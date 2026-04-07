@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoloBill — Invoice Demo</title>
+  <style>
+    :root{
+      --bg:#e8f6ec;
+      --header:#3bb367;
+      --header-dark:#2f8e52;
+      --card:#ffffff;
+      --text:#1a1a1a;
+      --muted:#6b7280;
+      --line:#dde5db;
+      --radius:14px;
+      --shadow:0 6px 20px rgba(0,0,0,.08);
+    }
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial;}
+    .demo-banner{background:#fefce8;border-bottom:1px solid #fde68a;color:#92400e;font-size:13px;text-align:center;padding:8px 16px;}
+    .hidden{display:none;}
+    .app-header{
+      position:sticky;top:0;z-index:5;
+      background:linear-gradient(180deg,var(--header),var(--header-dark));
+      color:#fff;display:flex;align-items:center;gap:16px;padding:14px 18px;
+      border-bottom-left-radius:14px;border-bottom-right-radius:14px;box-shadow:var(--shadow);
+    }
+    .brand{font-weight:700;font-size:20px;}
+    .nav{display:flex;gap:14px;margin-left:8px}
+    .nav-link{color:#eaffe6;opacity:.9;text-decoration:none;padding:8px 10px;border-radius:10px;cursor:pointer}
+    .nav-link.active,.nav-link:hover{background:rgba(255,255,255,.18);color:#fff}
+    .search{margin-left:auto}
+    .search-input{border:none;border-radius:12px;padding:10px 12px;width:280px;outline:none}
+    .avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:700}
+
+    .container{max-width:980px;margin:26px auto;padding:0 16px}
+    h1{font-size:34px;margin:8px 0 10px}
+    .bar{height:2px;background:#bfe6c8;margin:12px 0 18px;border-radius:2px}
+
+    .grid.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .field.full{grid-column:1 / -1}
+    label{font-size:13px;color:var(--muted)}
+    .input,select.input{
+      border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;outline:none;font-size:15px;
+    }
+    .table{margin-top:14px}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px}
+    .table-head{display:grid;grid-template-columns:140px 1fr 90px 90px 120px 120px 40px;color:var(--muted);font-weight:600;padding:6px 10px}
+    table{width:100%;border-collapse:collapse}
+    tbody tr{display:grid;grid-template-columns:140px 1fr 90px 90px 120px 120px 40px;align-items:center;border-top:1px solid var(--line)}
+    td{padding:8px 10px}
+    .qty,.rate{width:100%}
+    .value{font-weight:700;text-align:right}
+    .pill{border-radius:999px;border:1px solid var(--line);background:#f6f8f6;padding:8px 10px}
+    .pill.small{padding:6px 10px}
+    .icon-btn{border:none;background:transparent;cursor:pointer;font-size:16px;}
+
+    .table-actions{padding:10px}
+    .btn{border:none;background:#dfeee4;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer;font-size:15px;}
+    .btn.primary{background:#34a853;color:#fff}
+    .btn.outline{background:#fff;border:1px solid var(--line)}
+    .btn.ghost{background:transparent}
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+
+    .demo-note{
+      background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;
+      padding:12px 16px;font-size:13px;color:#166534;margin-top:8px;
+    }
+
+    @media (max-width:820px){
+      .grid.two{grid-template-columns:1fr}
+      .table-head,tbody tr{grid-template-columns:120px 1fr 80px 80px 100px 90px 40px}
+      .search{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">Demo mode — line item calculations are live. Save &amp; PDF export require Google Workspace deployment.</div>
+
+  <header class="app-header">
+    <div class="brand">SoloBill</div>
+    <nav class="nav">
+      <a class="nav-link active" data-target="tab-invoice" onclick="showTab('tab-invoice')">Invoices</a>
+      <a class="nav-link" data-target="tab-report" onclick="showTab('tab-report')">Report</a>
+      <a class="nav-link" data-target="tab-settings" onclick="showTab('tab-settings')">Settings</a>
+    </nav>
+    <div class="search">
+      <input class="search-input" placeholder="Search" />
+    </div>
+    <div class="avatar">LG</div>
+  </header>
+
+  <main class="container">
+    <section id="tab-invoice" class="tabview">
+      <h1>New invoice</h1>
+      <div class="bar"></div>
+
+      <div class="grid two">
+        <div class="field">
+          <label>Invoice number</label>
+          <input id="invoiceNumber" class="input" placeholder="INV-2026-0001" />
+        </div>
+        <div class="field">
+          <label>Client</label>
+          <select id="clientSelect" class="input">
+            <option value="">— Select client —</option>
+            <option value="1">Acme Corp</option>
+            <option value="2">Bright Digital</option>
+            <option value="3">Greenway Nonprofit</option>
+            <option value="4">Solo Ventures LLC</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>PO number</label>
+          <input class="input" placeholder="Optional" />
+        </div>
+        <div class="field">
+          <label>Tax number</label>
+          <input class="input" placeholder="Optional" />
+        </div>
+
+        <div class="field">
+          <label>Issue date</label>
+          <input id="issueDate" class="input" type="date" />
+        </div>
+        <div class="field">
+          <label>Currency</label>
+          <select class="input">
+            <option>United States Dollar - USD - $</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Due date</label>
+          <select id="dueTerm" class="input">
+            <option>14 days</option>
+            <option>30 days</option>
+            <option>Due on receipt</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Contractor type</label>
+          <select id="contractorType" class="input">
+            <option>Contractor</option>
+            <option>Freelancer</option>
+            <option>Consultant</option>
+            <option>Agency</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Subject</label>
+          <input class="input" placeholder="Project / job description" />
+        </div>
+      </div>
+
+      <div class="table card">
+        <div class="table-head">
+          <div>Type</div><div>Description</div><div>Qty.</div><div>Unit</div><div>Rate</div><div>Value</div><div></div>
+        </div>
+        <table>
+          <tbody id="lineBody"></tbody>
+        </table>
+        <div class="table-actions">
+          <button class="btn" onclick="addLine()">+ Add line</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:8px;display:grid;grid-template-columns:1fr 200px;align-items:center;">
+        <div style="color:#6b7280;">Totals</div>
+        <div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;">
+            <span>Subtotal</span><strong id="subtotal">$0.00</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;">
+            <span>Tax (8%)</span><strong id="tax">$0.00</strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #dde5db;margin-top:6px;">
+            <span>Total</span><strong id="total">$0.00</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="btnSave" class="btn primary" onclick="demoSave()">Save invoice</button>
+        <button class="btn outline" onclick="demoPDF()">Preview PDF</button>
+        <button class="btn ghost" onclick="resetForm()">Cancel</button>
+      </div>
+
+      <div class="demo-note">
+        Live calculation is fully functional. Save and PDF export require the Google Apps Script backend deployed to your Workspace.
+      </div>
+    </section>
+
+    <section id="tab-report" class="tabview hidden">
+      <h1>Report</h1>
+      <p style="color:var(--muted);margin-top:16px;">This tab will list invoices with status (New, Paid, Late) and running balances. Coming in v2.</p>
+    </section>
+
+    <section id="tab-settings" class="tabview hidden">
+      <h1>Settings</h1>
+      <p style="color:var(--muted);margin-top:16px;">Company details, default tax rate, and email templates are configured here, pulled from the Settings sheet at runtime.</p>
+    </section>
+  </main>
+
+  <script>
+    window.SETTINGS = { DefaultTaxRate: 0.08 };
+    const UNITS = ['hrs', 'days', 'ea', 'items', 'flat'];
+
+    function showTab(id){
+      document.querySelectorAll('.tabview').forEach(el => el.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+      document.querySelector(`[data-target="${id}"]`).classList.add('active');
+    }
+
+    const toMoney = n => '$' + (Number(n||0)).toFixed(2);
+
+    function lineCalc(tr){
+      const qty  = parseFloat(tr.querySelector('.qty')?.value || '0') || 0;
+      const rate = parseFloat(tr.querySelector('.rate')?.value || '0') || 0;
+      const val  = +(qty * rate).toFixed(2);
+      tr.querySelector('.value').textContent = toMoney(val);
+      return val;
+    }
+
+    function updateTotals(){
+      const rows = Array.from(document.querySelectorAll('#lineBody tr'));
+      const subtotal = rows.reduce((s, tr) => s + lineCalc(tr), 0);
+      const taxRate  = window.SETTINGS.DefaultTaxRate || 0;
+      const tax      = +(subtotal * taxRate).toFixed(2);
+      const total    = +(subtotal + tax).toFixed(2);
+      document.getElementById('subtotal').textContent = toMoney(subtotal);
+      document.getElementById('tax').textContent      = toMoney(tax);
+      document.getElementById('total').textContent    = toMoney(total);
+    }
+
+    function buildUnitSelect(){
+      const sel = document.createElement('select');
+      sel.className = 'input line-unit';
+      UNITS.forEach(u => sel.append(new Option(u, u)));
+      return sel;
+    }
+
+    function addLine(){
+      const tbody = document.getElementById('lineBody');
+      const row   = document.createElement('tr');
+      const unitSel = buildUnitSelect();
+      row.innerHTML = `
+        <td>
+          <select class="pill small type-pill">
+            <option>Services</option>
+            <option>Deposit</option>
+            <option>Items</option>
+          </select>
+        </td>
+        <td><input class="input" placeholder="Description"></td>
+        <td><input class="input qty" type="number" step="0.01" value="1"></td>
+        <td></td>
+        <td><input class="input rate" type="number" step="0.01" value="0"></td>
+        <td class="value">$0.00</td>
+        <td><button class="icon-btn" onclick="this.closest('tr').remove(); updateTotals();">🗑</button></td>
+      `;
+      row.querySelectorAll('td')[3].appendChild(unitSel);
+      tbody.appendChild(row);
+      ['input','change'].forEach(ev => {
+        row.querySelector('.qty').addEventListener(ev, updateTotals);
+        row.querySelector('.rate').addEventListener(ev, updateTotals);
+      });
+      updateTotals();
+    }
+
+    function demoSave(){
+      const client = document.getElementById('clientSelect');
+      const clientName = client.options[client.selectedIndex]?.text;
+      if (!clientName || client.value === '') return alert('Please select a client.');
+      const rows = Array.from(document.querySelectorAll('#lineBody tr'));
+      if (!rows.length) return alert('Please add at least one line item.');
+      alert('Demo mode: invoice would be saved to Google Sheets in production.');
+    }
+
+    function demoPDF(){
+      const client = document.getElementById('clientSelect');
+      if (!client.value) return alert('Please select a client first.');
+      alert('Demo mode: PDF would be generated in Google Drive in production.');
+    }
+
+    function resetForm(){
+      document.getElementById('invoiceNumber').value = '';
+      document.getElementById('clientSelect').value = '';
+      document.getElementById('lineBody').innerHTML = '';
+      updateTotals();
+      addLine();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set today's date
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById('issueDate').value = today;
+      // Seed invoice number
+      document.getElementById('invoiceNumber').value = 'INV-2026-0001';
+      // Add first line
+      addLine();
+    });
+  </script>
+</body>
+</html>

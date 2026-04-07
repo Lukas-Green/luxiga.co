@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoloBill — LUXIGA Case Study</title>
+<meta name="description" content="A complete invoicing system built inside Google Sheets for independent contractors. Zero monthly fees, zero external dependencies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--surface:#0D0D1A;--accent:#C4FF53;--accent-hover:#d4ff73;
+  --violet:#8B5CF6;--violet-hover:#a78bfa;--text:#E8E8F0;--muted:#888899;
+  --border:#1a1a2e;--radius-btn:6px;--radius-card:12px;
+  --sans:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+ul{list-style:none}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,16,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-brand{font-family:var(--mono);font-size:1.25rem;font-weight:700;letter-spacing:2px;color:var(--text)}
+.nav-brand .ux{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:.875rem;color:var(--muted);transition:color .2s;font-weight:500;letter-spacing:.5px}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{padding:.5rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.8rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s}
+.nav-cta:hover{background:var(--accent-hover)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .3s,opacity .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(8,8,16,.95);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:999}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-size:1.25rem;color:var(--muted);transition:color .2s}
+.mobile-nav a:hover{color:var(--text)}
+
+/* ── CASE STUDY HERO ── */
+.cs-hero{padding:8rem 2rem 4rem;background:var(--bg)}
+.cs-hero .container{max-width:860px;margin:0 auto}
+.cs-back{font-family:var(--mono);font-size:.85rem;color:var(--muted);transition:color .2s;display:inline-block;margin-bottom:2rem}
+.cs-back:hover{color:var(--accent)}
+.cs-tag{display:inline-block;font-family:var(--mono);font-size:.75rem;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase;padding:.35rem .85rem;border:1px solid var(--violet);border-radius:var(--radius-btn);margin-bottom:1.25rem}
+.cs-title{font-size:clamp(2.5rem,5vw,3.5rem);font-weight:700;line-height:1.1;margin-bottom:1rem;letter-spacing:-1px}
+.cs-tagline{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:700px;margin-bottom:2.5rem}
+.cs-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;padding:1.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cs-meta-item label{display:block;font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.35rem}
+.cs-meta-item span{font-size:.9rem;color:var(--text);font-weight:500}
+
+/* ── DEMO FRAME ── */
+.cs-demo{padding:4rem 2rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cs-demo .container{max-width:960px;margin:0 auto}
+.demo-browser{border:1px solid var(--border);border-radius:var(--radius-card);overflow:hidden;background:var(--bg)}
+.demo-chrome{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;background:var(--surface);border-bottom:1px solid var(--border)}
+.demo-dots{display:flex;gap:6px}
+.demo-dots span{width:10px;height:10px;border-radius:50%}
+.demo-dots span:nth-child(1){background:#ff5f57}
+.demo-dots span:nth-child(2){background:#febc2e}
+.demo-dots span:nth-child(3){background:#28c840}
+.demo-url{font-family:var(--mono);font-size:.7rem;color:var(--muted);flex:1;text-align:center}
+.demo-fullscreen{font-family:var(--mono);font-size:.7rem;color:var(--accent);transition:color .2s}
+.demo-fullscreen:hover{color:var(--accent-hover)}
+.demo-browser iframe{display:block;width:100%;height:680px;border:none;background:var(--bg)}
+
+/* ── BODY SECTIONS ── */
+.cs-section{padding:5rem 2rem}
+.cs-section .container{max-width:860px;margin:0 auto}
+.cs-section.bg-surface{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cs-section.bg-dark{background:var(--bg)}
+.cs-section-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem}
+.cs-section-title{font-size:1.75rem;font-weight:700;line-height:1.2;margin-bottom:1.5rem}
+.cs-section p{color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:1.25rem}
+.cs-section p:last-child{margin-bottom:0}
+
+/* ── BREAKOUT QUOTE ── */
+.cs-quote{border-left:3px solid var(--accent);padding:1.25rem 0 1.25rem 1.5rem;margin:2rem 0;font-size:1.15rem;color:var(--text);line-height:1.6;font-weight:500}
+
+/* ── FINDINGS LIST ── */
+.cs-findings{margin:1.5rem 0;padding:0}
+.cs-findings li{position:relative;padding-left:1.25rem;color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:.75rem}
+.cs-findings li::before{content:'';position:absolute;left:0;top:.55rem;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* ── PAGE NAV ── */
+.cs-page-nav{padding:3rem 2rem;background:var(--bg);border-top:1px solid var(--border)}
+.cs-page-nav .container{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+.cs-page-nav a{font-family:var(--mono);font-size:.9rem;color:var(--muted);transition:color .2s}
+.cs-page-nav a:hover{color:var(--accent)}
+
+/* ── FOOTER ── */
+.footer{padding:2.5rem 2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;max-width:100%}
+.footer-brand{font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:2px}
+.footer-brand .ux{color:var(--accent)}
+.footer-copy{font-size:.8rem;color:var(--muted)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .nav{padding:0 1.25rem}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .cs-hero{padding:6rem 1.25rem 3rem}
+  .cs-meta{grid-template-columns:repeat(2,1fr);gap:1rem}
+  .cs-demo{padding:2.5rem 1.25rem}
+  .demo-browser iframe{height:520px}
+  .cs-section{padding:3.5rem 1.25rem}
+  .cs-section-title{font-size:1.5rem}
+  .cs-title{font-size:2.2rem}
+  .cs-page-nav{padding:2rem 1.25rem}
+  .footer{flex-direction:column;gap:.75rem;text-align:center;padding:2rem 1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="../index.html" class="nav-brand">L<span class="ux">UX</span>IGA</a>
+  <div class="nav-links">
+    <a href="../index.html#home">Home</a>
+    <a href="../index.html#services">Services</a>
+    <a href="../index.html#projects">Projects</a>
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#contact">Contact</a>
+  </div>
+  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a Call</a>
+  <button class="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <a href="../index.html#home">Home</a>
+  <a href="../index.html#services">Services</a>
+  <a href="../index.html#projects">Projects</a>
+  <a href="../index.html#about">About</a>
+  <a href="../index.html#contact">Contact</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a Call</a>
+</div>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="container">
+    <a href="../index.html#projects" class="cs-back">&larr; Back to Projects</a>
+    <div class="cs-tag">Invoicing / Finance</div>
+    <h1 class="cs-title">SoloBill</h1>
+    <p class="cs-tagline">A journeyman plumber needed to send invoices. Every platform wanted $30/month for features he'd never touch. I built one inside the tools he already had open.</p>
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <label>Role</label>
+        <span>Designer &amp; Builder</span>
+      </div>
+      <div class="cs-meta-item">
+        <label>Stack</label>
+        <span>Google Apps Script, Google Docs, PDF</span>
+      </div>
+      <div class="cs-meta-item">
+        <label>Built For</label>
+        <span>Independent contractor</span>
+      </div>
+      <div class="cs-meta-item">
+        <label>Status</label>
+        <span>MVP complete, in refinement</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="cs-demo">
+  <div class="container">
+    <div class="demo-browser">
+      <div class="demo-chrome">
+        <div class="demo-dots"><span></span><span></span><span></span></div>
+        <span class="demo-url">solobill &middot; demo mode &middot; calculations live</span>
+        <a href="../demo/solobill-demo.html" target="_blank" rel="noopener" class="demo-fullscreen">Open full screen &nearr;</a>
+      </div>
+      <iframe src="../demo/solobill-demo.html" title="SoloBill Demo" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- THE PAIN -->
+<section class="cs-section bg-dark">
+  <div class="container">
+    <div class="cs-section-label">The Pain</div>
+    <h2 class="cs-section-title">Every platform charges for 90% you don't use</h2>
+    <p>A friend — journeyman plumber, licensed contractor — needed a way to send invoices. He'd been writing them by hand or using Word templates. Every invoicing platform he tried charged $20-30/month for features like team management, inventory tracking, and CRM pipelines. He needed one thing: generate a professional invoice, track it, and send it.</p>
+    <p>The tools weren't built for people like him. They were built for companies that had outgrown the problem he was trying to solve for the first time.</p>
+  </div>
+</section>
+
+<!-- THE CONSTRAINT -->
+<section class="cs-section bg-surface">
+  <div class="container">
+    <div class="cs-section-label">The Constraint</div>
+    <h2 class="cs-section-title">Google Workspace only, zero external dependencies</h2>
+    <p>He already had Google Workspace through his email. The solution had to live there — no new accounts, no new passwords, no new monthly charges. Google Sheets as the ledger, Google Docs as the invoice template, Apps Script as the glue.</p>
+    <p>This constraint eliminated entire categories of complexity. No server, no database, no deployment pipeline. The entire tool runs inside Google's infrastructure with zero hosting cost.</p>
+  </div>
+</section>
+
+<!-- WHAT I BUILT -->
+<section class="cs-section bg-dark">
+  <div class="container">
+    <div class="cs-section-label">What I Built</div>
+    <h2 class="cs-section-title">Full invoicing flow with live calculations</h2>
+    <p>SoloBill is a complete invoicing system that runs inside Google Sheets. The sidebar UI handles everything: client management, line-item entry with live calculation, tax computation, and one-click invoice generation.</p>
+    <p>Line items calculate dynamically — quantity &times; rate updates the subtotal in real time. Tax is computed at the row level. The total reflects everything as you type. When you click "Generate Invoice," Apps Script builds a formatted Google Doc from the data and exports it as a PDF.</p>
+    <blockquote class="cs-quote">"The best tool for a one-person operation is the one that doesn't require a second person to manage."</blockquote>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="cs-section bg-surface">
+  <div class="container">
+    <div class="cs-section-label">How It Works</div>
+    <h2 class="cs-section-title">Multi-tab Sheet model with client-side calculations</h2>
+    <p>The Sheet has dedicated tabs: Invoices (the ledger), Clients (contact details), and Settings (business info, tax rate, invoice numbering). The sidebar reads and writes to these tabs through Apps Script.</p>
+    <p>All line-item math happens client-side for instant feedback. When saved, the complete invoice data writes to the Invoices tab as a single row with a JSON-serialized line items field. This keeps the ledger flat and queryable while supporting arbitrary line item counts.</p>
+    <ul class="cs-findings">
+      <li>Client-side calculation eliminates server round-trips during line item editing</li>
+      <li>JSON serialization of line items in a flat Sheet avoids the "one row per line item" explosion</li>
+      <li>PDF generation uses Google Docs as a template engine — reliable, free, already trusted</li>
+    </ul>
+  </div>
+</section>
+
+<!-- STATUS -->
+<section class="cs-section bg-dark">
+  <div class="container">
+    <div class="cs-section-label">Status</div>
+    <h2 class="cs-section-title">MVP complete. Report tab coming.</h2>
+    <p>The core invoicing flow is complete and functional. Create, calculate, generate, export. The Report tab (revenue by month, outstanding invoices) and automated email sending are next.</p>
+    <p>SoloBill is also a candidate for integration into FieldKit as a vertical configuration — the same engine, tuned for contractor invoicing.</p>
+  </div>
+</section>
+
+<!-- PAGE NAV -->
+<div class="cs-page-nav">
+  <div class="container">
+    <a href="canvasskit.html">&larr; CanvassKit</a>
+    <a href="../index.html#projects">All Projects &rarr;</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">L<span class="ux">UX</span>IGA</div>
+  <div class="footer-copy">&copy; 2026 LUXIGA LLC</div>
+</footer>
+
+<script>
+// Mobile nav toggle
+const hamburger = document.querySelector('.hamburger');
+const mobileNav = document.querySelector('.mobile-nav');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+});
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
