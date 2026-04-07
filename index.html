@@ -121,12 +121,21 @@ section{padding:6rem 2rem}
 .project-link:hover{color:var(--accent-hover)}
 
 /* ── STACK ── */
-.stack{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.stack-group{margin-bottom:1.5rem}
-.stack-group-label{font-family:var(--mono);font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:.75rem}
-.stack-pills{display:flex;flex-wrap:wrap;gap:.5rem}
-.stack-pill{font-family:var(--mono);font-size:.8rem;padding:.45rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--text);transition:border-color .2s}
-.stack-pill:hover{border-color:var(--accent)}
+.stack{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.5rem 2rem;overflow:hidden}
+.stack .container{max-width:700px;text-align:center}
+.stack .section-label,.stack .section-title{text-align:center}
+.stack-orbit{position:relative;margin:2rem auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem}
+.stack-pill{font-family:var(--mono);font-size:.78rem;padding:.5rem 1.1rem;background:var(--bg);border:1px solid var(--border);border-radius:20px;color:var(--text);transition:border-color .3s,transform .3s,box-shadow .3s;cursor:default;position:relative;overflow:hidden}
+.stack-pill::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,255,83,.08),rgba(139,92,246,.08));opacity:0;transition:opacity .3s}
+.stack-pill:hover{border-color:var(--accent);transform:translateY(-2px) scale(1.05);box-shadow:0 4px 20px rgba(196,255,83,.12)}
+.stack-pill:hover::before{opacity:1}
+.stack-pill[data-cat="ai"]{border-color:rgba(139,92,246,.3)}
+.stack-pill[data-cat="ai"]:hover{border-color:var(--violet);box-shadow:0 4px 20px rgba(139,92,246,.15)}
+.stack-divider{display:flex;align-items:center;justify-content:center;gap:8px;margin:1.25rem 0 .5rem;color:var(--muted);font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase}
+.stack-divider::before,.stack-divider::after{content:'';height:1px;width:40px;background:var(--border)}
+.stack-pulse{position:absolute;width:100%;height:2px;bottom:0;left:-100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:stackPulse 4s ease-in-out infinite}
+@keyframes stackPulse{0%{left:-100%}50%{left:100%}100%{left:100%}}
+@keyframes pillFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 
 /* ── ABOUT ── */
 .about{background:var(--bg)}
@@ -370,22 +379,19 @@ section{padding:6rem 2rem}
 <section class="stack" id="stack">
   <div class="container">
     <div class="section-label reveal">Tools</div>
-    <h2 class="section-title reveal">Stack</h2>
-    <div class="stack-group reveal">
-      <div class="stack-group-label">Backend</div>
-      <div class="stack-pills"><span class="stack-pill">Python</span><span class="stack-pill">FastAPI</span><span class="stack-pill">SQLite</span></div>
-    </div>
-    <div class="stack-group reveal">
-      <div class="stack-group-label">AI</div>
-      <div class="stack-pills"><span class="stack-pill">Ollama</span><span class="stack-pill">Claude API</span></div>
-    </div>
-    <div class="stack-group reveal">
-      <div class="stack-group-label">Frontend</div>
-      <div class="stack-pills"><span class="stack-pill">HTML/CSS</span><span class="stack-pill">Vanilla JS</span><span class="stack-pill">Google Apps Script</span></div>
-    </div>
-    <div class="stack-group reveal">
-      <div class="stack-group-label">Design &amp; Ops</div>
-      <div class="stack-pills"><span class="stack-pill">Figma</span><span class="stack-pill">GitHub</span></div>
+    <h2 class="section-title reveal">Built With</h2>
+    <div class="stack-orbit reveal" id="stackOrbit">
+      <span class="stack-pill" data-cat="backend">Python</span>
+      <span class="stack-pill" data-cat="backend">FastAPI</span>
+      <span class="stack-pill" data-cat="backend">SQLite</span>
+      <span class="stack-pill" data-cat="ai">Ollama</span>
+      <span class="stack-pill" data-cat="ai">Claude API</span>
+      <span class="stack-pill" data-cat="frontend">HTML / CSS</span>
+      <span class="stack-pill" data-cat="frontend">Vanilla JS</span>
+      <span class="stack-pill" data-cat="frontend">Google Apps Script</span>
+      <span class="stack-pill" data-cat="ops">Figma</span>
+      <span class="stack-pill" data-cat="ops">GitHub</span>
+      <div class="stack-pulse"></div>
     </div>
   </div>
 </section>
@@ -784,6 +790,14 @@ section{padding:6rem 2rem}
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   reveals.forEach(r => revealObserver.observe(r));
+
+  /* ── STACK PILL FLOAT ── */
+  const pills = document.querySelectorAll('.stack-pill');
+  pills.forEach((pill, i) => {
+    const duration = 2.5 + Math.random() * 1.5;
+    const delay = i * 0.2;
+    pill.style.animation = 'pillFloat ' + duration + 's ease-in-out ' + delay + 's infinite';
+  });
 
   /* ── CONTACT FORM ── */
   const form = document.getElementById('contactForm');
