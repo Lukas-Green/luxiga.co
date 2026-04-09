@@ -674,23 +674,41 @@ function handleEmail(e) {
   const email = document.getElementById('emailInput').value;
   if (!email) return;
 
-  // Store in localStorage
-  const results = {
+  const r = window.pulseResults;
+  const payload = {
     email: email,
-    score: window.pulseResults.totalScore,
-    automation: window.pulseResults.automation,
-    data: window.pulseResults.data,
-    knowledge: window.pulseResults.knowledge,
-    q7: window.pulseResults.q7Category,
-    answers: answers.map((a, i) => ({ question: i + 1, answer: a })),
-    timestamp: new Date().toISOString()
+    _subject: 'Pulse Assessment Lead — ' + email,
+    score: r.totalScore + ' / 24',
+    tier: r.totalScore <= 11 ? 'Getting Started' : r.totalScore <= 17 ? 'Building Foundation' : r.totalScore <= 22 ? 'Well Positioned' : 'Digitally Mature',
+    automation: r.automation.toFixed(1) + ' / 4.0',
+    data_management: r.data.toFixed(1) + ' / 4.0',
+    knowledge_process: r.knowledge.toFixed(1) + ' / 4.0',
+    priority_area: r.q7Category,
+    answers: answers.map((a, i) => 'Q' + (i + 1) + ': Option ' + (a + 1)).join(', ')
   };
-  const stored = JSON.parse(localStorage.getItem('pulse_leads') || '[]');
-  stored.push(results);
-  localStorage.setItem('pulse_leads', JSON.stringify(stored));
 
-  document.getElementById('emailForm').style.display = 'none';
-  document.getElementById('emailSuccess').style.display = 'block';
+  // Send to Formspree
+  fetch('https://formspree.io/f/mkopjjab', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(res => {
+    if (res.ok) {
+      document.getElementById('emailForm').style.display = 'none';
+      document.getElementById('emailSuccess').style.display = 'block';
+    } else {
+      document.getElementById('emailSuccess').textContent = 'Something went wrong. Try again.';
+      document.getElementById('emailSuccess').style.display = 'block';
+    }
+  }).catch(() => {
+    document.getElementById('emailSuccess').textContent = 'Network error. Try again.';
+    document.getElementById('emailSuccess').style.display = 'block';
+  });
+
+  // Also store locally as backup
+  const stored = JSON.parse(localStorage.getItem('pulse_leads') || '[]');
+  stored.push({ ...payload, timestamp: new Date().toISOString() });
+  localStorage.setItem('pulse_leads', JSON.stringify(stored));
 }
 
 // Mobile nav toggle
