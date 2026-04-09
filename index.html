@@ -47,7 +47,8 @@ ul{list-style:none}
 .nav-links a:hover,.nav-links a.active{color:var(--text)}
 .nav-cta{padding:.5rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.8rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s}
 .nav-cta:hover{background:var(--accent-hover)}
-.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+section[id]{scroll-margin-top:64px}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-width:44px;min-height:44px;align-items:center;justify-content:center}
 .hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .3s,opacity .3s}
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0}
@@ -507,6 +508,17 @@ section{padding:6rem 2rem}
     a.addEventListener('click', () => {
       hamburger.classList.remove('open');
       mobileNav.classList.remove('open');
+    });
+  });
+
+  /* ── HOME SCROLL (force re-scroll even if hash is already #home) ── */
+  document.querySelectorAll('a[href="#home"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      hamburger.classList.remove('open');
+      mobileNav.classList.remove('open');
+      history.replaceState(null, '', '#home');
     });
   });
 
