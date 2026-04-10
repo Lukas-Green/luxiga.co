@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — Digital Readiness Assessment | LUXIGA</title>
+<meta name="description" content="Take the Pulse: 7 questions, 3 minutes, a clear picture of where your business stands digitally — and where the leverage is.">
+<meta name="author" content="Lukas Green">
+<meta property="og:title" content="Pulse — Digital Readiness Assessment | LUXIGA">
+<meta property="og:description" content="7 questions. 3 minutes. A clear picture of where your business stands — and where the leverage is.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://luxiga.co/audit">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--surface:#0D0D1A;--accent:#C4FF53;--accent-hover:#d4ff73;
+  --violet:#8B5CF6;--violet-hover:#a78bfa;--text:#E8E8F0;--muted:#888899;
+  --border:#1a1a2e;--radius-btn:6px;--radius-card:12px;
+  --sans:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,16,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-brand{font-family:var(--mono);font-size:1.25rem;font-weight:700;letter-spacing:2px;color:var(--text)}
+.nav-brand .ux{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:.875rem;color:var(--muted);transition:color .2s;font-weight:500;letter-spacing:.5px}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-cta{padding:.5rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.8rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s}
+.nav-cta:hover{background:var(--accent-hover)}
+section[id]{scroll-margin-top:64px}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-width:44px;min-height:44px;align-items:center;justify-content:center}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .3s,opacity .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(8,8,16,.95);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:999}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-size:1.25rem;color:var(--muted);transition:color .2s}
+.mobile-nav a:hover{color:var(--text)}
+
+/* ── APP WRAPPER ── */
+.app{padding-top:64px;min-height:100vh;display:flex;flex-direction:column}
+
+/* ── SCREENS ── */
+.screen{display:none;flex:1;animation:fadeIn .3s ease}
+.screen.active{display:flex;flex-direction:column}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── INTRO SCREEN ── */
+.intro{align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;min-height:calc(100vh - 64px)}
+.intro-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:1.5rem}
+.intro h1{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:700;line-height:1.1;margin-bottom:1.25rem;letter-spacing:-1px}
+.intro-subtitle{color:var(--muted);font-size:1.1rem;line-height:1.7;max-width:560px;margin:0 auto 3rem}
+.intro-features{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+.intro-feature{text-align:center;max-width:200px}
+.intro-feature .icon{font-size:1.5rem;margin-bottom:.5rem}
+.intro-feature .label{font-weight:600;font-size:.95rem;margin-bottom:.25rem}
+.intro-feature .desc{font-size:.8rem;color:var(--muted);line-height:1.5}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:1rem 2.5rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:1rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s,transform .1s;border:none;cursor:pointer;font-family:var(--sans)}
+.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+.intro-fine{font-size:.8rem;color:var(--muted);margin-top:1rem}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{position:fixed;top:64px;left:0;right:0;z-index:900;background:var(--surface);height:4px}
+.progress-bar{height:100%;background:var(--accent);border-radius:0 2px 2px 0;transition:width .4s ease}
+
+/* ── QUESTION SCREEN ── */
+.question-screen{align-items:center;padding:4rem 1.5rem 3rem;min-height:calc(100vh - 64px)}
+.question-wrap{max-width:680px;width:100%;margin:0 auto}
+.question-step{font-family:var(--mono);font-size:.8rem;color:var(--muted);letter-spacing:2px;margin-bottom:1.5rem}
+.question-text{font-size:clamp(1.4rem,3vw,1.85rem);font-weight:700;line-height:1.3;margin-bottom:2.5rem}
+.options{display:flex;flex-direction:column;gap:.75rem}
+.option{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.25rem 1.5rem;cursor:pointer;transition:border-color .2s,background .2s,transform .15s}
+.option:hover{border-color:var(--accent);background:rgba(196,255,83,.03);transform:translateX(4px)}
+.option.selected{border-color:var(--accent);background:rgba(196,255,83,.07)}
+.option-label{font-weight:600;font-size:1rem;margin-bottom:.25rem}
+.option-desc{font-size:.85rem;color:var(--muted);line-height:1.5}
+.back-btn{display:inline-flex;align-items:center;gap:.35rem;background:none;border:none;color:var(--muted);font-family:var(--sans);font-size:.85rem;cursor:pointer;margin-top:2rem;padding:.5rem 0;transition:color .2s}
+.back-btn:hover{color:var(--text)}
+
+/* ── CALCULATING SCREEN ── */
+.calculating{align-items:center;justify-content:center;text-align:center;min-height:calc(100vh - 64px);gap:1.5rem}
+.calc-text{font-size:1.25rem;font-weight:600}
+.calc-dots{display:flex;gap:.5rem;justify-content:center}
+.calc-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);animation:pulse 1s ease-in-out infinite}
+.calc-dot:nth-child(2){animation-delay:.2s}
+.calc-dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+
+/* ── RESULTS SCREEN ── */
+.results{align-items:center;padding:3rem 1.5rem 4rem}
+.results-wrap{max-width:760px;width:100%;margin:0 auto}
+.results-header{text-align:center;margin-bottom:3rem}
+.results-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:.75rem}
+.results-title{font-size:2rem;font-weight:700;margin-bottom:.5rem}
+
+/* Score circle */
+.score-section{text-align:center;margin-bottom:3rem}
+.score-circle-wrap{position:relative;width:180px;height:180px;margin:0 auto 1.25rem}
+.score-circle-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.score-circle-bg{fill:none;stroke:var(--border);stroke-width:8}
+.score-circle-fg{fill:none;stroke:var(--accent);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.5s ease}
+.score-number{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.75rem;font-weight:700;font-family:var(--mono)}
+.score-number span{font-size:1.1rem;color:var(--muted)}
+.tier-badge{display:inline-block;padding:.4rem 1.25rem;border-radius:20px;font-weight:600;font-size:.85rem;letter-spacing:.5px}
+
+/* Category bars */
+.categories{margin-bottom:3rem}
+.categories h3{font-size:1.15rem;font-weight:600;margin-bottom:1.25rem}
+.cat-row{margin-bottom:1rem}
+.cat-label-row{display:flex;justify-content:space-between;margin-bottom:.35rem}
+.cat-label{font-size:.9rem;font-weight:500}
+.cat-value{font-family:var(--mono);font-size:.85rem;color:var(--accent)}
+.cat-bar-bg{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.cat-bar-fg{height:100%;background:var(--accent);border-radius:4px;transition:width 1.2s ease;width:0}
+
+/* Findings */
+.findings{margin-bottom:3rem}
+.findings h3{font-size:1.15rem;font-weight:600;margin-bottom:1rem}
+.finding{display:flex;gap:.75rem;margin-bottom:1rem;padding:1rem 1.25rem;background:var(--surface);border-radius:var(--radius-card);border:1px solid var(--border)}
+.finding-icon{color:var(--accent);font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.finding-text{font-size:.9rem;color:var(--muted);line-height:1.6}
+
+/* Recommendations */
+.recs{margin-bottom:3rem}
+.recs h3{font-size:1.15rem;font-weight:600;margin-bottom:1.25rem}
+.rec-cards{display:grid;gap:1rem}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.5rem}
+.rec-num{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:2px;margin-bottom:.5rem}
+.rec-title{font-weight:600;font-size:1rem;margin-bottom:.35rem}
+.rec-desc{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem}
+.rec-impact{font-family:var(--mono);font-size:.7rem;letter-spacing:1px;padding:.25rem .75rem;border-radius:4px;display:inline-block}
+.rec-impact.high{background:rgba(196,255,83,.12);color:var(--accent)}
+.rec-impact.medium{background:rgba(139,92,246,.12);color:var(--violet)}
+
+/* ROI */
+.roi{margin-bottom:3rem;padding:1.75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);text-align:center}
+.roi h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
+.roi-subtitle{font-size:.85rem;color:var(--muted);margin-bottom:.75rem}
+.roi-stat{font-size:1.1rem;font-weight:600;color:var(--accent);line-height:1.6}
+
+/* CTA section */
+.results-cta{text-align:center;margin-bottom:2.5rem;padding:2.5rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card)}
+.results-cta h3{font-size:1.5rem;font-weight:700;margin-bottom:.75rem}
+.results-cta p{color:var(--muted);font-size:.95rem;max-width:480px;margin:0 auto 1.75rem;line-height:1.7}
+.results-cta-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-secondary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;background:transparent;color:var(--text);font-weight:500;font-size:.9rem;border-radius:var(--radius-btn);border:1px solid var(--border);cursor:pointer;font-family:var(--sans);transition:border-color .2s}
+.btn-secondary:hover{border-color:var(--muted)}
+
+/* Email capture */
+.email-capture{text-align:center;padding:2rem 0}
+.email-capture p{font-size:.9rem;color:var(--muted);margin-bottom:1rem}
+.email-form{display:flex;gap:.5rem;max-width:400px;margin:0 auto}
+.email-input{flex:1;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--text);font-family:var(--sans);font-size:.9rem;outline:none;transition:border-color .2s}
+.email-input:focus{border-color:var(--accent)}
+.email-input::placeholder{color:var(--muted)}
+.email-submit{padding:.75rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.85rem;border:none;border-radius:var(--radius-btn);cursor:pointer;font-family:var(--sans);transition:background .2s;white-space:nowrap}
+.email-submit:hover{background:var(--accent-hover)}
+.email-success{color:var(--accent);font-size:.85rem;margin-top:.75rem;display:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .intro-features{flex-direction:column;align-items:center;gap:1.5rem}
+  .score-circle-wrap{width:150px;height:150px}
+  .score-number{font-size:2.25rem}
+  .rec-cards{grid-template-columns:1fr}
+  .email-form{flex-direction:column}
+  .results-cta-btns{flex-direction:column;align-items:center}
+}
+@media(min-width:769px){
+  .rec-cards{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-brand">L<span class="ux">UX</span>IGA</a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/#services">Services</a>
+    <a href="/audit" class="active">Pulse</a>
+    <a href="/#projects">Projects</a>
+    <a href="/#about">About</a>
+    <a href="/#contact">Contact</a>
+  </div>
+  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a Call</a>
+  <button class="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <a href="/">Home</a>
+  <a href="/#services">Services</a>
+  <a href="/audit">Pulse</a>
+  <a href="/#projects">Projects</a>
+  <a href="/#about">About</a>
+  <a href="/#contact">Contact</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a Call</a>
+</div>
+
+<!-- PROGRESS BAR (hidden on intro/results) -->
+<div class="progress-wrap" id="progressWrap" style="display:none">
+  <div class="progress-bar" id="progressBar" style="width:0%"></div>
+</div>
+
+<!-- APP -->
+<div class="app">
+
+  <!-- INTRO SCREEN -->
+  <div class="screen active" id="screen-intro">
+    <div class="intro">
+      <div class="intro-label">Digital Readiness Assessment</div>
+      <h1>Take the Pulse</h1>
+      <p class="intro-subtitle">7 questions. 3 minutes. A clear picture of where your business stands &mdash; and where the leverage is.</p>
+      <div class="intro-features">
+        <div class="intro-feature">
+          <div class="icon">&#9889;</div>
+          <div class="label">Quick</div>
+          <div class="desc">7 focused questions</div>
+        </div>
+        <div class="intro-feature">
+          <div class="icon">&#128202;</div>
+          <div class="label">Scored</div>
+          <div class="desc">Benchmarked against your industry</div>
+        </div>
+        <div class="intro-feature">
+          <div class="icon">&#127919;</div>
+          <div class="label">Actionable</div>
+          <div class="desc">Prioritized recommendations</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="startAssessment()">Start Assessment &rarr;</button>
+      <div class="intro-fine">No signup required &middot; Results are instant</div>
+    </div>
+  </div>
+
+  <!-- QUESTION SCREENS (generated by JS) -->
+  <div class="screen question-screen" id="screen-question">
+    <div class="question-wrap">
+      <div class="question-step" id="questionStep"></div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <button class="back-btn" id="backBtn" onclick="goBack()">&larr; Back</button>
+    </div>
+  </div>
+
+  <!-- CALCULATING SCREEN -->
+  <div class="screen calculating" id="screen-calculating">
+    <div class="calc-text">Calculating your results</div>
+    <div class="calc-dots">
+      <div class="calc-dot"></div>
+      <div class="calc-dot"></div>
+      <div class="calc-dot"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="screen results" id="screen-results">
+    <div class="results-wrap">
+      <div class="results-header">
+        <div class="results-label">Your Results</div>
+        <div class="results-title">Digital Readiness Score</div>
+      </div>
+
+      <!-- Score Circle -->
+      <div class="score-section">
+        <div class="score-circle-wrap">
+          <svg viewBox="0 0 120 120">
+            <circle class="score-circle-bg" cx="60" cy="60" r="52"/>
+            <circle class="score-circle-fg" id="scoreCircle" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+          </svg>
+          <div class="score-number"><span id="scoreDisplay">0</span><span>/24</span></div>
+        </div>
+        <div class="tier-badge" id="tierBadge"></div>
+      </div>
+
+      <!-- Category Bars -->
+      <div class="categories">
+        <h3>Category Breakdown</h3>
+        <div id="categoryBars"></div>
+      </div>
+
+      <!-- Key Findings -->
+      <div class="findings">
+        <h3>Key Findings</h3>
+        <div id="findingsContainer"></div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="recs">
+        <h3>Recommended Next Steps</h3>
+        <div class="rec-cards" id="recCards"></div>
+      </div>
+
+      <!-- ROI -->
+      <div class="roi">
+        <h3>Estimated Impact</h3>
+        <div class="roi-subtitle">Based on typical businesses at your readiness level...</div>
+        <div class="roi-stat" id="roiStat"></div>
+      </div>
+
+      <!-- CTA -->
+      <div class="results-cta">
+        <h3>Ready to act on this?</h3>
+        <p>I help businesses turn these insights into working systems. Let's talk about where to start.</p>
+        <div class="results-cta-btns">
+          <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a Free Strategy Call &rarr;</a>
+          <a href="/" class="btn-secondary">&larr; Back to LUXIGA</a>
+        </div>
+      </div>
+
+      <!-- Email Capture -->
+      <div class="email-capture">
+        <p>Want a copy of your results?</p>
+        <form class="email-form" id="emailForm" onsubmit="handleEmail(event)">
+          <input type="email" class="email-input" id="emailInput" placeholder="you@company.com" required>
+          <button type="submit" class="email-submit">Send Results</button>
+        </form>
+        <div class="email-success" id="emailSuccess">Saved! We'll be in touch.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer" style="padding:2.5rem 2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;max-width:100%">
+  <div class="footer-brand" style="font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:2px">L<span class="ux" style="color:var(--accent)">UX</span>IGA</div>
+  <div class="footer-copy" style="font-size:.8rem;color:var(--muted)">&copy; 2026 LUXIGA LLC. All rights reserved.</div>
+</footer>
+
+<script>
+/* ──────────────────────────────────────
+   LUXIGA PULSE — Assessment Engine
+   ────────────────────────────────────── */
+
+const questions = [
+  {
+    text: "How does your team handle repetitive tasks?",
+    options: [
+      { label: "Manually, every time", desc: "Staff handle recurring work by hand with no automation", score: 1 },
+      { label: "Some spreadsheet macros or templates", desc: "Basic automation exists but it's fragile and person-dependent", score: 2 },
+      { label: "Dedicated tools for major workflows", desc: "Key processes have software support but gaps remain", score: 3 },
+      { label: "Mostly automated, humans handle exceptions", desc: "Systems run on their own; staff focus on edge cases", score: 4 }
+    ]
+  },
+  {
+    text: "How do you capture and manage client/customer data?",
+    options: [
+      { label: "Paper forms, notebooks, or memory", desc: "Critical information lives in analog or personal formats", score: 1 },
+      { label: "Spreadsheets and email folders", desc: "Digital but scattered across files and inboxes", score: 2 },
+      { label: "A CRM or database, but inconsistently used", desc: "The system exists but adoption and data quality vary", score: 3 },
+      { label: "Centralized system, consistently maintained", desc: "One source of truth that the team actually relies on", score: 4 }
+    ]
+  },
+  {
+    text: "When someone leaves your team, how much knowledge walks out the door?",
+    options: [
+      { label: "Most of it — processes live in people's heads", desc: "Institutional knowledge is almost entirely informal", score: 1 },
+      { label: "Some is documented, but finding it is hard", desc: "Documentation exists in scattered, outdated locations", score: 2 },
+      { label: "Core processes are documented, edge cases aren't", desc: "The basics are captured but tribal knowledge persists", score: 3 },
+      { label: "Systems are self-documenting; onboarding is smooth", desc: "New hires can get up to speed with minimal hand-holding", score: 4 }
+    ]
+  },
+  {
+    text: "How do you make decisions about what's working and what isn't?",
+    options: [
+      { label: "Gut feeling and anecdotal evidence", desc: "Decisions are based on intuition more than data", score: 1 },
+      { label: "Manual reports pulled when someone asks", desc: "Data exists but extracting it is slow and reactive", score: 2 },
+      { label: "Regular reports, but building them takes effort", desc: "Reporting cadence exists but it's a manual lift", score: 3 },
+      { label: "Live dashboards or automated reports", desc: "Real-time visibility into key metrics without effort", score: 4 }
+    ]
+  },
+  {
+    text: "How does your team communicate about ongoing work?",
+    options: [
+      { label: "Verbal updates, texts, or scattered messages", desc: "No central thread; updates get lost between channels", score: 1 },
+      { label: "Email threads and occasional meetings", desc: "Structured but slow; context lives in inboxes", score: 2 },
+      { label: "Project tools exist but adoption is mixed", desc: "Some use the system, others default to old habits", score: 3 },
+      { label: "Single source of truth everyone actually uses", desc: "Status, tasks, and context live in one place the team trusts", score: 4 }
+    ]
+  },
+  {
+    text: "How often do errors or missed handoffs cause rework?",
+    options: [
+      { label: "Weekly — it's a known issue", desc: "Dropped balls and redo loops are a regular frustration", score: 1 },
+      { label: "Monthly — it happens but we recover", desc: "Not constant, but enough to notice the pattern", score: 2 },
+      { label: "Rarely — we've built checks for the big ones", desc: "Critical handoffs are protected; smaller ones still slip", score: 3 },
+      { label: "Almost never — systems catch problems before humans need to", desc: "Validation and alerts prevent most errors automatically", score: 4 }
+    ]
+  },
+  {
+    text: "If you could wave a magic wand, what would you fix first?",
+    options: [
+      { label: "We're drowning in manual data entry", desc: "Too much time spent typing things that should flow automatically", category: "automation" },
+      { label: "We can't see what's happening across the team", desc: "Lack of visibility makes coordination guesswork", category: "visibility" },
+      { label: "Our tools don't talk to each other", desc: "Information gets siloed and re-entered between systems", category: "integration" },
+      { label: "We don't know what we don't know", desc: "No clear picture of where inefficiencies actually are", category: "intelligence" }
+    ]
+  }
+];
+
+// State
+let currentQuestion = 0;
+let answers = [];
+let advanceTimeout = null;
+
+// Screen management
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + id);
+  if (target) {
+    // Force reflow for animation
+    target.style.animation = 'none';
+    target.offsetHeight;
+    target.style.animation = '';
+    target.classList.add('active');
+  }
+  // Progress bar visibility
+  const pw = document.getElementById('progressWrap');
+  if (id === 'question') {
+    pw.style.display = 'block';
+  } else {
+    pw.style.display = 'none';
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startAssessment() {
+  currentQuestion = 0;
+  answers = [];
+  showScreen('question');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  document.getElementById('questionStep').textContent = 'Question ' + (currentQuestion + 1) + ' of 7';
+  document.getElementById('questionText').textContent = q.text;
+
+  // Progress bar
+  document.getElementById('progressBar').style.width = ((currentQuestion + 1) / 7 * 100) + '%';
+
+  // Back button
+  document.getElementById('backBtn').style.display = currentQuestion === 0 ? 'none' : 'inline-flex';
+
+  // Options
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    if (answers[currentQuestion] === i) div.classList.add('selected');
+    div.innerHTML = '<div class="option-label">' + opt.label + '</div><div class="option-desc">' + opt.desc + '</div>';
+    div.addEventListener('click', () => selectOption(i));
+    container.appendChild(div);
+  });
+}
+
+function selectOption(index) {
+  if (advanceTimeout) clearTimeout(advanceTimeout);
+
+  answers[currentQuestion] = index;
+
+  // Visual feedback
+  document.querySelectorAll('.option').forEach((o, i) => {
+    o.classList.toggle('selected', i === index);
+  });
+
+  // Auto-advance
+  advanceTimeout = setTimeout(() => {
+    if (currentQuestion < 6) {
+      currentQuestion++;
+      renderQuestion();
+      // Re-trigger screen animation
+      const screen = document.getElementById('screen-question');
+      screen.style.animation = 'none';
+      screen.offsetHeight;
+      screen.style.animation = '';
+    } else {
+      showCalculating();
+    }
+  }, 400);
+}
+
+function goBack() {
+  if (advanceTimeout) clearTimeout(advanceTimeout);
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestion();
+  }
+}
+
+function showCalculating() {
+  showScreen('calculating');
+  setTimeout(() => {
+    calculateResults();
+    showScreen('results');
+    animateResults();
+  }, 1500);
+}
+
+function calculateResults() {
+  // Scores for Q1-Q6 (Q7 is categorical)
+  const scores = [];
+  for (let i = 0; i < 6; i++) {
+    scores.push(questions[i].options[answers[i]].score);
+  }
+
+  const totalScore = scores.reduce((a, b) => a + b, 0);
+
+  // Category averages
+  const automation = (scores[0] + scores[5]) / 2;   // Q1 + Q6
+  const data = (scores[1] + scores[3]) / 2;          // Q2 + Q4
+  const knowledge = (scores[2] + scores[4]) / 2;     // Q3 + Q5
+
+  // Q7 category
+  const q7Category = questions[6].options[answers[6]].category;
+
+  // Store for animation
+  window.pulseResults = { totalScore, automation, data, knowledge, q7Category };
+}
+
+function animateResults() {
+  const r = window.pulseResults;
+
+  // -- Score circle --
+  const circumference = 2 * Math.PI * 52; // ~326.73
+  const pct = r.totalScore / 24;
+  const offset = circumference * (1 - pct);
+  const circle = document.getElementById('scoreCircle');
+  setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
+
+  // -- Animated counter --
+  const display = document.getElementById('scoreDisplay');
+  animateCounter(display, 0, r.totalScore, 1200);
+
+  // -- Tier badge --
+  const badge = document.getElementById('tierBadge');
+  let tierText, tierColor;
+  if (r.totalScore <= 11) { tierText = 'Getting Started'; tierColor = '#FF6B6B'; }
+  else if (r.totalScore <= 17) { tierText = 'Building Foundation'; tierColor = '#FFD166'; }
+  else if (r.totalScore <= 22) { tierText = 'Well Positioned'; tierColor = '#64B5FF'; }
+  else { tierText = 'Digitally Mature'; tierColor = '#C4FF53'; }
+  badge.textContent = tierText;
+  badge.style.background = tierColor + '1a';
+  badge.style.color = tierColor;
+
+  // -- Category bars --
+  const cats = [
+    { name: 'Automation', value: r.automation },
+    { name: 'Data Management', value: r.data },
+    { name: 'Knowledge & Process', value: r.knowledge }
+  ];
+  const barsContainer = document.getElementById('categoryBars');
+  barsContainer.innerHTML = '';
+  cats.forEach(cat => {
+    const pctW = (cat.value / 4) * 100;
+    const row = document.createElement('div');
+    row.className = 'cat-row';
+    row.innerHTML =
+      '<div class="cat-label-row"><span class="cat-label">' + cat.name + '</span><span class="cat-value">' + cat.value.toFixed(1) + ' / 4.0</span></div>' +
+      '<div class="cat-bar-bg"><div class="cat-bar-fg" data-width="' + pctW + '"></div></div>';
+    barsContainer.appendChild(row);
+  });
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.cat-bar-fg').forEach(bar => {
+      bar.style.width = bar.dataset.width + '%';
+    });
+  }, 200);
+
+  // -- Key Findings --
+  const findingsEl = document.getElementById('findingsContainer');
+  findingsEl.innerHTML = '';
+  const findings = [];
+  if (r.automation < 2.5) findings.push("Your team spends significant time on tasks that could be automated. This is your highest-leverage improvement area.");
+  if (r.data < 2.5) findings.push("Client and operational data isn't consistently captured. Decisions are likely based on incomplete information.");
+  if (r.knowledge < 2.5) findings.push("Institutional knowledge is at risk. When team members leave, critical process knowledge goes with them.");
+  if (findings.length === 0) findings.push("Your foundation is solid. The next step is connecting your systems and finding the 20% of remaining manual work that creates 80% of the friction.");
+  // Add a general finding if we have fewer than 3
+  if (findings.length < 3 && r.automation >= 2.5) findings.push("Your automation is in good shape. Look for opportunities to connect existing automations for compound efficiency gains.");
+  if (findings.length < 3 && r.data >= 2.5) findings.push("Your data practices provide a solid base. Consider how real-time analytics could accelerate decision-making.");
+  if (findings.length < 3 && r.knowledge >= 2.5) findings.push("Knowledge management is a strength. Build on this with self-documenting workflows and automated onboarding paths.");
+  findings.slice(0, 3).forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'finding';
+    div.innerHTML = '<div class="finding-icon">&#9656;</div><div class="finding-text">' + f + '</div>';
+    findingsEl.appendChild(div);
+  });
+
+  // -- Recommendations --
+  const recsMap = {
+    automation: [
+      { title: "Map your top 5 repetitive tasks", desc: "Catalog the recurring work that eats the most hours. Rank by frequency and time cost per occurrence.", impact: "high" },
+      { title: "Identify what runs on tools you already have", desc: "Most teams only use 30% of their existing tool capabilities. Audit before buying anything new.", impact: "high" },
+      { title: "Start with the highest time-saver", desc: "Pick the one task that saves the most minutes per week and automate it first. Build momentum from wins.", impact: "medium" }
+    ],
+    visibility: [
+      { title: "Audit where team status lives today", desc: "List every place someone checks to understand what's happening. You'll likely find 5+ sources of partial truth.", impact: "high" },
+      { title: "Consolidate to a single dashboard", desc: "Choose one shared space for status updates. It doesn't need to be perfect — it needs to be used.", impact: "high" },
+      { title: "Set up a weekly async update ritual", desc: "Replace status meetings with a structured written check-in. Recovers meeting time while improving visibility.", impact: "medium" }
+    ],
+    integration: [
+      { title: "List every tool your team touches in a week", desc: "Map the full tool landscape. Include the unofficial ones — personal spreadsheets, sticky notes, workarounds.", impact: "high" },
+      { title: "Identify the manual bridges between tools", desc: "Find where someone is copy-pasting, re-entering, or manually syncing data between systems.", impact: "high" },
+      { title: "Prioritize the connection that eliminates the most copy-paste", desc: "One well-placed integration can remove hours of weekly manual work and reduce errors.", impact: "medium" }
+    ],
+    intelligence: [
+      { title: "Run a process audit", desc: "Document what actually happens vs. what should happen. The gap between the two is where your leverage is.", impact: "high" },
+      { title: "Identify your top 3 decision-making blind spots", desc: "Where do you wish you had data but don't? These are the areas where better information creates the most value.", impact: "high" },
+      { title: "Build a lightweight reporting habit", desc: "Start tracking key metrics weekly before investing in dashboards. The habit matters more than the tool.", impact: "medium" }
+    ]
+  };
+
+  const recs = recsMap[r.q7Category] || recsMap.automation;
+  const recCardsEl = document.getElementById('recCards');
+  recCardsEl.innerHTML = '';
+  recs.forEach((rec, i) => {
+    const card = document.createElement('div');
+    card.className = 'rec-card';
+    card.innerHTML =
+      '<div class="rec-num">0' + (i + 1) + '</div>' +
+      '<div class="rec-title">' + rec.title + '</div>' +
+      '<div class="rec-desc">' + rec.desc + '</div>' +
+      '<span class="rec-impact ' + rec.impact + '">' + rec.impact.toUpperCase() + ' IMPACT</span>';
+    recCardsEl.appendChild(card);
+  });
+
+  // -- ROI --
+  const roiEl = document.getElementById('roiStat');
+  if (r.totalScore < 15) {
+    roiEl.textContent = "Organizations at this stage typically recover 10\u201315 hours/week through targeted automation.";
+  } else if (r.totalScore <= 21) {
+    roiEl.textContent = "Organizations at this stage typically recover 5\u201310 hours/week by connecting existing systems.";
+  } else {
+    roiEl.textContent = "Organizations at this stage typically see 15\u201325% efficiency gains from strategic optimization.";
+  }
+}
+
+function animateCounter(el, from, to, duration) {
+  const start = performance.now();
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(from + (to - from) * eased);
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Email capture
+function handleEmail(e) {
+  e.preventDefault();
+  const email = document.getElementById('emailInput').value;
+  if (!email) return;
+
+  const r = window.pulseResults;
+  const payload = {
+    email: email,
+    _subject: 'Pulse Assessment Lead — ' + email,
+    score: r.totalScore + ' / 24',
+    tier: r.totalScore <= 11 ? 'Getting Started' : r.totalScore <= 17 ? 'Building Foundation' : r.totalScore <= 22 ? 'Well Positioned' : 'Digitally Mature',
+    automation: r.automation.toFixed(1) + ' / 4.0',
+    data_management: r.data.toFixed(1) + ' / 4.0',
+    knowledge_process: r.knowledge.toFixed(1) + ' / 4.0',
+    priority_area: r.q7Category,
+    answers: answers.map((a, i) => 'Q' + (i + 1) + ': Option ' + (a + 1)).join(', ')
+  };
+
+  // Send to Formspree
+  fetch('https://formspree.io/f/mkopjjab', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(res => {
+    if (res.ok) {
+      document.getElementById('emailForm').style.display = 'none';
+      document.getElementById('emailSuccess').style.display = 'block';
+    } else {
+      document.getElementById('emailSuccess').textContent = 'Something went wrong. Try again.';
+      document.getElementById('emailSuccess').style.display = 'block';
+    }
+  }).catch(() => {
+    document.getElementById('emailSuccess').textContent = 'Network error. Try again.';
+    document.getElementById('emailSuccess').style.display = 'block';
+  });
+
+  // Also store locally as backup
+  const stored = JSON.parse(localStorage.getItem('pulse_leads') || '[]');
+  stored.push({ ...payload, timestamp: new Date().toISOString() });
+  localStorage.setItem('pulse_leads', JSON.stringify(stored));
+}
+
+// Mobile nav toggle
+document.querySelector('.hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.mobile-nav').classList.toggle('open');
+});
+
+// Close mobile nav on link click
+document.querySelectorAll('.mobile-nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelector('.hamburger').classList.remove('open');
+    document.querySelector('.mobile-nav').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>
