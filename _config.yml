@@ -1,0 +1,6 @@
+# GitHub Pages / Jekyll config for luxiga.co
+# Keep this file minimal — the site is plain HTML, Jekyll is used only for its
+# exclude mechanism (to keep non-public paths out of the published site).
+
+exclude:
+  - infrastructure
