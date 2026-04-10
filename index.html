@@ -104,7 +104,8 @@ section{padding:6rem 2rem}
 .pulse-features{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2.5rem 0}
 .pulse-feature{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-card);padding:2rem 1.75rem;transition:border-color .3s}
 .pulse-feature:hover{border-color:var(--violet)}
-.pulse-icon{font-size:1.75rem;margin-bottom:1rem}
+.pulse-icon{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin-bottom:1rem;color:var(--accent)}
+.pulse-icon svg{width:100%;height:100%}
 .pulse-feature h4{font-size:1.05rem;font-weight:600;margin-bottom:.5rem}
 .pulse-feature p{color:var(--muted);font-size:.875rem;line-height:1.65}
 .pulse-cta-wrap{text-align:center;margin-top:2.5rem}
@@ -257,7 +258,7 @@ section{padding:6rem 2rem}
   <div class="hero-orb hero-orb--violet"></div>
   <div class="hero-content">
     <div class="hero-label reveal">AI Design Technology Studio</div>
-    <h1 class="reveal">I find the friction.<br>I build the fix.</h1>
+    <h1 class="reveal">I listen for the friction.<br>I build the fix.</h1>
     <p class="hero-subtitle reveal">Lukas Green &middot; AI Design Technologist &middot; Portland, OR</p>
     <p class="hero-tagline reveal">Design intelligence meets smart automation. I partner with teams to eliminate operational pain points through tools that actually get adopted.</p>
     <div class="hero-ctas reveal">
@@ -305,17 +306,46 @@ section{padding:6rem 2rem}
     <p class="section-subtitle reveal">Free AI-powered assessment of your business's digital readiness. Answer 7 questions. Get your score, benchmarks, and a custom action plan.</p>
     <div class="pulse-features">
       <div class="pulse-feature reveal">
-        <div class="pulse-icon">&#9878;</div>
+        <div class="pulse-icon" aria-hidden="true">
+          <!-- Checklist: 7 Questions -->
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="8" y="6" width="28" height="32" rx="3"/>
+            <path d="M14 15l3 3 5-6"/>
+            <line x1="25" y1="15" x2="32" y2="15"/>
+            <path d="M14 25l3 3 5-6"/>
+            <line x1="25" y1="25" x2="32" y2="25"/>
+            <line x1="14" y1="33" x2="32" y2="33"/>
+          </svg>
+        </div>
         <h4>7 Questions</h4>
         <p>Quick, focused diagnostic covering automation, tools, data, and workflows</p>
       </div>
       <div class="pulse-feature reveal">
-        <div class="pulse-icon">&#9733;</div>
+        <div class="pulse-icon" aria-hidden="true">
+          <!-- Gauge: Instant Score -->
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 30a16 16 0 0 1 32 0"/>
+            <line x1="22" y1="30" x2="30" y2="14"/>
+            <circle cx="22" cy="30" r="2" fill="currentColor" stroke="none"/>
+            <line x1="10" y1="30" x2="12" y2="30"/>
+            <line x1="22" y1="17" x2="22" y2="15"/>
+            <line x1="34" y1="30" x2="32" y2="30"/>
+          </svg>
+        </div>
         <h4>Instant Score</h4>
         <p>See where you stand compared to industry benchmarks with category breakdowns</p>
       </div>
       <div class="pulse-feature reveal">
-        <div class="pulse-icon">&#9889;</div>
+        <div class="pulse-icon" aria-hidden="true">
+          <!-- Target with arrow: Action Plan -->
+          <svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="22" cy="22" r="14"/>
+            <circle cx="22" cy="22" r="8"/>
+            <circle cx="22" cy="22" r="2" fill="currentColor" stroke="none"/>
+            <line x1="22" y1="22" x2="36" y2="8"/>
+            <polyline points="30 8 36 8 36 14"/>
+          </svg>
+        </div>
         <h4>Action Plan</h4>
         <p>Get specific, prioritized recommendations tailored to your business</p>
       </div>
@@ -409,7 +439,7 @@ section{padding:6rem 2rem}
     <div class="about-grid">
       <div class="about-photo-wrap reveal">
         <img src="assets/img/cartoon-lukas.jpeg" alt="Lukas Green" class="about-photo">
-        <div class="about-quote">"I find the pain point and I build the fix."</div>
+        <div class="about-quote">"I listen for what's getting in the way, then I build the fix."</div>
       </div>
       <div class="about-bio reveal">
         <p>I came up through graphic design: print shops, branding agencies, nonprofits. Over two decades developing an eye for what works across print, digital, and UX. Currently pursuing advanced studies at Portland State, where design and systems thinking keep colliding in useful ways.</p>
