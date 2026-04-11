@@ -1,5 +1,5 @@
 # LUXIGA.co — SESSION
-_Last updated: 2026-04-08_
+_Last updated: 2026-04-10_
 
 ---
 
@@ -31,6 +31,27 @@ The site is live at `luxiga.co` with:
 ---
 
 ## Build History
+
+### 2026-04-10 — Polish pass plan + git hygiene
+
+- **Design review** wearing brand / UX / creative-dev hats against references
+  the owner flagged as standout examples (moonbeam.network,
+  biotech.chipsa.design, htmlburger tech roundup)
+- **Diagnosis:** hero has six stacked elements and the declaration line is
+  undersized. Inverted hierarchy — the ambient layer (particles, orbs, mesh
+  gradient, cursor, watermark) is doing more perceptual work than the sentence
+- **Locked decisions:** polish pass (not rebuild); hero copy becomes
+  `"I hear friction. I build fixes."` (Lane 1 — drops soft syllables, hardens
+  opening consonant, sharpens metaphor); custom cursor stays
+- **Full plan** saved as `docs/polish-pass.md` — 9-item punch list with line
+  numbers, risk ratings, rationale, and explicit "not touched" list
+- **Git hygiene:** the `forge/projects/luxiga-co/` local copy had been
+  detached since the 2026-04-09 consolidation (no `.git`, edits couldn't
+  flow). Resolved by re-cloning fresh, verifying byte-identity with the
+  detached local (no changes to port), tidying `.gitignore`
+  (`test-results/`, `playwright-report/` added), committing, and replacing
+  the detached directory with the clone (node_modules preserved to avoid a
+  reinstall)
 
 ### 2026-04-08 — Audit fixes + favicon
 
