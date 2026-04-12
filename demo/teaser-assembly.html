@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXIGA Teaser — The Assembly</title>
+<style>
+* { margin: 0; padding: 0; }
+body { background: #080810; overflow: hidden; cursor: none; }
+canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+const ACCENT = '#C4FF53';
+const BG = '#080810';
+const SURFACE = '#0D0D1A';
+
+let W, H;
+let fragments = [];
+let connections = [];
+let phase = 'chaos';       // chaos → pulse → snap → hold → fade → reset
+let phaseTime = 0;
+let pulseX = -200;
+let globalAlpha = 1;
+let cameraZoom = 1;
+let cameraOffsetX = 0;
+let cameraOffsetY = 0;
+let grainCanvas, grainCtx;
+
+// Timing (seconds)
+const T_CHAOS = 2.5;
+const T_PULSE = 3.0;
+const T_HOLD = 3.0;
+const T_FADE = 1.5;
+const T_PAUSE = 1.0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  initGrain();
+}
+
+function initGrain() {
+  grainCanvas = document.createElement('canvas');
+  grainCanvas.width = W / 2;
+  grainCanvas.height = H / 2;
+  grainCtx = grainCanvas.getContext('2d');
+}
+
+function drawGrain(opacity) {
+  const d = grainCtx.createImageData(grainCanvas.width, grainCanvas.height);
+  const data = d.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const v = Math.random() * 30;
+    data[i] = data[i + 1] = data[i + 2] = v;
+    data[i + 3] = opacity * 255;
+  }
+  grainCtx.putImageData(d, 0, 0);
+  ctx.drawImage(grainCanvas, 0, 0, W, H);
+}
+
+// Fragment types
+const FRAG_TYPES = ['doc', 'spreadsheet', 'calendar', 'folder', 'receipt', 'card'];
+
+class Fragment {
+  constructor(i, total) {
+    this.type = FRAG_TYPES[i % FRAG_TYPES.length];
+    this.resetChaos();
+
+    // Grid target
+    const cols = Math.ceil(Math.sqrt(total * (W / H)));
+    const rows = Math.ceil(total / cols);
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const cellW = W * 0.6 / cols;
+    const cellH = H * 0.5 / rows;
+    this.targetX = W * 0.2 + col * cellW + cellW / 2;
+    this.targetY = H * 0.25 + row * cellH + cellH / 2;
+    this.targetRot = 0;
+    this.targetW = Math.min(cellW * 0.7, 60);
+    this.targetH = this.targetW * 1.3;
+
+    this.snapped = false;
+    this.snapProgress = 0;
+    this.glowIntensity = 0;
+    this.connectionAlpha = 0;
+  }
+
+  resetChaos() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.rot = (Math.random() - 0.5) * Math.PI * 0.8;
+    this.w = 30 + Math.random() * 40;
+    this.h = this.w * (1 + Math.random() * 0.6);
+    this.driftX = (Math.random() - 0.5) * 0.3;
+    this.driftY = (Math.random() - 0.5) * 0.2;
+    this.driftRot = (Math.random() - 0.5) * 0.003;
+    this.alpha = 0.15 + Math.random() * 0.25;
+    this.chaosX = this.x;
+    this.chaosY = this.y;
+    this.chaosRot = this.rot;
+    this.chaosW = this.w;
+    this.chaosH = this.h;
+  }
+
+  drift(dt) {
+    this.x += this.driftX * dt * 60;
+    this.y += this.driftY * dt * 60;
+    this.rot += this.driftRot * dt * 60;
+    // Wrap
+    if (this.x < -100) this.x = W + 100;
+    if (this.x > W + 100) this.x = -100;
+    if (this.y < -100) this.y = H + 100;
+    if (this.y > H + 100) this.y = -100;
+  }
+
+  snap(progress) {
+    this.snapProgress = Math.min(1, progress);
+    const t = easeOutBack(this.snapProgress);
+    this.x = lerp(this.chaosX, this.targetX, t);
+    this.y = lerp(this.chaosY, this.targetY, t);
+    this.rot = lerp(this.chaosRot, this.targetRot, t);
+    this.w = lerp(this.chaosW, this.targetW, t);
+    this.h = lerp(this.chaosH, this.targetH, t);
+    this.alpha = lerp(this.alpha, 0.8, t * 0.5);
+  }
+
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.globalAlpha = this.alpha * globalAlpha;
+
+    if (this.snapProgress > 0.9) {
+      // Wireframe style when snapped
+      const t = (this.snapProgress - 0.9) / 0.1;
+      ctx.strokeStyle = ACCENT;
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = t * 0.9 * globalAlpha;
+      ctx.strokeRect(-this.w / 2, -this.h / 2, this.w, this.h);
+
+      // Inner detail lines
+      ctx.globalAlpha = t * 0.4 * globalAlpha;
+      ctx.beginPath();
+      for (let i = 1; i <= 3; i++) {
+        const yy = -this.h / 2 + (this.h / 4) * i;
+        ctx.moveTo(-this.w / 2 + 6, yy);
+        ctx.lineTo(this.w / 2 - 6, yy);
+      }
+      ctx.stroke();
+
+      // Glow
+      if (this.glowIntensity > 0) {
+        ctx.globalAlpha = this.glowIntensity * 0.3 * globalAlpha;
+        ctx.shadowColor = ACCENT;
+        ctx.shadowBlur = 20;
+        ctx.strokeRect(-this.w / 2, -this.h / 2, this.w, this.h);
+        ctx.shadowBlur = 0;
+      }
+    } else {
+      // Paper/document style when chaotic
+      const shade = this.type === 'folder' ? '#1a1a2e' :
+                    this.type === 'spreadsheet' ? '#121225' : '#15152a';
+      ctx.fillStyle = shade;
+      ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+
+      // Faint edge
+      ctx.strokeStyle = 'rgba(136,136,153,0.15)';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(-this.w / 2, -this.h / 2, this.w, this.h);
+
+      // Content lines
+      ctx.fillStyle = 'rgba(136,136,153,0.08)';
+      for (let i = 0; i < 4; i++) {
+        const yy = -this.h / 2 + 8 + i * (this.h / 5);
+        const lw = this.w * (0.4 + Math.random() * 0.4);
+        ctx.fillRect(-this.w / 2 + 6, yy, lw, 2);
+      }
+    }
+
+    ctx.restore();
+  }
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function easeOutBack(t) {
+  const c1 = 1.70158;
+  const c3 = c1 + 1;
+  return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+}
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+function init() {
+  const count = 24;
+  fragments = [];
+  for (let i = 0; i < count; i++) {
+    fragments.push(new Fragment(i, count));
+  }
+
+  // Build connections between nearby grid targets
+  connections = [];
+  for (let i = 0; i < fragments.length; i++) {
+    for (let j = i + 1; j < fragments.length; j++) {
+      const dx = fragments[i].targetX - fragments[j].targetX;
+      const dy = fragments[i].targetY - fragments[j].targetY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < W * 0.18) {
+        connections.push({ a: i, b: j, alpha: 0 });
+      }
+    }
+  }
+
+  phase = 'chaos';
+  phaseTime = 0;
+  pulseX = -200;
+  globalAlpha = 1;
+  cameraZoom = 1;
+  cameraOffsetX = 0;
+  cameraOffsetY = 0;
+}
+
+function drawPulse() {
+  if (phase !== 'pulse') return;
+  const grad = ctx.createLinearGradient(pulseX - 80, 0, pulseX + 20, 0);
+  grad.addColorStop(0, 'rgba(196,255,83,0)');
+  grad.addColorStop(0.4, 'rgba(196,255,83,0.06)');
+  grad.addColorStop(0.8, 'rgba(196,255,83,0.25)');
+  grad.addColorStop(1, 'rgba(196,255,83,0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(pulseX - 80, 0, 100, H);
+
+  // Bright leading edge
+  ctx.strokeStyle = ACCENT;
+  ctx.lineWidth = 2;
+  ctx.globalAlpha = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(pulseX, 0);
+  ctx.lineTo(pulseX, H);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+}
+
+function drawConnections() {
+  ctx.strokeStyle = ACCENT;
+  ctx.lineWidth = 1;
+  for (const conn of connections) {
+    if (conn.alpha <= 0) continue;
+    const a = fragments[conn.a];
+    const b = fragments[conn.b];
+    ctx.globalAlpha = conn.alpha * 0.5 * globalAlpha;
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+
+    // Node dots at each end
+    ctx.globalAlpha = conn.alpha * 0.8 * globalAlpha;
+    ctx.fillStyle = ACCENT;
+    ctx.beginPath();
+    ctx.arc(a.x, a.y, 2.5, 0, Math.PI * 2);
+    ctx.arc(b.x, b.y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawWordmark(alpha) {
+  if (alpha <= 0) return;
+  ctx.save();
+  ctx.globalAlpha = alpha * globalAlpha;
+  ctx.font = "700 42px 'SF Mono', 'Fira Code', 'Courier New', monospace";
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.letterSpacing = '6px';
+
+  // Draw LUXIGA with UX in accent
+  const text = 'LUXIGA';
+  const metrics = ctx.measureText(text);
+  const startX = W / 2 - metrics.width / 2;
+  const y = H / 2 + 10;
+
+  // L
+  ctx.fillStyle = '#E8E8F0';
+  const parts = [
+    { text: 'L', color: '#E8E8F0' },
+    { text: 'UX', color: ACCENT },
+    { text: 'IGA', color: '#E8E8F0' }
+  ];
+  let xPos = startX;
+  for (const part of parts) {
+    ctx.fillStyle = part.color;
+    ctx.fillText(part.text, W / 2, y);
+  }
+
+  // Actually, just draw the whole word simply
+  // "L" in white, "UX" in accent, "IGA" in white
+  ctx.textAlign = 'left';
+  const fullWidth = ctx.measureText('LUXIGA').width;
+  let cx = W / 2 - fullWidth / 2;
+
+  ctx.fillStyle = '#E8E8F0';
+  ctx.fillText('L', cx, y);
+  cx += ctx.measureText('L').width;
+
+  ctx.fillStyle = ACCENT;
+  ctx.fillText('UX', cx, y);
+  cx += ctx.measureText('UX').width;
+
+  ctx.fillStyle = '#E8E8F0';
+  ctx.fillText('IGA', cx, y);
+
+  // Subtle glow behind
+  ctx.globalAlpha = alpha * 0.15;
+  ctx.shadowColor = ACCENT;
+  ctx.shadowBlur = 40;
+  ctx.fillStyle = ACCENT;
+  ctx.textAlign = 'center';
+  ctx.fillText('LUXIGA', W / 2, y);
+  ctx.shadowBlur = 0;
+
+  ctx.restore();
+}
+
+let lastTime = 0;
+let wordmarkAlpha = 0;
+
+function animate(time) {
+  const dt = Math.min((time - lastTime) / 1000, 0.05);
+  lastTime = time;
+  phaseTime += dt;
+
+  // Clear
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, W, H);
+
+  // Apply camera
+  ctx.save();
+  ctx.translate(W / 2, H / 2);
+  ctx.scale(cameraZoom, cameraZoom);
+  ctx.translate(-W / 2 + cameraOffsetX, -H / 2 + cameraOffsetY);
+
+  // Phase logic
+  switch (phase) {
+    case 'chaos':
+      for (const f of fragments) f.drift(dt);
+      if (phaseTime >= T_CHAOS) {
+        phase = 'pulse';
+        phaseTime = 0;
+        pulseX = -100;
+        for (const f of fragments) {
+          f.chaosX = f.x;
+          f.chaosY = f.y;
+          f.chaosRot = f.rot;
+        }
+      }
+      break;
+
+    case 'pulse':
+      const pulseSpeed = (W + 300) / T_PULSE;
+      pulseX += pulseSpeed * dt;
+
+      for (const f of fragments) {
+        if (!f.snapped && pulseX >= f.chaosX) {
+          f.snapped = true;
+        }
+        if (f.snapped) {
+          f.snap(f.snapProgress + dt * 2.5);
+          f.glowIntensity = Math.max(0, f.glowIntensity + (1 - f.glowIntensity) * dt * 3);
+        } else {
+          f.drift(dt);
+        }
+      }
+
+      // Connections appear as fragments snap
+      for (const conn of connections) {
+        const a = fragments[conn.a];
+        const b = fragments[conn.b];
+        if (a.snapProgress > 0.8 && b.snapProgress > 0.8) {
+          conn.alpha = Math.min(1, conn.alpha + dt * 2);
+        }
+      }
+
+      if (pulseX > W + 200) {
+        phase = 'hold';
+        phaseTime = 0;
+      }
+      break;
+
+    case 'hold':
+      // Gentle camera push in
+      cameraZoom = lerp(cameraZoom, 1.08, dt * 0.5);
+      cameraOffsetX = lerp(cameraOffsetX, 0, dt * 0.5);
+
+      // Glow breathing
+      for (const f of fragments) {
+        f.glowIntensity = 0.5 + 0.5 * Math.sin(phaseTime * 1.5 + f.targetX * 0.01);
+      }
+
+      // Wordmark fades in during hold
+      if (phaseTime > 1.5) {
+        wordmarkAlpha = Math.min(1, wordmarkAlpha + dt * 1.2);
+      }
+
+      if (phaseTime >= T_HOLD) {
+        phase = 'fade';
+        phaseTime = 0;
+      }
+      break;
+
+    case 'fade':
+      globalAlpha = Math.max(0, 1 - phaseTime / T_FADE);
+      wordmarkAlpha = globalAlpha;
+      cameraZoom = lerp(cameraZoom, 1.12, dt * 0.3);
+      if (phaseTime >= T_FADE) {
+        phase = 'pause';
+        phaseTime = 0;
+      }
+      break;
+
+    case 'pause':
+      globalAlpha = 0;
+      wordmarkAlpha = 0;
+      if (phaseTime >= T_PAUSE) {
+        init();
+      }
+      break;
+  }
+
+  // Draw
+  drawConnections();
+  for (const f of fragments) f.draw();
+  drawPulse();
+
+  ctx.restore();
+
+  // Wordmark (drawn outside camera transform)
+  drawWordmark(wordmarkAlpha);
+
+  // Film grain overlay
+  drawGrain(0.04);
+
+  // Vignette
+  const vGrad = ctx.createRadialGradient(W / 2, H / 2, W * 0.3, W / 2, H / 2, W * 0.8);
+  vGrad.addColorStop(0, 'rgba(8,8,16,0)');
+  vGrad.addColorStop(1, 'rgba(8,8,16,0.6)');
+  ctx.fillStyle = vGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', resize);
+resize();
+init();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
