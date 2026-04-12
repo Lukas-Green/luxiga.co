@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXIGA Teaser — The Signal</title>
+<style>
+* { margin: 0; padding: 0; }
+body { background: #080810; overflow: hidden; cursor: none; }
+canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+const ACCENT = '#C4FF53';
+const BG = '#080810';
+
+let W, H, CX, CY;
+let elapsed = 0;
+let globalAlpha = 1;
+let wordmarkAlpha = 0;
+
+// Timing
+const CYCLE = 12; // total cycle seconds
+const T_GRID = 1.5;
+const T_RADAR = 3.5;
+const T_DATA = 2.5;
+const T_HOLD = 3.0;
+const T_FADE = 1.5;
+
+// Data points that appear on the radar
+let dataPoints = [];
+let gridAlpha = 0;
+let radarAngle = 0;
+let heartbeatPhase = 0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  CX = W / 2;
+  CY = H / 2;
+  initData();
+}
+
+function initData() {
+  dataPoints = [];
+  const count = 18;
+  const maxR = Math.min(W, H) * 0.38;
+
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.3;
+    const r = maxR * (0.25 + Math.random() * 0.7);
+    dataPoints.push({
+      x: CX + Math.cos(angle) * r,
+      y: CY + Math.sin(angle) * r,
+      r: r,
+      angle: angle,
+      size: 2 + Math.random() * 3,
+      discovered: false,
+      discoverTime: 0,
+      pulseAlpha: 0,
+      label: ['CRM', 'ERP', 'FLOW', 'DATA', 'SYNC', 'AUTO', 'PIPE',
+              'DASH', 'TASK', 'MAIL', 'DOCS', 'SCAN', 'BILL', 'SHIP',
+              'PLAN', 'CHAT', 'CALC', 'FEED'][i % 18]
+    });
+  }
+}
+
+function drawGrid() {
+  if (gridAlpha <= 0) return;
+
+  ctx.save();
+  ctx.globalAlpha = gridAlpha * 0.08 * globalAlpha;
+  ctx.strokeStyle = ACCENT;
+  ctx.lineWidth = 0.5;
+
+  // Concentric circles
+  const maxR = Math.min(W, H) * 0.4;
+  const rings = 5;
+  for (let i = 1; i <= rings; i++) {
+    const r = (maxR / rings) * i;
+    ctx.beginPath();
+    ctx.arc(CX, CY, r, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Radial lines
+  for (let i = 0; i < 12; i++) {
+    const angle = (Math.PI * 2 / 12) * i;
+    ctx.beginPath();
+    ctx.moveTo(CX, CY);
+    ctx.lineTo(CX + Math.cos(angle) * maxR, CY + Math.sin(angle) * maxR);
+    ctx.stroke();
+  }
+
+  // Tick marks on circles
+  ctx.globalAlpha = gridAlpha * 0.15 * globalAlpha;
+  for (let i = 1; i <= rings; i++) {
+    const r = (maxR / rings) * i;
+    for (let j = 0; j < 36; j++) {
+      const a = (Math.PI * 2 / 36) * j;
+      const inner = r - 3;
+      const outer = r + 3;
+      ctx.beginPath();
+      ctx.moveTo(CX + Math.cos(a) * inner, CY + Math.sin(a) * inner);
+      ctx.lineTo(CX + Math.cos(a) * outer, CY + Math.sin(a) * outer);
+      ctx.stroke();
+    }
+  }
+
+  ctx.restore();
+}
+
+function drawRadarSweep(angle) {
+  const maxR = Math.min(W, H) * 0.4;
+
+  // Sweep cone
+  ctx.save();
+  const grad = ctx.createConicGradient(angle - 0.5, CX, CY);
+  grad.addColorStop(0, 'rgba(196,255,83,0)');
+  grad.addColorStop(0.06, 'rgba(196,255,83,0.08)');
+  grad.addColorStop(0.08, 'rgba(196,255,83,0)');
+  // Fill the rest transparent
+  for (let s = 0.1; s <= 1; s += 0.1) {
+    grad.addColorStop(Math.min(s, 1), 'rgba(196,255,83,0)');
+  }
+
+  ctx.globalAlpha = globalAlpha;
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(CX, CY, maxR, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Leading edge line
+  ctx.globalAlpha = 0.6 * globalAlpha;
+  ctx.strokeStyle = ACCENT;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(CX, CY);
+  ctx.lineTo(CX + Math.cos(angle) * maxR, CY + Math.sin(angle) * maxR);
+  ctx.stroke();
+
+  // Tip glow
+  ctx.globalAlpha = 0.3 * globalAlpha;
+  ctx.shadowColor = ACCENT;
+  ctx.shadowBlur = 20;
+  ctx.beginPath();
+  ctx.arc(CX + Math.cos(angle) * maxR * 0.9, CY + Math.sin(angle) * maxR * 0.9, 4, 0, Math.PI * 2);
+  ctx.fillStyle = ACCENT;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  ctx.restore();
+}
+
+function drawDataPoints() {
+  for (const dp of dataPoints) {
+    if (!dp.discovered) {
+      // Dormant — barely visible dot
+      ctx.globalAlpha = 0.06 * globalAlpha;
+      ctx.fillStyle = '#888899';
+      ctx.beginPath();
+      ctx.arc(dp.x, dp.y, dp.size * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+      continue;
+    }
+
+    const age = elapsed - dp.discoverTime;
+    const t = Math.min(1, age * 2);
+    const eased = easeOutCubic(t);
+
+    // Discovery ring
+    if (age < 1.5) {
+      ctx.globalAlpha = (1 - age / 1.5) * 0.5 * globalAlpha;
+      ctx.strokeStyle = ACCENT;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(dp.x, dp.y, dp.size + age * 40, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Core dot
+    ctx.globalAlpha = eased * 0.9 * globalAlpha;
+    ctx.fillStyle = ACCENT;
+    ctx.beginPath();
+    ctx.arc(dp.x, dp.y, dp.size * eased, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Bright center
+    ctx.globalAlpha = eased * 0.7 * globalAlpha;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(dp.x, dp.y, dp.size * 0.3 * eased, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Label
+    if (age > 0.5) {
+      const labelAlpha = Math.min(1, (age - 0.5) * 2);
+      ctx.globalAlpha = labelAlpha * 0.4 * globalAlpha;
+      ctx.fillStyle = ACCENT;
+      ctx.font = "600 9px 'SF Mono', 'Fira Code', 'Courier New', monospace";
+      ctx.textAlign = 'center';
+      ctx.fillText(dp.label, dp.x, dp.y - dp.size - 8);
+    }
+
+    // Connection lines to nearby discovered points
+    ctx.globalAlpha = eased * 0.12 * globalAlpha;
+    ctx.strokeStyle = ACCENT;
+    ctx.lineWidth = 0.5;
+    for (const other of dataPoints) {
+      if (other === dp || !other.discovered) continue;
+      const dx = dp.x - other.x;
+      const dy = dp.y - other.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < Math.min(W, H) * 0.2) {
+        ctx.beginPath();
+        ctx.moveTo(dp.x, dp.y);
+        ctx.lineTo(other.x, other.y);
+        ctx.stroke();
+      }
+    }
+
+    // Breathing pulse on discovered nodes
+    const breath = 0.7 + 0.3 * Math.sin(elapsed * 2 + dp.angle * 3);
+    ctx.globalAlpha = breath * 0.15 * globalAlpha;
+    ctx.fillStyle = ACCENT;
+    ctx.beginPath();
+    ctx.arc(dp.x, dp.y, dp.size * 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawHeartbeat() {
+  const y = H * 0.82;
+  const segW = W * 0.6;
+  const startX = W * 0.2;
+  const progress = Math.min(1, Math.max(0, (elapsed - T_GRID) / (T_RADAR + T_DATA)));
+
+  ctx.beginPath();
+  ctx.globalAlpha = 0.6 * globalAlpha;
+  ctx.strokeStyle = ACCENT;
+  ctx.lineWidth = 2;
+  ctx.shadowColor = ACCENT;
+  ctx.shadowBlur = 8;
+
+  const activeX = startX + segW * progress;
+
+  for (let x = startX; x < activeX; x += 2) {
+    const t = (x - startX) / segW;
+
+    // ECG-style heartbeat pattern
+    let val = 0;
+    const beat = (t * 8 + elapsed * 0.5) % 1;
+    if (beat > 0.4 && beat < 0.42) val = -15;
+    else if (beat > 0.42 && beat < 0.46) val = 45;
+    else if (beat > 0.46 && beat < 0.50) val = -25;
+    else if (beat > 0.50 && beat < 0.53) val = 10;
+    else if (beat > 0.53 && beat < 0.56) val = 0;
+    else val = Math.sin(x * 0.03 + elapsed) * 2;
+
+    // Fade edges
+    const edgeFade = Math.min(1, (x - startX) / 30, (activeX - x) / 30);
+    val *= edgeFade;
+
+    if (x === startX) ctx.moveTo(x, y + val);
+    else ctx.lineTo(x, y + val);
+  }
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Leading dot
+  if (progress > 0 && progress < 1) {
+    ctx.globalAlpha = 0.9 * globalAlpha;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(activeX, y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // "PULSE" label
+  if (progress > 0.1) {
+    ctx.globalAlpha = Math.min(0.25, progress) * globalAlpha;
+    ctx.fillStyle = ACCENT;
+    ctx.font = "700 10px 'SF Mono', 'Fira Code', 'Courier New', monospace";
+    ctx.textAlign = 'left';
+    ctx.letterSpacing = '3px';
+    ctx.fillText('P U L S E', startX, y + 30);
+  }
+}
+
+function drawCenterReticle() {
+  const r = 12;
+  const t = Math.min(1, elapsed / T_GRID);
+
+  ctx.save();
+  ctx.globalAlpha = t * 0.5 * globalAlpha;
+  ctx.strokeStyle = ACCENT;
+  ctx.lineWidth = 1.5;
+
+  // Crosshairs
+  const gap = 5;
+  const len = 12;
+  // Top
+  ctx.beginPath();
+  ctx.moveTo(CX, CY - gap);
+  ctx.lineTo(CX, CY - gap - len);
+  ctx.stroke();
+  // Bottom
+  ctx.beginPath();
+  ctx.moveTo(CX, CY + gap);
+  ctx.lineTo(CX, CY + gap + len);
+  ctx.stroke();
+  // Left
+  ctx.beginPath();
+  ctx.moveTo(CX - gap, CY);
+  ctx.lineTo(CX - gap - len, CY);
+  ctx.stroke();
+  // Right
+  ctx.beginPath();
+  ctx.moveTo(CX + gap, CY);
+  ctx.lineTo(CX + gap + len, CY);
+  ctx.stroke();
+
+  // Center dot
+  ctx.globalAlpha = t * 0.8 * globalAlpha;
+  ctx.fillStyle = ACCENT;
+  ctx.beginPath();
+  ctx.arc(CX, CY, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Rotating outer brackets
+  ctx.globalAlpha = t * 0.3 * globalAlpha;
+  ctx.lineWidth = 1;
+  const outerR = 25;
+  const bracketArc = 0.3;
+  for (let i = 0; i < 4; i++) {
+    const baseAngle = (Math.PI / 2) * i + elapsed * 0.3;
+    ctx.beginPath();
+    ctx.arc(CX, CY, outerR, baseAngle, baseAngle + bracketArc);
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+function drawWordmark(alpha) {
+  if (alpha <= 0) return;
+  ctx.save();
+  ctx.globalAlpha = alpha * globalAlpha;
+  ctx.font = "700 48px 'SF Mono', 'Fira Code', 'Courier New', monospace";
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+
+  const y = CY;
+  const fullWidth = ctx.measureText('LUXIGA').width;
+  let cx = CX - fullWidth / 2;
+
+  ctx.fillStyle = '#E8E8F0';
+  ctx.fillText('L', cx, y);
+  cx += ctx.measureText('L').width;
+  ctx.fillStyle = ACCENT;
+  ctx.fillText('UX', cx, y);
+  cx += ctx.measureText('UX').width;
+  ctx.fillStyle = '#E8E8F0';
+  ctx.fillText('IGA', cx, y);
+
+  // Tagline
+  ctx.globalAlpha = alpha * 0.4;
+  ctx.font = "400 14px 'SF Mono', 'Fira Code', 'Courier New', monospace";
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#B4B4C4';
+  ctx.fillText('systems that work', CX, y + 40);
+
+  // Glow
+  ctx.globalAlpha = alpha * 0.1;
+  ctx.shadowColor = ACCENT;
+  ctx.shadowBlur = 60;
+  ctx.font = "700 48px 'SF Mono', 'Fira Code', 'Courier New', monospace";
+  ctx.fillStyle = ACCENT;
+  ctx.fillText('LUXIGA', CX, y);
+  ctx.shadowBlur = 0;
+
+  ctx.restore();
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+let lastTime = 0;
+
+function animate(time) {
+  const dt = Math.min((time - lastTime) / 1000, 0.05);
+  lastTime = time;
+  elapsed += dt;
+
+  // Cycle management
+  const cycleElapsed = elapsed % (CYCLE + 1.5);
+
+  if (cycleElapsed < 0.5) {
+    globalAlpha = cycleElapsed / 0.5;
+    wordmarkAlpha = 0;
+  } else if (cycleElapsed < CYCLE - T_FADE) {
+    globalAlpha = 1;
+    // Wordmark in final hold
+    const holdStart = T_GRID + T_RADAR + T_DATA;
+    if (cycleElapsed > holdStart + 1) {
+      wordmarkAlpha = Math.min(1, (cycleElapsed - holdStart - 1) * 1.2);
+    }
+  } else if (cycleElapsed < CYCLE) {
+    const fadeProgress = (cycleElapsed - (CYCLE - T_FADE)) / T_FADE;
+    globalAlpha = 1 - fadeProgress;
+    wordmarkAlpha = globalAlpha;
+  } else {
+    globalAlpha = 0;
+    wordmarkAlpha = 0;
+    if (cycleElapsed > CYCLE + 1) {
+      elapsed = 0;
+      initData();
+    }
+  }
+
+  // Radar sweep
+  if (cycleElapsed > T_GRID && cycleElapsed < T_GRID + T_RADAR + T_DATA) {
+    radarAngle += dt * 1.8;
+
+    // Discover points when radar passes them
+    for (const dp of dataPoints) {
+      if (dp.discovered) continue;
+      const angleDiff = ((radarAngle % (Math.PI * 2)) - ((dp.angle + Math.PI * 2) % (Math.PI * 2)));
+      if (Math.abs(angleDiff) < 0.15 || Math.abs(angleDiff - Math.PI * 2) < 0.15) {
+        dp.discovered = true;
+        dp.discoverTime = elapsed;
+      }
+    }
+  }
+
+  // Clear
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, W, H);
+
+  // Draw layers
+  const gridT = Math.min(1, cycleElapsed / T_GRID);
+  gridAlpha = easeOutCubic(gridT);
+
+  drawGrid();
+  drawCenterReticle();
+
+  if (cycleElapsed > T_GRID) {
+    drawRadarSweep(radarAngle);
+  }
+
+  drawDataPoints();
+  drawHeartbeat();
+
+  ctx.globalAlpha = 1;
+  drawWordmark(wordmarkAlpha);
+
+  // Vignette
+  ctx.globalAlpha = 1;
+  const vGrad = ctx.createRadialGradient(CX, CY, Math.min(W, H) * 0.2, CX, CY, Math.max(W, H) * 0.7);
+  vGrad.addColorStop(0, 'rgba(8,8,16,0)');
+  vGrad.addColorStop(1, 'rgba(8,8,16,0.65)');
+  ctx.fillStyle = vGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle scanlines
+  ctx.globalAlpha = 0.025;
+  ctx.fillStyle = '#000';
+  for (let y = 0; y < H; y += 3) {
+    ctx.fillRect(0, y, W, 1);
+  }
+  ctx.globalAlpha = 1;
+
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', resize);
+resize();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>

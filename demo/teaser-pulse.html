@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUXIGA Teaser — The Pulse</title>
+<style>
+* { margin: 0; padding: 0; }
+body { background: #080810; overflow: hidden; cursor: none; }
+canvas { display: block; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+const ACCENT = [196, 255, 83];
+const ACCENT_HEX = '#C4FF53';
+const BG = '#080810';
+
+let W, H;
+let nodes = [];
+let paths = [];
+let pulses = [];
+let wavePoints = [];
+let elapsed = 0;
+let phase = 'build';  // build → travel → bloom → hold → fade → reset
+let phaseTime = 0;
+let globalAlpha = 1;
+let wordmarkAlpha = 0;
+
+const T_BUILD = 1.5;
+const T_TRAVEL = 3.5;
+const T_BLOOM = 2.0;
+const T_HOLD = 2.5;
+const T_FADE = 1.5;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  initNetwork();
+}
+
+class Node {
+  constructor(x, y, size, delay) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.delay = delay;
+    this.active = false;
+    this.activateTime = 0;
+    this.bloomProgress = 0;
+    this.ringAlpha = 0;
+  }
+
+  activate() {
+    if (this.active) return;
+    this.active = true;
+    this.activateTime = elapsed;
+  }
+
+  draw() {
+    if (!this.active) {
+      // Dormant node — barely visible
+      ctx.globalAlpha = 0.08 * globalAlpha;
+      ctx.fillStyle = '#888899';
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
+
+    const age = elapsed - this.activateTime;
+    this.bloomProgress = Math.min(1, age * 2.5);
+    const t = easeOutCubic(this.bloomProgress);
+
+    // Expanding ring
+    this.ringAlpha = Math.max(0, 1 - age * 1.2);
+    if (this.ringAlpha > 0) {
+      ctx.globalAlpha = this.ringAlpha * 0.4 * globalAlpha;
+      ctx.strokeStyle = ACCENT_HEX;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size + age * 60, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Outer glow
+    ctx.globalAlpha = t * 0.15 * globalAlpha;
+    ctx.shadowColor = ACCENT_HEX;
+    ctx.shadowBlur = 30;
+    ctx.fillStyle = ACCENT_HEX;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Core
+    ctx.globalAlpha = t * 0.9 * globalAlpha;
+    ctx.fillStyle = ACCENT_HEX;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * t, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Inner bright point
+    ctx.globalAlpha = t * globalAlpha;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * 0.35 * t, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+class Pulse {
+  constructor(path, delay) {
+    this.path = path;
+    this.delay = delay;
+    this.progress = 0;
+    this.started = false;
+    this.done = false;
+    this.trail = [];
+  }
+
+  update(dt) {
+    if (this.done) return;
+    if (elapsed < this.delay) return;
+    this.started = true;
+    this.progress = Math.min(1, this.progress + dt * 0.8);
+
+    // Build trail
+    const p = this.getPosition();
+    this.trail.push({ x: p.x, y: p.y, time: elapsed });
+    if (this.trail.length > 80) this.trail.shift();
+
+    // Activate target node when pulse arrives
+    if (this.progress >= 0.95 && !this.done) {
+      this.done = true;
+      this.path.to.activate();
+    }
+  }
+
+  getPosition() {
+    const t = easeInOutCubic(this.progress);
+    return {
+      x: lerp(this.path.from.x, this.path.to.x, t),
+      y: lerp(this.path.from.y, this.path.to.y, t)
+    };
+  }
+
+  draw() {
+    if (!this.started || this.trail.length < 2) return;
+
+    // Trail
+    for (let i = 1; i < this.trail.length; i++) {
+      const age = elapsed - this.trail[i].time;
+      const alpha = Math.max(0, 1 - age * 2) * 0.6;
+      if (alpha <= 0) continue;
+      ctx.globalAlpha = alpha * globalAlpha;
+      ctx.strokeStyle = ACCENT_HEX;
+      ctx.lineWidth = 3 * (1 - age * 1.5);
+      ctx.beginPath();
+      ctx.moveTo(this.trail[i - 1].x, this.trail[i - 1].y);
+      ctx.lineTo(this.trail[i].x, this.trail[i].y);
+      ctx.stroke();
+    }
+
+    // Head glow
+    if (this.progress < 1) {
+      const p = this.getPosition();
+      ctx.globalAlpha = 0.8 * globalAlpha;
+      ctx.shadowColor = ACCENT_HEX;
+      ctx.shadowBlur = 25;
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      ctx.globalAlpha = 0.3 * globalAlpha;
+      ctx.fillStyle = ACCENT_HEX;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 12, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+function initNetwork() {
+  nodes = [];
+  paths = [];
+  pulses = [];
+
+  // Central node (origin of the pulse)
+  const center = new Node(W * 0.12, H * 0.5, 6, 0);
+  center.activate();
+  nodes.push(center);
+
+  // Build a network branching rightward
+  const layers = [
+    [{ y: 0.5 }],
+    [{ y: 0.3 }, { y: 0.7 }],
+    [{ y: 0.2 }, { y: 0.45 }, { y: 0.7 }, { y: 0.85 }],
+    [{ y: 0.15 }, { y: 0.35 }, { y: 0.55 }, { y: 0.75 }, { y: 0.9 }],
+    [{ y: 0.3 }, { y: 0.55 }, { y: 0.8 }]
+  ];
+
+  const layerX = [0.12, 0.28, 0.45, 0.62, 0.8];
+  let delay = T_BUILD;
+
+  for (let l = 1; l < layers.length; l++) {
+    for (let n = 0; n < layers[l].length; n++) {
+      const x = layerX[l] * W + (Math.random() - 0.5) * W * 0.04;
+      const y = layers[l][n].y * H + (Math.random() - 0.5) * H * 0.05;
+      const size = 3 + Math.random() * 4;
+      const node = new Node(x, y, size, delay);
+      nodes.push(node);
+
+      // Connect to closest node in previous layer
+      const prevLayerStart = l <= 1 ? 0 : layers.slice(0, l - 1).reduce((s, a) => s + a.length, 0);
+      const prevLayerEnd = prevLayerStart + layers[l - 1].length;
+      let closest = prevLayerStart;
+      let closestDist = Infinity;
+      for (let p = prevLayerStart; p < prevLayerEnd; p++) {
+        const d = Math.abs(nodes[p].y - y);
+        if (d < closestDist) { closestDist = d; closest = p; }
+      }
+
+      const path = { from: nodes[closest], to: node };
+      paths.push(path);
+      pulses.push(new Pulse(path, delay));
+      delay += 0.25 + Math.random() * 0.3;
+    }
+  }
+
+  // Waveform at bottom
+  wavePoints = [];
+  for (let x = 0; x < W; x += 3) {
+    wavePoints.push({ x, y: 0, active: false });
+  }
+}
+
+function drawPaths() {
+  // Dormant paths
+  ctx.strokeStyle = '#1a1a2e';
+  ctx.lineWidth = 1;
+  ctx.globalAlpha = 0.3 * globalAlpha;
+  for (const path of paths) {
+    ctx.beginPath();
+    ctx.moveTo(path.from.x, path.from.y);
+    ctx.lineTo(path.to.x, path.to.y);
+    ctx.stroke();
+  }
+
+  // Active paths (where both nodes are active)
+  ctx.strokeStyle = ACCENT_HEX;
+  ctx.lineWidth = 1;
+  for (const path of paths) {
+    if (path.from.active && path.to.active) {
+      const toAge = elapsed - path.to.activateTime;
+      ctx.globalAlpha = Math.min(1, toAge * 2) * 0.35 * globalAlpha;
+      ctx.beginPath();
+      ctx.moveTo(path.from.x, path.from.y);
+      ctx.lineTo(path.to.x, path.to.y);
+      ctx.stroke();
+    }
+  }
+}
+
+function drawWaveform() {
+  const waveY = H * 0.88;
+  const amp = 25;
+  const activeX = Math.max(0, (elapsed - T_BUILD) / T_TRAVEL * W);
+
+  ctx.beginPath();
+  ctx.globalAlpha = 0.5 * globalAlpha;
+
+  for (let i = 0; i < wavePoints.length; i++) {
+    const wp = wavePoints[i];
+    if (wp.x > activeX) {
+      // Dormant flat line
+      if (i === 0 || wavePoints[i - 1].x <= activeX) {
+        ctx.moveTo(wp.x, waveY);
+      }
+      ctx.strokeStyle = '#1a1a2e';
+      ctx.globalAlpha = 0.2 * globalAlpha;
+      ctx.lineTo(wp.x, waveY);
+    } else {
+      // Active waveform
+      const freq1 = 0.015;
+      const freq2 = 0.035;
+      const freq3 = 0.008;
+      const pulse = Math.exp(-Math.pow((wp.x - activeX + 40) / 60, 2));
+      const y = waveY +
+        Math.sin(wp.x * freq1 + elapsed * 3) * amp * 0.5 +
+        Math.sin(wp.x * freq2 + elapsed * 5) * amp * 0.3 * pulse +
+        Math.sin(wp.x * freq3 - elapsed * 2) * amp * 0.7;
+
+      if (i === 0) ctx.moveTo(wp.x, y);
+      else ctx.lineTo(wp.x, y);
+    }
+  }
+  ctx.strokeStyle = ACCENT_HEX;
+  ctx.lineWidth = 1.5;
+  ctx.globalAlpha = 0.5 * globalAlpha;
+  ctx.stroke();
+
+  // Bright leading edge of waveform
+  if (activeX > 0 && activeX < W) {
+    ctx.globalAlpha = 0.8 * globalAlpha;
+    ctx.shadowColor = ACCENT_HEX;
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    const edgeY = waveY + Math.sin(activeX * 0.015 + elapsed * 3) * amp * 0.5;
+    ctx.arc(activeX, edgeY, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+function drawWordmark(alpha) {
+  if (alpha <= 0) return;
+  ctx.save();
+  ctx.globalAlpha = alpha * globalAlpha;
+  ctx.font = "700 42px 'SF Mono', 'Fira Code', 'Courier New', monospace";
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+
+  const y = H * 0.5;
+  const fullWidth = ctx.measureText('LUXIGA').width;
+  let cx = W / 2 - fullWidth / 2;
+
+  ctx.fillStyle = '#E8E8F0';
+  ctx.fillText('L', cx, y);
+  cx += ctx.measureText('L').width;
+  ctx.fillStyle = ACCENT_HEX;
+  ctx.fillText('UX', cx, y);
+  cx += ctx.measureText('UX').width;
+  ctx.fillStyle = '#E8E8F0';
+  ctx.fillText('IGA', cx, y);
+
+  ctx.globalAlpha = alpha * 0.12;
+  ctx.shadowColor = ACCENT_HEX;
+  ctx.shadowBlur = 50;
+  ctx.textAlign = 'center';
+  ctx.fillStyle = ACCENT_HEX;
+  ctx.fillText('LUXIGA', W / 2, y);
+  ctx.shadowBlur = 0;
+
+  ctx.restore();
+}
+
+function drawGrain(opacity) {
+  const imageData = ctx.getImageData(0, 0, W, H);
+  const data = imageData.data;
+  // Light grain — only add to every 4th pixel for performance
+  for (let i = 0; i < data.length; i += 16) {
+    const noise = (Math.random() - 0.5) * 15 * opacity;
+    data[i] += noise;
+    data[i + 1] += noise;
+    data[i + 2] += noise;
+  }
+  ctx.putImageData(imageData, 0, 0);
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+let lastTime = 0;
+
+function animate(time) {
+  const dt = Math.min((time - lastTime) / 1000, 0.05);
+  lastTime = time;
+  elapsed += dt;
+  phaseTime += dt;
+
+  // Phase management
+  const totalActive = T_BUILD + T_TRAVEL + T_BLOOM + T_HOLD + T_FADE;
+  const cycleTime = elapsed % (totalActive + 1.5);
+
+  if (cycleTime < T_BUILD) {
+    phase = 'build';
+    globalAlpha = Math.min(1, cycleTime / 0.5);
+  } else if (cycleTime < T_BUILD + T_TRAVEL) {
+    phase = 'travel';
+  } else if (cycleTime < T_BUILD + T_TRAVEL + T_BLOOM) {
+    phase = 'bloom';
+  } else if (cycleTime < T_BUILD + T_TRAVEL + T_BLOOM + T_HOLD) {
+    phase = 'hold';
+    const holdT = cycleTime - (T_BUILD + T_TRAVEL + T_BLOOM);
+    if (holdT > 1) {
+      wordmarkAlpha = Math.min(1, (holdT - 1) * 1.5);
+    }
+  } else if (cycleTime < totalActive) {
+    phase = 'fade';
+    const fadeT = cycleTime - (T_BUILD + T_TRAVEL + T_BLOOM + T_HOLD);
+    globalAlpha = Math.max(0, 1 - fadeT / T_FADE);
+    wordmarkAlpha = globalAlpha;
+  } else {
+    globalAlpha = 0;
+    wordmarkAlpha = 0;
+    // Reset
+    if (cycleTime > totalActive + 1) {
+      elapsed = 0;
+      phaseTime = 0;
+      initNetwork();
+    }
+  }
+
+  // Clear
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, W, H);
+
+  // Update pulses
+  for (const p of pulses) p.update(dt);
+
+  // Draw
+  drawPaths();
+  for (const p of pulses) p.draw();
+  for (const n of nodes) n.draw();
+  drawWaveform();
+
+  ctx.globalAlpha = 1;
+  drawWordmark(wordmarkAlpha);
+
+  // Vignette
+  const vGrad = ctx.createRadialGradient(W / 2, H / 2, W * 0.25, W / 2, H / 2, W * 0.75);
+  vGrad.addColorStop(0, 'rgba(8,8,16,0)');
+  vGrad.addColorStop(1, 'rgba(8,8,16,0.5)');
+  ctx.fillStyle = vGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Scanline subtle effect
+  ctx.globalAlpha = 0.03;
+  for (let y = 0; y < H; y += 3) {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, y, W, 1);
+  }
+  ctx.globalAlpha = 1;
+
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', resize);
+resize();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
