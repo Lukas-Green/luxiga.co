@@ -96,8 +96,10 @@ jobs:
         with:
           args: >-
             --no-progress
+            --base .
             --exclude 'formspree.io'
             --exclude 'calendly.com'
+            --exclude 'linkedin.com'
             --exclude 'mailto:'
             '*.html'
             'case-studies/*.html'
