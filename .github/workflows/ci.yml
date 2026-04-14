@@ -96,7 +96,7 @@ jobs:
         with:
           args: >-
             --no-progress
-            --base .
+            --root-dir .
             --exclude 'formspree.io'
             --exclude 'calendly.com'
             --exclude 'linkedin.com'
