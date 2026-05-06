@@ -71,7 +71,7 @@ section{padding:6rem 2rem}
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding-top:64px}
 .hero-canvas{position:absolute;inset:0;z-index:0}
 .hero-canvas canvas{width:100%;height:100%}
-.hero-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:clamp(6rem,15vw,14rem);font-weight:700;color:rgba(196,255,83,.04);letter-spacing:.15em;pointer-events:none;z-index:1;white-space:nowrap;user-select:none}
+.hero-watermark{position:absolute;top:28%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:clamp(7rem,17vw,16rem);font-weight:800;color:rgba(196,255,83,.06);letter-spacing:.16em;pointer-events:none;z-index:1;white-space:nowrap;user-select:none}
 .hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:1;opacity:0;animation:orbFadeIn 1.5s 1.5s forwards}
 .hero-orb--lime{width:340px;height:340px;background:rgba(196,255,83,.12);top:20%;left:15%;animation:orbFadeIn 1.5s 1.5s forwards,orbFloat 8s 3s ease-in-out infinite}
 .hero-orb--violet{width:280px;height:280px;background:rgba(139,92,246,.1);bottom:15%;right:10%;animation:orbFadeIn 1.5s 1.8s forwards,orbFloat 10s 3.3s ease-in-out infinite reverse}
@@ -118,8 +118,15 @@ section{padding:6rem 2rem}
 /* ── PROJECTS ── */
 .projects{background:var(--bg)}
 .projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3rem}
-.project-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:2.25rem 2rem;transition:border-color .3s,transform .3s}
+.project-card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:2.25rem 2rem;transition:border-color .3s,transform .3s,box-shadow .3s}
 .project-card:hover{border-color:var(--violet);transform:translateY(-4px)}
+.project-card--featured{background:linear-gradient(135deg,var(--surface) 0%,rgba(196,255,83,.05) 100%);border-color:rgba(196,255,83,.3);box-shadow:0 0 28px rgba(196,255,83,.06)}
+.project-card--featured:hover{border-color:var(--accent);box-shadow:0 0 36px rgba(196,255,83,.12);transform:translateY(-4px)}
+.project-card-badge{position:absolute;top:1.25rem;right:1.25rem;font-family:var(--mono);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;background:var(--accent);color:#0a0a0a;padding:.25rem .55rem;border-radius:999px;font-weight:700;animation:badgePulse 3s ease-in-out infinite}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(196,255,83,.5)}50%{box-shadow:0 0 0 6px rgba(196,255,83,0)}}
+.project-spark{display:inline-block;font-size:.95rem;animation:sparkSpin 4s ease-in-out infinite}
+@keyframes sparkSpin{0%,90%,100%{transform:rotate(0deg)}45%{transform:rotate(15deg)}55%{transform:rotate(-15deg)}}
+.project-status{display:inline-block;margin-top:.6rem;font-family:var(--mono);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:.18rem .5rem;border:1px solid var(--border);border-radius:999px}
 .project-tag{font-family:var(--mono);font-size:.7rem;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.75rem}
 .project-card h3{font-size:1.2rem;font-weight:600;margin-bottom:.35rem}
 .project-origin{font-style:italic;color:var(--accent);font-size:.85rem;margin-bottom:.75rem}
@@ -411,8 +418,8 @@ section{padding:6rem 2rem}
       <a href="https://calendly.com/lukasgreen-ai-design" class="btn-secondary" target="_blank" rel="noopener">Book a Strategy Call &rarr;</a>
     </div>
     <div class="stats-bar reveal">
-      <div class="stat"><div class="stat-number" data-target="22" data-suffix="+">0</div><div class="stat-label">Years in Design</div></div>
-      <div class="stat"><div class="stat-number" data-target="14">0</div><div class="stat-label">Active Projects</div></div>
+      <div class="stat"><div class="stat-number" data-target="4" data-suffix=" yrs">0</div><div class="stat-label">UX Practice</div></div>
+      <div class="stat"><div class="stat-number" data-target="6" data-suffix="+">0</div><div class="stat-label">Products Shipped</div></div>
       <div class="stat"><div class="stat-number" data-target="100" data-suffix="%">0</div><div class="stat-label">Pain-Point Driven</div></div>
     </div>
   </div>
@@ -520,13 +527,14 @@ section{padding:6rem 2rem}
         <a href="case-studies/canvasskit.html" class="project-link">View Case Study &rarr;</a>
       </div>
 
-      <div class="project-card reveal">
+      <div class="project-card project-card--featured reveal">
+        <div class="project-card-badge">Live</div>
         <div class="project-tag">Invoicing / Finance</div>
-        <h3>SoloBill</h3>
+        <h3>SoloBill <span class="project-spark">⚡</span></h3>
         <div class="project-origin">"contractor overpaying for 10% of a platform"</div>
-        <p>Generates, tracks, and sends invoices from Google Sheets. PDF export, client tracking, email triggers. No paid platform needed.</p>
+        <p>Send a polished invoice in 90 seconds — straight from Google Sheets. PDF export, client tracking, auto-reminders, payment links. No SaaS subscription, no learning curve, no monthly fee for software you barely use.</p>
         <div class="project-stack">
-          <span>Apps Script</span><span>Docs</span><span>PDF Export</span>
+          <span>Apps Script</span><span>Docs</span><span>Stripe-ready</span>
         </div>
         <a href="case-studies/solobill.html" class="project-link">View Case Study &rarr;</a>
       </div>
@@ -535,20 +543,22 @@ section{padding:6rem 2rem}
         <div class="project-tag">Field Data Capture</div>
         <h3>FieldKit</h3>
         <div class="project-origin">"same problem, eight different industries"</div>
-        <p>White-label field data capture framework. One engine powers eight industry verticals &mdash; from construction inspections to healthcare intake. Google Workspace native, zero infrastructure.</p>
+        <p>White-label field data capture framework. One engine powers eight verticals &mdash; construction inspections, healthcare intake, real-estate showings, more. Google Workspace native, zero infrastructure to maintain.</p>
         <div class="project-stack">
           <span>Apps Script</span><span>Sheets</span><span>Config Engine</span>
         </div>
+        <span class="project-status">In customer trials</span>
       </div>
 
       <div class="project-card reveal">
         <div class="project-tag">AI / Healthcare</div>
         <h3>RecallAI</h3>
         <div class="project-origin">"no-shows are a solved problem most clinics haven't solved"</div>
-        <p>Scheduling automation for dental practices. Patient reminders, cancellation follow-up, reactivation workflows. Shaped around a real clinic partnership.</p>
+        <p>Scheduling automation for dental practices. Patient reminders, cancellation follow-up, reactivation workflows. RBAC + HIPAA baseline. Shaped around a real clinic partnership.</p>
         <div class="project-stack">
-          <span>Python</span><span>FastAPI</span><span>AI Integration</span>
+          <span>Python</span><span>FastAPI</span><span>HIPAA-aware</span>
         </div>
+        <span class="project-status">In R&amp;D</span>
       </div>
 
     </div>
