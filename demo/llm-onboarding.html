@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Onboarding Simulator · LUXIGA</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--surface:#0D0D1A;--surface2:#13131f;
+  --accent:#C4FF53;--accent-dk:#a8e045;--accent-hover:#d4ff73;
+  --violet:#8B5CF6;
+  --text:#E8E8F0;--muted:#C0B8D8;--muted-dim:#7a7494;
+  --border:#1a1a2e;--radius-btn:8px;--radius-card:12px;
+  --sans:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+
+.demo-banner{background:var(--surface);border-bottom:1px solid var(--border);color:var(--muted);font-family:var(--mono);font-size:.75rem;text-align:center;padding:.6rem 1rem;letter-spacing:.5px}
+.demo-banner span{color:var(--accent);font-weight:700}
+
+.progress-bar{display:flex;gap:.5rem;padding:1.5rem 2.5rem;max-width:680px;margin:0 auto}
+.progress-step{flex:1;height:4px;border-radius:2px;background:var(--border);transition:background .3s}
+.progress-step.active{background:var(--accent)}
+.progress-step.done{background:var(--accent-dk)}
+
+.wizard{max-width:720px;margin:0 auto;padding:0 1.5rem 4rem}
+.wizard-title{font-size:1.85rem;font-weight:800;margin-bottom:.5rem;letter-spacing:-.02em;text-wrap:balance}
+.wizard-subtitle{color:var(--muted);font-size:.92rem;margin-bottom:2rem;line-height:1.6;text-wrap:pretty}
+
+/* Vertical cards */
+.vert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.vert-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-card);padding:1.5rem 1.25rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+.vert-card:hover{border-color:rgba(196,255,83,.3)}
+.vert-card.selected{border-color:var(--accent);background:rgba(196,255,83,.04)}
+.vert-card-icon{width:48px;height:48px;margin:0 auto 1rem;color:var(--accent)}
+.vert-card-icon svg{width:100%;height:100%;stroke:var(--accent);fill:none;stroke-width:1.5}
+.vert-card-name{font-size:1rem;font-weight:700;margin-bottom:.25rem}
+.vert-card-desc{font-size:.75rem;color:var(--muted-dim);line-height:1.5}
+
+/* Form fields */
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.form-input,.form-select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);padding:.65rem .9rem;color:var(--text);font-size:.9rem;font-family:inherit;outline:none;transition:border-color .2s}
+.form-input:focus,.form-select:focus{border-color:var(--accent)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a7494' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .8rem center;padding-right:2.25rem}
+.form-select option{background:var(--bg);color:var(--text)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* Checkboxes */
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.check-item{display:flex;align-items:center;gap:.65rem;padding:.65rem .9rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);cursor:pointer;transition:border-color .2s,background .2s;font-size:.85rem;line-height:1.4}
+.check-item:hover{border-color:rgba(196,255,83,.3)}
+.check-item.checked{border-color:var(--accent);background:rgba(196,255,83,.05)}
+.check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,border-color .2s}
+.check-item.checked .check-box{background:var(--accent);border-color:var(--accent)}
+.check-item.checked .check-box::after{content:'✓';color:var(--bg);font-size:.75rem;font-weight:700}
+
+/* Thinking */
+.thinking{display:flex;align-items:center;gap:.4rem;padding:2.5rem 0;justify-content:center}
+.thinking-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);animation:pulse 1.4s infinite}
+.thinking-dot:nth-child(2){animation-delay:.2s}
+.thinking-dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.thinking-text{color:var(--muted);font-family:var(--mono);font-size:.8rem;margin-left:.5rem;letter-spacing:.3px}
+
+/* Playbook */
+.playbook{animation:fadeUp .5s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.playbook-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.5rem;margin-bottom:1rem}
+.playbook-card h3{font-size:1rem;font-weight:700;margin-bottom:.85rem}
+.auto-item{display:flex;gap:.85rem;padding:.65rem 0;border-bottom:1px solid var(--border)}
+.auto-item:last-child{border:0}
+.auto-num{width:28px;height:28px;border-radius:50%;background:rgba(196,255,83,.12);color:var(--accent);font-family:var(--mono);font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.auto-item-name{font-size:.9rem;font-weight:600;color:var(--text)}
+.auto-item-save{font-family:var(--mono);font-size:.75rem;color:var(--accent);margin-top:.15rem}
+.timeline-phase{display:flex;align-items:flex-start;gap:.85rem;padding:.5rem 0}
+.timeline-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:.35rem}
+.timeline-line{width:2px;height:20px;background:var(--border);margin-left:5px}
+
+/* Preview */
+.preview-mock{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);overflow:hidden}
+.preview-sidebar{width:180px;background:var(--surface2);padding:1rem;border-right:1px solid var(--border)}
+.preview-sidebar-item{padding:.5rem .75rem;border-radius:6px;font-size:.78rem;color:var(--muted);margin-bottom:.25rem}
+.preview-sidebar-item.active{background:rgba(196,255,83,.08);color:var(--accent);font-weight:600}
+.preview-main{flex:1;padding:1.25rem}
+.preview-stat{background:rgba(196,255,83,.04);border:1px solid var(--border);border-radius:var(--radius-btn);padding:1rem;text-align:center}
+.preview-stat-val{font-family:var(--mono);font-size:1.5rem;font-weight:800;color:var(--accent)}
+.preview-stat-label{font-family:var(--mono);font-size:.65rem;color:var(--muted-dim);text-transform:uppercase;letter-spacing:1px;margin-top:.25rem}
+
+/* Nav */
+.wizard-nav{display:flex;justify-content:space-between;align-items:center;margin-top:2rem;gap:1rem}
+.btn{padding:.7rem 1.5rem;border-radius:var(--radius-btn);font-size:.88rem;font-weight:600;border:none;cursor:pointer;transition:background .2s,border-color .2s;font-family:inherit;letter-spacing:.3px}
+.btn-primary{background:var(--accent);color:var(--bg)}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--muted-dim);color:var(--text)}
+
+.hidden{display:none!important}
+
+@media(max-width:640px){
+  .vert-grid{grid-template-columns:1fr}
+  .check-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .wizard-title{font-size:1.4rem}
+  .progress-bar{padding:1rem 1.25rem}
+  .wizard{padding:0 1rem 3rem}
+}
+</style>
+</head>
+<body>
+
+<div class="demo-banner">Simulated AI onboarding. Responses are <span>pre-scripted</span>, not live AI.</div>
+
+<div class="progress-bar" id="progressBar">
+  <div class="progress-step active"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+</div>
+
+<div class="wizard" id="wizard">
+
+  <!-- STEP 1 -->
+  <div class="step" id="step1">
+    <h1 class="wizard-title">Choose your industry</h1>
+    <p class="wizard-subtitle">Select the vertical that matches your business. Each template is built from real market research and validated pain points.</p>
+    <div class="vert-grid">
+      <div class="vert-card" data-vert="healthcare" onclick="selectVert(this)">
+        <div class="vert-card-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 015 5v1a5 5 0 01-10 0V7a5 5 0 015-5z"/><path d="M20 21v-2a4 4 0 00-3-3.87M4 21v-2a4 4 0 013-3.87"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg></div>
+        <div class="vert-card-name">Healthcare</div>
+        <div class="vert-card-desc">Clinics, practices, patient operations</div>
+      </div>
+      <div class="vert-card" data-vert="construction" onclick="selectVert(this)">
+        <div class="vert-card-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20M5 20V8l7-5 7 5v12M9 20v-5h6v5"/></svg></div>
+        <div class="vert-card-name">Construction</div>
+        <div class="vert-card-desc">Contractors, builders, project management</div>
+      </div>
+      <div class="vert-card" data-vert="smb" onclick="selectVert(this)">
+        <div class="vert-card-icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="vert-card-name">SMB / Office</div>
+        <div class="vert-card-desc">HR, onboarding, workflow automation</div>
+      </div>
+    </div>
+    <div class="wizard-nav"><div></div><button class="btn btn-primary" id="next1" disabled onclick="goStep(2)">Next &rarr;</button></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step hidden" id="step2">
+    <h1 class="wizard-title">Tell us about your business</h1>
+    <p class="wizard-subtitle">We'll use this to customize your automation playbook.</p>
+    <div id="profileFields"></div>
+    <div class="wizard-nav">
+      <button class="btn btn-secondary" onclick="goStep(1)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Next &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step hidden" id="step3">
+    <h1 class="wizard-title">What's slowing you down?</h1>
+    <p class="wizard-subtitle">Select the pain points that apply to your business. We'll prioritize automations based on your selections.</p>
+    <div class="check-grid" id="painGrid"></div>
+    <div class="wizard-nav">
+      <button class="btn btn-secondary" onclick="goStep(2)">&larr; Back</button>
+      <button class="btn btn-primary" id="next3" disabled onclick="goStep(4)">Analyze &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step hidden" id="step4">
+    <h1 class="wizard-title">AI analysis</h1>
+    <p class="wizard-subtitle">Generating your customized automation playbook.</p>
+    <div id="analysisContent">
+      <div class="thinking"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div><span class="thinking-text">Analyzing your inputs.</span></div>
+    </div>
+    <div class="wizard-nav hidden" id="nav4">
+      <button class="btn btn-secondary" onclick="goStep(3)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goStep(5)">See preview &rarr;</button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step hidden" id="step5">
+    <h1 class="wizard-title">Your customized dashboard</h1>
+    <p class="wizard-subtitle" id="previewSubtitle"></p>
+    <div id="previewContent"></div>
+    <div class="wizard-nav">
+      <button class="btn btn-secondary" onclick="goStep(4)">&larr; Back</button>
+      <a href="../index.html#contact" class="btn btn-primary" style="text-decoration:none;">Book a Strategy Call &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  healthcare: {
+    fields: [
+      { id: 'name', label: 'Clinic Name', type: 'text', placeholder: 'e.g. Sunrise Family Practice' },
+      { id: 'size', label: 'Clinic Size', type: 'select', options: ['Solo Practitioner', 'Small (2-5 providers)', 'Medium (6-15)', 'Large (15+)'] },
+      { id: 'specialties', label: 'Specialties (select all)', type: 'multi', options: ['Primary Care', 'Dental', 'Chiropractic', 'Mental Health', 'Pediatrics', 'OB-GYN'] },
+      { id: 'ehr', label: 'Current EHR', type: 'select', options: ['None', 'Epic', 'Cerner', 'DrChrono', 'SimplePractice', 'Other'] },
+      { id: 'volume', label: 'Monthly Patient Volume', type: 'text', placeholder: 'e.g. 200' }
+    ],
+    pains: [
+      { id: 'scheduling', label: 'Scheduling conflicts & no-shows', save: '~6 hrs/week' },
+      { id: 'insurance', label: 'Insurance verification delays', save: '~4 hrs/week' },
+      { id: 'documentation', label: 'Documentation & charting backlog', save: '~8 hrs/week' },
+      { id: 'noshows', label: 'Patient no-shows (20-30%)', save: '~$2,400/month' },
+      { id: 'billing', label: 'Billing errors & claim denials', save: '~$3,200/month' },
+      { id: 'compliance', label: 'HIPAA compliance tracking', save: '~3 hrs/week' },
+      { id: 'priorauth', label: 'Prior authorization bottleneck', save: '~5 hrs/week' }
+    ],
+    navItems: ['Dashboard', 'Patient Intake', 'Scheduling', 'Billing', 'Compliance', 'Reports'],
+    stats: [
+      { label: 'Patients Today', val: '24' },
+      { label: 'Open Claims', val: '12' },
+      { label: 'Denial Rate', val: '4.2%' },
+      { label: 'Revenue MTD', val: '$48.5K' }
+    ]
+  },
+  construction: {
+    fields: [
+      { id: 'name', label: 'Company Name', type: 'text', placeholder: 'e.g. Summit Builders LLC' },
+      { id: 'size', label: 'Team Size', type: 'select', options: ['1-5 employees', '6-15 employees', '16-50 employees', '50+ employees'] },
+      { id: 'types', label: 'Project Types (select all)', type: 'multi', options: ['Residential', 'Commercial', 'Industrial', 'Renovation', 'Infrastructure'] },
+      { id: 'estimating', label: 'Current Estimating Method', type: 'select', options: ['Manual / Paper', 'Spreadsheets', 'ProEst', 'PlanSwift', 'Other'] },
+      { id: 'projects', label: 'Avg Projects Per Year', type: 'text', placeholder: 'e.g. 12' }
+    ],
+    pains: [
+      { id: 'changeorders', label: 'Change order delays', save: '~4 hrs/week' },
+      { id: 'fieldcomm', label: 'Field-to-office communication gaps', save: '~6 hrs/week' },
+      { id: 'estimating', label: 'Estimating inaccuracies', save: '~$5,000/project' },
+      { id: 'permitting', label: 'Permitting complexity', save: '~8 hrs/permit' },
+      { id: 'subcontractor', label: 'Subcontractor coordination', save: '~5 hrs/week' },
+      { id: 'invoicing', label: 'Invoice tracking & payment', save: '~3 hrs/week' },
+      { id: 'safety', label: 'Safety documentation gaps', save: '~2 hrs/week' }
+    ],
+    navItems: ['Dashboard', 'Change Orders', 'Field Log', 'Estimates', 'Permits', 'Reports'],
+    stats: [
+      { label: 'Active Projects', val: '4' },
+      { label: 'Open COs', val: '7' },
+      { label: 'Field Updates', val: '23' },
+      { label: 'Contract Total', val: '$2.8M' }
+    ]
+  },
+  smb: {
+    fields: [
+      { id: 'name', label: 'Company Name', type: 'text', placeholder: 'e.g. Apex Marketing Group' },
+      { id: 'size', label: 'Employee Count', type: 'select', options: ['1-10', '11-50', '51-200', '200+'] },
+      { id: 'industry', label: 'Industry', type: 'select', options: ['Marketing', 'Tech', 'Finance', 'Healthcare', 'Legal', 'Other'] },
+      { id: 'onboarding', label: 'Current Onboarding Process', type: 'select', options: ['None / Ad Hoc', 'Manual Checklist', 'BambooHR', 'Gusto', 'Other'] },
+      { id: 'hiresmo', label: 'Avg New Hires Per Month', type: 'text', placeholder: 'e.g. 3' }
+    ],
+    pains: [
+      { id: 'slow', label: 'Onboarding takes too long', save: '~8 hrs/hire' },
+      { id: 'docs', label: 'Document collection chaos', save: '~4 hrs/hire' },
+      { id: 'compliance', label: 'Missing compliance deadlines', save: '~$1,500/incident' },
+      { id: 'visibility', label: 'No visibility into hire progress', save: '~3 hrs/week' },
+      { id: 'manual', label: 'Manual task assignment', save: '~5 hrs/week' },
+      { id: 'inconsistent', label: 'Inconsistent process across hires', save: '~2 hrs/hire' },
+      { id: 'it', label: 'IT provisioning delays', save: '~1 day/hire' }
+    ],
+    navItems: ['Dashboard', 'Workflows', 'New Hires', 'Documents', 'Compliance', 'Reports'],
+    stats: [
+      { label: 'Active Hires', val: '8' },
+      { label: 'Docs Pending', val: '5' },
+      { label: 'Compliance', val: '94%' },
+      { label: 'Avg Time', val: '3.2 days' }
+    ]
+  }
+};
+
+let state = { vertical: null, profile: {}, pains: [], step: 1 };
+
+function goStep(n) {
+  state.step = n;
+  document.querySelectorAll('.step').forEach(s => s.classList.add('hidden'));
+  document.getElementById('step' + n).classList.remove('hidden');
+  document.querySelectorAll('.progress-step').forEach((el, i) => {
+    el.classList.remove('active', 'done');
+    if (i + 1 === n) el.classList.add('active');
+    if (i + 1 < n) el.classList.add('done');
+  });
+  if (n === 2) renderProfileFields();
+  if (n === 3) renderPainPoints();
+  if (n === 4) runAnalysis();
+  if (n === 5) renderPreview();
+  localStorage.setItem('luxiga_llm_onboarding_state', JSON.stringify(state));
+}
+
+window.selectVert = function(el) {
+  document.querySelectorAll('.vert-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.vertical = el.dataset.vert;
+  state.pains = [];
+  document.getElementById('next1').disabled = false;
+};
+
+function renderProfileFields() {
+  const d = DATA[state.vertical];
+  const container = document.getElementById('profileFields');
+  container.innerHTML = d.fields.map(f => {
+    if (f.type === 'text') {
+      return `<div class="form-group"><label class="form-label">${f.label}</label><input class="form-input" id="pf_${f.id}" placeholder="${f.placeholder || ''}" value="${state.profile[f.id] || ''}" onchange="state.profile['${f.id}']=this.value"></div>`;
+    }
+    if (f.type === 'select') {
+      return `<div class="form-group"><label class="form-label">${f.label}</label><select class="form-select" id="pf_${f.id}" onchange="state.profile['${f.id}']=this.value">
+        <option value="">Select.</option>${f.options.map(o => `<option ${state.profile[f.id] === o ? 'selected' : ''}>${o}</option>`).join('')}
+      </select></div>`;
+    }
+    if (f.type === 'multi') {
+      const selected = state.profile[f.id] || [];
+      return `<div class="form-group"><label class="form-label">${f.label}</label><div class="check-grid">${f.options.map(o => {
+        const checked = selected.includes(o);
+        return `<div class="check-item ${checked ? 'checked' : ''}" onclick="toggleMulti('${f.id}','${o}',this)"><div class="check-box"></div>${o}</div>`;
+      }).join('')}</div></div>`;
+    }
+  }).join('');
+}
+
+window.toggleMulti = function(fieldId, val, el) {
+  if (!state.profile[fieldId]) state.profile[fieldId] = [];
+  const arr = state.profile[fieldId];
+  const idx = arr.indexOf(val);
+  if (idx >= 0) { arr.splice(idx, 1); el.classList.remove('checked'); }
+  else { arr.push(val); el.classList.add('checked'); }
+};
+
+function renderPainPoints() {
+  const d = DATA[state.vertical];
+  const grid = document.getElementById('painGrid');
+  grid.innerHTML = d.pains.map(p => {
+    const checked = state.pains.includes(p.id);
+    return `<div class="check-item ${checked ? 'checked' : ''}" onclick="togglePain('${p.id}',this)"><div class="check-box"></div>${p.label}</div>`;
+  }).join('');
+  updateNext3();
+}
+
+window.togglePain = function(id, el) {
+  const idx = state.pains.indexOf(id);
+  if (idx >= 0) { state.pains.splice(idx, 1); el.classList.remove('checked'); }
+  else { state.pains.push(id); el.classList.add('checked'); }
+  updateNext3();
+};
+
+function updateNext3() {
+  document.getElementById('next3').disabled = state.pains.length === 0;
+}
+
+function runAnalysis() {
+  const content = document.getElementById('analysisContent');
+  const nav = document.getElementById('nav4');
+  nav.classList.add('hidden');
+  content.innerHTML = `<div class="thinking"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div><span class="thinking-text">Analyzing your inputs.</span></div>`;
+
+  setTimeout(() => {
+    const d = DATA[state.vertical];
+    const selectedPains = d.pains.filter(p => state.pains.includes(p.id));
+    const companyName = state.profile.name || 'Your Company';
+
+    let totalSave = 0;
+    selectedPains.forEach(p => {
+      const m = p.save.match(/(\d+)/);
+      if (m) totalSave += parseInt(m[1]);
+    });
+
+    content.innerHTML = `<div class="playbook">
+      <div class="playbook-card">
+        <h3 style="color:var(--accent);">Customized Playbook for ${esc(companyName)}</h3>
+        <p style="color:var(--muted); font-size:.85rem; margin-bottom:1rem;">Based on your ${selectedPains.length} identified pain points, here are your priority automations:</p>
+        ${selectedPains.map((p, i) => `<div class="auto-item">
+          <div class="auto-num">${i + 1}</div>
+          <div><div class="auto-item-name">${p.label}</div><div class="auto-item-save">Estimated savings: ${p.save}</div></div>
+        </div>`).join('')}
+      </div>
+      <div class="playbook-card">
+        <h3>Implementation Timeline</h3>
+        <div class="timeline-phase"><div class="timeline-dot"></div><div><strong style="font-size:.9rem;">Phase 1: Quick Wins</strong> <span style="color:var(--muted-dim); font-size:.78rem; font-family:var(--mono);">(Week 1-2)</span><br><span style="color:var(--muted); font-size:.85rem;">${selectedPains.slice(0, 2).map(p => p.label).join(', ') || 'Setup and configuration'}</span></div></div>
+        <div style="margin-left:5px;"><div class="timeline-line"></div></div>
+        <div class="timeline-phase"><div class="timeline-dot" style="background:var(--accent-dk);"></div><div><strong style="font-size:.9rem;">Phase 2: Core Automation</strong> <span style="color:var(--muted-dim); font-size:.78rem; font-family:var(--mono);">(Week 3-6)</span><br><span style="color:var(--muted); font-size:.85rem;">${selectedPains.slice(2, 5).map(p => p.label).join(', ') || 'Full workflow integration'}</span></div></div>
+        <div style="margin-left:5px;"><div class="timeline-line"></div></div>
+        <div class="timeline-phase"><div class="timeline-dot" style="background:var(--violet);"></div><div><strong style="font-size:.9rem;">Phase 3: AI Intelligence</strong> <span style="color:var(--muted-dim); font-size:.78rem; font-family:var(--mono);">(Month 2-3)</span><br><span style="color:var(--muted); font-size:.85rem;">Predictive analytics, advanced reporting, continuous optimization</span></div></div>
+      </div>
+      <div class="playbook-card" style="text-align:center;">
+        <div style="font-family:var(--mono); font-size:2.25rem; font-weight:800; color:var(--accent);">~${totalSave}+ hrs/week</div>
+        <div style="color:var(--muted); font-size:.9rem; margin-top:.25rem;">Estimated total time savings across ${selectedPains.length} automations</div>
+      </div>
+    </div>`;
+    nav.classList.remove('hidden');
+  }, 3000);
+}
+
+function renderPreview() {
+  const d = DATA[state.vertical];
+  const companyName = state.profile.name || 'Your Company';
+  document.getElementById('previewSubtitle').textContent = "Here's what " + companyName + "'s customized dashboard would look like.";
+
+  document.getElementById('previewContent').innerHTML = `
+    <div class="preview-mock">
+      <div style="display:flex; min-height:360px;">
+        <div class="preview-sidebar" style="display:none;" id="previewSidebar">
+          <div style="font-family:var(--mono); font-size:.85rem; font-weight:700; color:var(--accent); margin-bottom:1rem; letter-spacing:.5px;">${esc(companyName)}</div>
+          ${d.navItems.map((item, i) => `<div class="preview-sidebar-item ${i === 0 ? 'active' : ''}">${item}</div>`).join('')}
+        </div>
+        <div class="preview-main">
+          <div style="font-size:1.05rem; font-weight:700; margin-bottom:1rem;">Welcome back</div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:.65rem; margin-bottom:1.25rem;">
+            ${d.stats.map(s => `<div class="preview-stat"><div class="preview-stat-val">${s.val}</div><div class="preview-stat-label">${s.label}</div></div>`).join('')}
+          </div>
+          <div style="background:var(--border); border-radius:8px; height:120px; display:flex; align-items:center; justify-content:center; color:var(--muted-dim); font-family:var(--mono); font-size:.78rem;">
+            Activity chart and recent actions
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  if (window.innerWidth > 640) {
+    document.getElementById('previewSidebar').style.display = 'block';
+  }
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+try {
+  const saved = JSON.parse(localStorage.getItem('luxiga_llm_onboarding_state'));
+  if (saved && saved.vertical) { state = saved; }
+} catch(e) {}
+</script>
+</body>
+</html>
