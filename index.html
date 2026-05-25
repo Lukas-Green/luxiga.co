@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUXIGA — AI Design Technology Studio</title>
+<title>LUXIGA · AI Design Technology Studio</title>
 <meta name="description" content="Design intelligence meets smart automation. LUXIGA partners with teams to eliminate operational pain points through tools that actually get adopted.">
 <meta name="author" content="Lukas Green">
-<meta property="og:title" content="LUXIGA — AI Design Technology Studio">
+<meta property="og:title" content="LUXIGA · AI Design Technology Studio">
 <meta property="og:description" content="Design intelligence meets smart automation. I partner with teams to eliminate operational pain points through tools that actually get adopted.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://luxiga.co/assets/img/og-preview.png">
@@ -64,14 +64,14 @@ section[id]{scroll-margin-top:64px}
 section{padding:6rem 2rem}
 .container{max-width:1100px;margin:0 auto}
 .section-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem}
-.section-title{font-size:2.5rem;font-weight:700;line-height:1.15;margin-bottom:1rem}
-.section-subtitle{color:var(--muted);font-size:1.05rem;max-width:560px;line-height:1.7}
+.section-title{font-size:2.5rem;font-weight:700;line-height:1.15;margin-bottom:1rem;text-wrap:balance}
+.section-subtitle{color:var(--muted);font-size:1.05rem;max-width:560px;line-height:1.7;text-wrap:pretty}
 
 /* ── HERO ── */
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding-top:64px}
 .hero-canvas{position:absolute;inset:0;z-index:0}
 .hero-canvas canvas{width:100%;height:100%}
-.hero-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:clamp(6rem,15vw,14rem);font-weight:700;color:rgba(196,255,83,.04);letter-spacing:.15em;pointer-events:none;z-index:1;white-space:nowrap;user-select:none}
+.hero-watermark{position:absolute;top:28%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:clamp(7rem,17vw,16rem);font-weight:800;color:rgba(196,255,83,.06);letter-spacing:.16em;pointer-events:none;z-index:1;white-space:nowrap;user-select:none}
 .hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:1;opacity:0;animation:orbFadeIn 1.5s 1.5s forwards}
 .hero-orb--lime{width:340px;height:340px;background:rgba(196,255,83,.12);top:20%;left:15%;animation:orbFadeIn 1.5s 1.5s forwards,orbFloat 8s 3s ease-in-out infinite}
 .hero-orb--violet{width:280px;height:280px;background:rgba(139,92,246,.1);bottom:15%;right:10%;animation:orbFadeIn 1.5s 1.8s forwards,orbFloat 10s 3.3s ease-in-out infinite reverse}
@@ -79,11 +79,12 @@ section{padding:6rem 2rem}
 @keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
 .hero-content{position:relative;z-index:2;text-align:center;max-width:780px;padding:2rem}
 .hero-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:1.5rem}
-.hero h1{font-size:clamp(2.8rem,7vw,5.5rem);font-weight:800;line-height:1.05;margin-bottom:1.25rem;letter-spacing:-2px;color:var(--text)}
-.hero-subtitle{font-family:var(--mono);font-size:1rem;margin-bottom:1.5rem;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+.hero h1{font-size:clamp(2.4rem,6vw,4.6rem);font-weight:800;line-height:1.08;margin-bottom:1.5rem;letter-spacing:-1.5px;color:var(--text);text-wrap:balance;max-width:22ch;margin-left:auto;margin-right:auto}
+.hero-subtitle{font-family:var(--mono);font-size:.95rem;margin-bottom:1.5rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center}
 .hero-subtitle .name-text{color:var(--accent)}
 .hero-subtitle .title-text{color:var(--violet)}
-.hero-tagline{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:600px;margin:0 auto 2.5rem}
+.hero-subtitle-sep{color:var(--muted);opacity:.5;padding:0 .15rem}
+.hero-tagline{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:540px;margin:0 auto 2.5rem;text-wrap:balance}
 .hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
 .btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.9rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s,transform .1s;border:none;cursor:pointer;font-family:var(--sans)}
 .btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px)}
@@ -115,11 +116,35 @@ section{padding:6rem 2rem}
 .pulse-cta-wrap{text-align:center;margin-top:2.5rem}
 .pulse-note{font-size:.8rem;color:var(--muted);margin-top:.75rem}
 
-/* ── PROJECTS ── */
+/* ── LIVE SITES ── */
+.live-sites{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.live-sites-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.site-card{position:relative;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.75rem 1.5rem;transition:border-color .3s,transform .3s,box-shadow .3s;text-decoration:none;color:inherit}
+.site-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 0 24px rgba(196,255,83,.08)}
+.site-card--self{background:linear-gradient(135deg,var(--bg) 0%,rgba(139,92,246,.06) 100%);border-color:rgba(139,92,246,.3)}
+.site-card--self:hover{border-color:var(--violet);box-shadow:0 0 28px rgba(139,92,246,.12)}
+.site-card-domain{font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--accent);letter-spacing:.5px;margin-bottom:.5rem;word-break:break-all}
+.site-card--self .site-card-domain{color:var(--violet)}
+.site-card-tag{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.75rem}
+.site-card-origin{font-style:italic;color:var(--text);font-size:.85rem;line-height:1.55;margin-bottom:1rem;flex:1}
+.site-card-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.site-card-stack span{font-family:var(--mono);font-size:.65rem;padding:.22rem .55rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--muted)}
+.site-card-cta{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:1px}
+.site-card--self .site-card-cta{color:var(--violet)}
+.site-card:hover .site-card-cta{color:var(--accent-hover)}
+
+/* ── PROJECTS / SHIPPED TOOLS ── */
 .projects{background:var(--bg)}
 .projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3rem}
-.project-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:2.25rem 2rem;transition:border-color .3s,transform .3s}
+.project-card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:2.25rem 2rem;transition:border-color .3s,transform .3s,box-shadow .3s}
 .project-card:hover{border-color:var(--violet);transform:translateY(-4px)}
+.project-card--featured{background:linear-gradient(135deg,var(--surface) 0%,rgba(196,255,83,.05) 100%);border-color:rgba(196,255,83,.3);box-shadow:0 0 28px rgba(196,255,83,.06)}
+.project-card--featured:hover{border-color:var(--accent);box-shadow:0 0 36px rgba(196,255,83,.12);transform:translateY(-4px)}
+.project-card-badge{position:absolute;top:1.25rem;right:1.25rem;font-family:var(--mono);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;background:var(--accent);color:#0a0a0a;padding:.25rem .55rem;border-radius:999px;font-weight:700;animation:badgePulse 3s ease-in-out infinite}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(196,255,83,.5)}50%{box-shadow:0 0 0 6px rgba(196,255,83,0)}}
+.project-spark{display:inline-block;font-size:.95rem;animation:sparkSpin 4s ease-in-out infinite}
+@keyframes sparkSpin{0%,90%,100%{transform:rotate(0deg)}45%{transform:rotate(15deg)}55%{transform:rotate(-15deg)}}
+.project-status{display:inline-block;margin-top:.6rem;font-family:var(--mono);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:.18rem .5rem;border:1px solid var(--border);border-radius:999px}
 .project-tag{font-family:var(--mono);font-size:.7rem;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.75rem}
 .project-card h3{font-size:1.2rem;font-weight:600;margin-bottom:.35rem}
 .project-origin{font-style:italic;color:var(--accent);font-size:.85rem;margin-bottom:.75rem}
@@ -128,6 +153,18 @@ section{padding:6rem 2rem}
 .project-stack span{font-family:var(--mono);font-size:.7rem;padding:.3rem .65rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--muted)}
 .project-link{font-family:var(--mono);font-size:.8rem;color:var(--accent);transition:color .2s}
 .project-link:hover{color:var(--accent-hover)}
+
+/* ── BUILDING IN (protected SaaS strip) ── */
+.building-strip{margin-top:3rem;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:var(--radius-card);padding:2.25rem 2rem;position:relative;overflow:hidden}
+.building-strip::before{content:'';position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at center,rgba(139,92,246,.08),transparent 70%);pointer-events:none}
+.building-label{font-family:var(--mono);font-size:.7rem;color:var(--violet);letter-spacing:2px;text-transform:uppercase;margin-bottom:.75rem}
+.building-strip h3{font-size:1.25rem;font-weight:600;margin-bottom:.75rem;color:var(--text)}
+.building-strip p{color:var(--muted);font-size:.92rem;line-height:1.7;margin-bottom:1.25rem;max-width:680px}
+.building-domains{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem}
+.building-domains span{font-family:var(--mono);font-size:.72rem;padding:.32rem .7rem;background:var(--bg);border:1px solid rgba(139,92,246,.25);border-radius:var(--radius-btn);color:var(--text);letter-spacing:.5px}
+.building-note{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.5px}
+.building-note a{color:var(--accent);transition:color .2s}
+.building-note a:hover{color:var(--accent-hover)}
 
 /* ── STACK ── */
 .stack{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.5rem 2rem;overflow:hidden}
@@ -205,11 +242,16 @@ section{padding:6rem 2rem}
   section{padding:4rem 1.25rem}
   .hero{padding-top:64px;min-height:auto;padding-bottom:3rem}
   .hero h1{font-size:2.5rem}
-  .hero-tagline{font-size:.95rem}
+  .hero h1{font-size:clamp(2rem,8vw,2.8rem);letter-spacing:-1px;max-width:18ch}
+  .hero h1 br{display:none}
+  .hero-tagline{font-size:.95rem;max-width:32ch}
+  .hero-subtitle{display:flex;flex-direction:column;gap:.4rem;font-size:.85rem}
+  .hero-subtitle-sep{display:none}
   .stats-bar{gap:2rem}
   .stat-number{font-size:1.5rem}
   .services-grid{grid-template-columns:1fr}
   .pulse-features{grid-template-columns:1fr}
+  .live-sites-grid{grid-template-columns:1fr}
   .projects-grid{grid-template-columns:1fr}
   .about-grid{grid-template-columns:1fr;gap:2.5rem}
   .contact-grid{grid-template-columns:1fr;gap:2.5rem}
@@ -300,6 +342,31 @@ section{padding:6rem 2rem}
   .footer-copy{color:var(--muted)}
   .cursor-dot{background:var(--accent-text)}
   .cursor-ring{border-color:var(--accent-text)}
+  .nav-brand .ux{color:var(--accent-text)}
+  .footer-brand .ux{color:var(--accent-text)}
+  .live-sites{background:var(--surface);border-color:var(--border)}
+  .site-card{background:var(--bg);border-color:var(--border)}
+  .site-card:hover{border-color:var(--accent-text);box-shadow:0 0 24px rgba(61,107,0,.08)}
+  .site-card--self{background:linear-gradient(135deg,var(--bg) 0%,rgba(109,40,217,.05) 100%);border-color:rgba(109,40,217,.3)}
+  .site-card--self:hover{border-color:var(--violet);box-shadow:0 0 28px rgba(109,40,217,.1)}
+  .site-card-domain{color:var(--accent-text)}
+  .site-card--self .site-card-domain{color:var(--violet)}
+  .site-card-tag{color:var(--muted)}
+  .site-card-origin{color:var(--text)}
+  .site-card-stack span{background:var(--surface);border-color:var(--border);color:var(--muted)}
+  .site-card-cta{color:var(--accent-text)}
+  .site-card--self .site-card-cta{color:var(--violet)}
+  .site-card:hover .site-card-cta{color:var(--accent-text)}
+  .building-strip{background:var(--surface);border-color:var(--border);border-left-color:var(--violet)}
+  .building-strip h3{color:var(--text)}
+  .building-strip p{color:var(--muted)}
+  .building-label{color:var(--violet)}
+  .building-domains span{background:var(--bg);color:var(--text);border-color:rgba(109,40,217,.25)}
+  .building-note{color:var(--muted)}
+  .building-note a{color:var(--accent-text)}
+  .building-note a:hover{color:var(--violet)}
+  .hero-subtitle-sep{color:var(--muted)}
+  .hero h1 .h1-soft{color:var(--muted)}
 }
 /* ── MANUAL THEME OVERRIDE ── */
 [data-theme="light"]{
@@ -342,6 +409,32 @@ section{padding:6rem 2rem}
 [data-theme="light"] .form-status.success{color:var(--accent-text)}
 [data-theme="light"] .cursor-dot{background:var(--accent-text)}
 [data-theme="light"] .cursor-ring{border-color:var(--accent-text)}
+[data-theme="light"] .nav-brand .ux{color:var(--accent-text)}
+[data-theme="light"] .footer-brand .ux{color:var(--accent-text)}
+[data-theme="light"] .live-sites{background:var(--surface);border-color:var(--border)}
+[data-theme="light"] .site-card{background:var(--bg);border-color:var(--border)}
+[data-theme="light"] .site-card:hover{border-color:var(--accent-text);box-shadow:0 0 24px rgba(61,107,0,.08)}
+[data-theme="light"] .site-card--self{background:linear-gradient(135deg,var(--bg) 0%,rgba(109,40,217,.05) 100%);border-color:rgba(109,40,217,.3)}
+[data-theme="light"] .site-card--self:hover{border-color:var(--violet);box-shadow:0 0 28px rgba(109,40,217,.1)}
+[data-theme="light"] .site-card-domain{color:var(--accent-text)}
+[data-theme="light"] .site-card--self .site-card-domain{color:var(--violet)}
+[data-theme="light"] .site-card-tag{color:var(--muted)}
+[data-theme="light"] .site-card-origin{color:var(--text)}
+[data-theme="light"] .site-card-stack span{background:var(--surface);border-color:var(--border);color:var(--muted)}
+[data-theme="light"] .site-card-cta{color:var(--accent-text)}
+[data-theme="light"] .site-card--self .site-card-cta{color:var(--violet)}
+[data-theme="light"] .site-card:hover .site-card-cta{color:var(--accent-text)}
+[data-theme="light"] .building-strip{background:var(--surface);border-color:var(--border);border-left-color:var(--violet)}
+[data-theme="light"] .building-strip h3{color:var(--text)}
+[data-theme="light"] .building-strip p{color:var(--muted)}
+[data-theme="light"] .building-label{color:var(--violet)}
+[data-theme="light"] .building-domains span{background:var(--bg);color:var(--text);border-color:rgba(109,40,217,.25)}
+[data-theme="light"] .building-note{color:var(--muted)}
+[data-theme="light"] .building-note a{color:var(--accent-text)}
+[data-theme="light"] .building-note a:hover{color:var(--violet)}
+[data-theme="light"] .hero-subtitle-sep{color:var(--muted)}
+[data-theme="light"] .hero h1 .h1-soft{color:var(--muted)}
+[data-theme="light"] .contact-cal:hover{color:var(--accent-text)}
 [data-theme="dark"]{
   --bg:#080810;--surface:#0D0D1A;--accent:#C4FF53;--accent-hover:#d4ff73;
   --accent-text:#C4FF53;--accent-btn-bg:#C4FF53;--accent-btn-text:#080810;
@@ -374,7 +467,8 @@ section{padding:6rem 2rem}
     <a href="#home">Home</a>
     <a href="#services">Services</a>
     <a href="#pulse">Pulse</a>
-    <a href="#projects">Projects</a>
+    <a href="#sites">Sites</a>
+    <a href="#projects">Work</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </div>
@@ -389,7 +483,8 @@ section{padding:6rem 2rem}
   <a href="#home">Home</a>
   <a href="#services">Services</a>
   <a href="#pulse">Pulse</a>
-  <a href="#projects">Projects</a>
+  <a href="#sites">Sites</a>
+  <a href="#projects">Work</a>
   <a href="#about">About</a>
   <a href="#contact">Contact</a>
   <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a Call</a>
@@ -403,16 +498,18 @@ section{padding:6rem 2rem}
   <div class="hero-orb hero-orb--violet"></div>
   <div class="hero-content">
     <div class="hero-label reveal">Design Technology Studio</div>
-    <h1 class="reveal">I listen for the friction.<br>I build the fix.</h1>
-    <p class="hero-subtitle reveal"><span class="name-text">Lukas Green</span> &middot; <span class="title-text">Design Technologist</span></p>
+    <h1 class="reveal">I listen for friction, then engineer the fix.</h1>
+    <p class="hero-subtitle reveal">
+      <span class="name-text">Lukas Green</span><span class="hero-subtitle-sep" aria-hidden="true"> &middot; </span><span class="title-text">Design Technologist</span>
+    </p>
     <p class="hero-tagline reveal">Design intelligence meets smart automation. I partner with teams to eliminate operational pain points through LLM-powered tools built for local, private use that actually get adopted.</p>
     <div class="hero-ctas reveal">
       <a href="/audit" class="btn-primary">Take the Pulse &rarr;</a>
       <a href="https://calendly.com/lukasgreen-ai-design" class="btn-secondary" target="_blank" rel="noopener">Book a Strategy Call &rarr;</a>
     </div>
     <div class="stats-bar reveal">
-      <div class="stat"><div class="stat-number" data-target="22" data-suffix="+">0</div><div class="stat-label">Years in Design</div></div>
-      <div class="stat"><div class="stat-number" data-target="14">0</div><div class="stat-label">Active Projects</div></div>
+      <div class="stat"><div class="stat-number" data-target="4" data-suffix=" yrs">0</div><div class="stat-label">UX Practice</div></div>
+      <div class="stat"><div class="stat-number" data-target="6" data-suffix="+">0</div><div class="stat-label">Products Shipped</div></div>
       <div class="stat"><div class="stat-number" data-target="100" data-suffix="%">0</div><div class="stat-label">Pain-Point Driven</div></div>
     </div>
   </div>
@@ -427,7 +524,7 @@ section{padding:6rem 2rem}
       <div class="service-card reveal">
         <div class="service-num">01</div>
         <h3>AI Consulting</h3>
-        <p>I help teams cut through the noise to find where AI actually creates leverage. Auditing workflows, identifying high-friction handoffs, scoping the right tool. Not the flashiest option &mdash; the one that still works six months after it ships.</p>
+        <p>I help teams cut through the noise to find where AI actually creates leverage. Auditing workflows, identifying high-friction handoffs, scoping the right tool. Not the flashiest option. The one that still works six months after it ships.</p>
       </div>
       <div class="service-card reveal">
         <div class="service-num">02</div>
@@ -437,7 +534,7 @@ section{padding:6rem 2rem}
       <div class="service-card reveal">
         <div class="service-num">03</div>
         <h3>UX-Informed Design</h3>
-        <p>Technical capability means nothing if adoption fails. I bring over two decades of design thinking into every build &mdash; interfaces that match how people actually work. If someone needs a walkthrough to use it, it&rsquo;s not done yet.</p>
+        <p>Technical capability means nothing if adoption fails. I bring over two decades of design thinking into every build. Interfaces that match how people actually work. If someone needs a walkthrough to use it, it&rsquo;s not done yet.</p>
       </div>
     </div>
   </div>
@@ -502,11 +599,53 @@ section{padding:6rem 2rem}
   </div>
 </section>
 
+<!-- LIVE SITES -->
+<section class="live-sites" id="sites">
+  <div class="container">
+    <div class="section-label reveal">Shipped &amp; Live</div>
+    <h2 class="section-title reveal">Live Sites</h2>
+    <p class="section-subtitle reveal">Three URLs you can open right now. Each one is a product I designed, built, and deployed end-to-end.</p>
+    <div class="live-sites-grid">
+
+      <a href="https://goldgosling.com" class="site-card reveal" target="_blank" rel="noopener">
+        <div class="site-card-tag">Client Build · Live</div>
+        <div class="site-card-domain">goldgosling.com</div>
+        <div class="site-card-origin">"client needs leads without the CRM tax"</div>
+        <div class="site-card-stack">
+          <span>GitHub Pages</span><span>CF Worker</span><span>Airtable</span><span>Playwright CI</span>
+        </div>
+        <div class="site-card-cta">Visit site &rarr;</div>
+      </a>
+
+      <a href="https://lukasdgreen.com" class="site-card reveal" target="_blank" rel="noopener">
+        <div class="site-card-tag">Personal · Live</div>
+        <div class="site-card-domain">lukasdgreen.com</div>
+        <div class="site-card-origin">"two decades of design, one URL"</div>
+        <div class="site-card-stack">
+          <span>HTML/CSS</span><span>Vanilla JS</span><span>GitHub Pages</span>
+        </div>
+        <div class="site-card-cta">Visit site &rarr;</div>
+      </a>
+
+      <a href="#home" class="site-card site-card--self reveal">
+        <div class="site-card-tag">This Site · You're On It</div>
+        <div class="site-card-domain">luxiga.co</div>
+        <div class="site-card-origin">"the studio site itself. Every interaction here is the demo."</div>
+        <div class="site-card-stack">
+          <span>Vanilla JS</span><span>Canvas FX</span><span>Apps Script</span><span>Workers</span>
+        </div>
+        <div class="site-card-cta">View source &rarr;</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
 <!-- PROJECTS -->
 <section class="projects" id="projects">
   <div class="container">
     <div class="section-label reveal">Selected Work</div>
-    <h2 class="section-title reveal">Projects</h2>
+    <h2 class="section-title reveal">Shipped Tools</h2>
     <div class="projects-grid">
 
       <div class="project-card reveal">
@@ -520,38 +659,34 @@ section{padding:6rem 2rem}
         <a href="case-studies/canvasskit.html" class="project-link">View Case Study &rarr;</a>
       </div>
 
-      <div class="project-card reveal">
+      <div class="project-card project-card--featured reveal">
+        <div class="project-card-badge">Live</div>
         <div class="project-tag">Invoicing / Finance</div>
-        <h3>SoloBill</h3>
+        <h3>SoloBill <span class="project-spark">⚡</span></h3>
         <div class="project-origin">"contractor overpaying for 10% of a platform"</div>
-        <p>Generates, tracks, and sends invoices from Google Sheets. PDF export, client tracking, email triggers. No paid platform needed.</p>
+        <p>Send a polished invoice in 90 seconds, straight from Google Sheets. PDF export, client tracking, auto-reminders, payment links. No SaaS subscription, no learning curve, no monthly fee for software you barely use.</p>
         <div class="project-stack">
-          <span>Apps Script</span><span>Docs</span><span>PDF Export</span>
+          <span>Apps Script</span><span>Docs</span><span>Stripe-ready</span>
         </div>
         <a href="case-studies/solobill.html" class="project-link">View Case Study &rarr;</a>
       </div>
 
-      <div class="project-card reveal">
-        <div class="project-tag">Field Data Capture</div>
-        <h3>FieldKit</h3>
-        <div class="project-origin">"same problem, eight different industries"</div>
-        <p>White-label field data capture framework. One engine powers eight industry verticals &mdash; from construction inspections to healthcare intake. Google Workspace native, zero infrastructure.</p>
-        <div class="project-stack">
-          <span>Apps Script</span><span>Sheets</span><span>Config Engine</span>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-tag">AI / Healthcare</div>
-        <h3>RecallAI</h3>
-        <div class="project-origin">"no-shows are a solved problem most clinics haven't solved"</div>
-        <p>Scheduling automation for dental practices. Patient reminders, cancellation follow-up, reactivation workflows. Shaped around a real clinic partnership.</p>
-        <div class="project-stack">
-          <span>Python</span><span>FastAPI</span><span>AI Integration</span>
-        </div>
-      </div>
-
     </div>
+
+    <!-- BUILDING IN: protected SaaS capability strip -->
+    <div class="building-strip reveal">
+      <div class="building-label">Building In · Trademark Pending</div>
+      <h3>Local-First AI for environments where cloud APIs aren't an option</h3>
+      <p>Currently architecting a local-first AI stack for teams whose data can't leave the building. Privacy, latency, or compliance constraints. Product names are withheld until trademark and release. The capability is real; the playbook is protected.</p>
+      <div class="building-domains">
+        <span>Local LLM Orchestration</span>
+        <span>Privacy-Preserving Transcription</span>
+        <span>Internal Ticketing Automation</span>
+        <span>Ollama · Whisper · Vector Search</span>
+      </div>
+      <div class="building-note">Live demos available under NDA. <a href="#contact">Start a conversation.</a></div>
+    </div>
+
   </div>
 </section>
 
@@ -589,7 +724,7 @@ section{padding:6rem 2rem}
       <div class="about-bio reveal">
         <p>I came up through graphic design: print shops, branding agencies, nonprofits. Over two decades developing an eye for what works across print, digital, and UX. Currently pursuing advanced studies at Portland State, where design and systems thinking keep colliding in useful ways.</p>
         <p>When AI tools arrived and I realized I could build, not just design, everything clicked. I&rsquo;ve since evolved into architecting automation-driven tools, internal platforms, and AI-augmented workflows. Every project starts with a specific friction point.</p>
-        <p>LUXIGA is the studio where design intelligence meets smart automation. I partner with mission-driven teams who need both technical fluency and design intelligence &mdash; especially where AI can reduce friction and build more accessible systems.</p>
+        <p>LUXIGA is the studio where design intelligence meets smart automation. I partner with mission-driven teams who need both technical fluency and design intelligence, especially where AI can reduce friction and build more accessible systems.</p>
         <div class="timeline">
           <div class="timeline-item">
             <div class="timeline-year">2000 &ndash; 2020</div>
@@ -892,7 +1027,7 @@ section{padding:6rem 2rem}
         n.baseAlpha = 1;
       }
 
-      // Mouse repulsion — snappy response
+      // Mouse repulsion: snappy response
       const dx = n.x - mouseX;
       const dy = n.y - mouseY;
       const dist = Math.sqrt(dx * dx + dy * dy);
