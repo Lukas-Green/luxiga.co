@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Methodology · LUXIGA Case Study</title>
+<meta name="description" content="How LUXIGA productizes AI for vertical SaaS: pre-built architecture templates, LLM-powered onboarding, customized automation playbooks per industry.">
+<meta property="og:title" content="Methodology · LUXIGA Case Study">
+<meta property="og:description" content="From friction to playbook. The framework behind LUXIGA's vertical AI work.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://luxiga.co/case-studies/methodology.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="apple-touch-icon" href="../apple-touch-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--surface:#0D0D1A;--accent:#C4FF53;--accent-hover:#d4ff73;
+  --violet:#8B5CF6;--violet-hover:#a78bfa;--text:#E8E8F0;--muted:#C0B8D8;
+  --border:#1a1a2e;--radius-btn:6px;--radius-card:12px;
+  --sans:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+ul{list-style:none}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,16,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-brand{font-family:var(--mono);font-size:1.25rem;font-weight:700;letter-spacing:2px;color:var(--text)}
+.nav-brand .ux{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:.875rem;color:var(--muted);transition:color .2s;font-weight:500;letter-spacing:.5px}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{padding:.5rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.8rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s}
+.nav-cta:hover{background:var(--accent-hover)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;min-width:44px;min-height:44px;align-items:center;justify-content:center}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .3s,opacity .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(8,8,16,.95);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:999}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-size:1.25rem;color:var(--muted);transition:color .2s}
+.mobile-nav a:hover{color:var(--text)}
+
+/* HERO */
+.cs-hero{padding:8rem 2rem 4rem;background:var(--bg)}
+.cs-hero .container{max-width:860px;margin:0 auto}
+.cs-back{font-family:var(--mono);font-size:.85rem;color:var(--muted);transition:color .2s;display:inline-block;margin-bottom:2rem}
+.cs-back:hover{color:var(--accent)}
+.cs-tag{display:inline-block;font-family:var(--mono);font-size:.75rem;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase;padding:.35rem .85rem;border:1px solid var(--violet);border-radius:var(--radius-btn);margin-bottom:1.25rem}
+.cs-title{font-size:clamp(2.5rem,5vw,3.5rem);font-weight:700;line-height:1.1;margin-bottom:1rem;letter-spacing:-1px;text-wrap:balance}
+.cs-tagline{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:700px;margin-bottom:2.5rem;text-wrap:pretty}
+.cs-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;padding:1.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cs-meta-item label{display:block;font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.35rem}
+.cs-meta-item span{font-size:.9rem;color:var(--text);font-weight:500}
+
+/* SECTIONS */
+.cs-section{padding:5rem 2rem}
+.cs-section .container{max-width:860px;margin:0 auto}
+.cs-section.bg-surface{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cs-section.bg-dark{background:var(--bg)}
+.cs-section-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem}
+.cs-section-title{font-size:1.75rem;font-weight:700;line-height:1.2;margin-bottom:1.5rem;text-wrap:balance}
+.cs-section p{color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:1.25rem}
+.cs-section p:last-child{margin-bottom:0}
+.cs-quote{border-left:3px solid var(--accent);padding:1.25rem 0 1.25rem 1.5rem;margin:2rem 0;font-size:1.15rem;color:var(--text);line-height:1.6;font-weight:500;font-style:italic}
+.cs-findings{margin:1.5rem 0;padding:0}
+.cs-findings li{position:relative;padding-left:1.25rem;color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:.85rem}
+.cs-findings li::before{content:'';position:absolute;left:0;top:.6rem;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.cs-findings li strong{color:var(--text);font-weight:600}
+
+/* DEMO FRAME */
+.cs-demo{padding:4rem 2rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cs-demo .container{max-width:960px;margin:0 auto}
+.demo-intro{text-align:center;margin-bottom:2.5rem}
+.demo-intro .cs-section-label{display:block;margin-bottom:.5rem}
+.demo-intro h2{font-size:1.6rem;font-weight:700;margin-bottom:.65rem;text-wrap:balance}
+.demo-intro p{color:var(--muted);font-size:.95rem;max-width:580px;margin:0 auto;text-wrap:pretty}
+.demo-browser{border:1px solid var(--border);border-radius:var(--radius-card);overflow:hidden;background:var(--bg);box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.demo-chrome{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1rem;background:var(--surface);border-bottom:1px solid var(--border)}
+.demo-dots{display:flex;gap:6px}
+.demo-dots span{width:10px;height:10px;border-radius:50%}
+.demo-dots span:nth-child(1){background:#ff5f57}
+.demo-dots span:nth-child(2){background:#febc2e}
+.demo-dots span:nth-child(3){background:#28c840}
+.demo-url{font-family:var(--mono);font-size:.7rem;color:var(--muted);flex:1;text-align:center}
+.demo-fullscreen{font-family:var(--mono);font-size:.7rem;color:var(--accent);transition:color .2s}
+.demo-fullscreen:hover{color:var(--accent-hover)}
+.demo-browser iframe{display:block;width:100%;height:680px;border:none;background:var(--bg)}
+
+/* VERTICALS GRID */
+.cs-section.verticals{padding:5rem 2rem;background:var(--bg)}
+.verticals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem}
+.vert-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.75rem 1.5rem;transition:border-color .3s,transform .3s}
+.vert-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.vert-card--soon{opacity:.7}
+.vert-card--soon:hover{border-color:var(--border);transform:none}
+.vert-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--accent);margin-bottom:1rem}
+.vert-icon svg{width:100%;height:100%}
+.vert-name{font-size:1.05rem;font-weight:600;margin-bottom:.5rem;color:var(--text)}
+.vert-status{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);padding:.18rem .5rem;border:1px solid var(--border);border-radius:999px;margin-bottom:.85rem}
+.vert-status--active{color:var(--accent);border-color:rgba(196,255,83,.4)}
+.vert-desc{color:var(--muted);font-size:.85rem;line-height:1.65;flex:1}
+
+/* CTA */
+.cs-cta{padding:5rem 2rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center}
+.cs-cta .container{max-width:680px;margin:0 auto}
+.cs-cta h2{font-size:1.85rem;font-weight:700;line-height:1.2;margin-bottom:1rem;text-wrap:balance}
+.cs-cta p{color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:2rem;max-width:540px;margin-left:auto;margin-right:auto;text-wrap:pretty}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.9rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s,transform .1s;border:none;cursor:pointer;font-family:var(--sans)}
+.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px)}
+
+/* PAGE NAV */
+.cs-page-nav{padding:3rem 2rem;background:var(--bg);border-top:1px solid var(--border)}
+.cs-page-nav .container{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.cs-page-nav a{font-family:var(--mono);font-size:.9rem;color:var(--muted);transition:color .2s}
+.cs-page-nav a:hover{color:var(--accent)}
+
+/* FOOTER */
+.footer{padding:2.5rem 2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;max-width:100%}
+.footer-brand{font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:2px}
+.footer-brand .ux{color:var(--accent)}
+.footer-copy{font-size:.8rem;color:var(--muted)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav{padding:0 1.25rem}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .cs-hero{padding:6rem 1.25rem 3rem}
+  .cs-meta{grid-template-columns:repeat(2,1fr);gap:1rem}
+  .cs-section,.cs-section.verticals,.cs-cta{padding:3.5rem 1.25rem}
+  .cs-section-title{font-size:1.5rem}
+  .cs-title{font-size:2.2rem}
+  .cs-demo{padding:2.5rem 1.25rem}
+  .demo-browser iframe{height:560px}
+  .verticals-grid{grid-template-columns:1fr}
+  .cs-page-nav{padding:2rem 1.25rem}
+  .footer{flex-direction:column;gap:.75rem;text-align:center;padding:2rem 1.25rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="nav-brand">L<span class="ux">UX</span>IGA</a>
+  <div class="nav-links">
+    <a href="../index.html#home">Home</a>
+    <a href="../index.html#services">Services</a>
+    <a href="../index.html#projects">Work</a>
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#contact">Contact</a>
+  </div>
+  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a Call</a>
+  <button class="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav">
+  <a href="../index.html#home">Home</a>
+  <a href="../index.html#services">Services</a>
+  <a href="../index.html#projects">Work</a>
+  <a href="../index.html#about">About</a>
+  <a href="../index.html#contact">Contact</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a Call</a>
+</div>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="container">
+    <a href="../index.html#projects" class="cs-back">&larr; Back to Work</a>
+    <div class="cs-tag">Methodology / Vertical SaaS</div>
+    <h1 class="cs-title">Productizing AI for verticals</h1>
+    <p class="cs-tagline">SMBs in regulated industries pay for tools that solve 10% of their problem. The other 90% stays trapped in spreadsheets, group texts, and workarounds nobody has time to fix. This page is the framework for closing that gap. The methodology, the demo, and the verticals currently in research.</p>
+    <div class="cs-meta">
+      <div class="cs-meta-item">
+        <label>Role</label>
+        <span>Architect &amp; Builder</span>
+      </div>
+      <div class="cs-meta-item">
+        <label>Approach</label>
+        <span>Vertical templates + LLM customization</span>
+      </div>
+      <div class="cs-meta-item">
+        <label>Built For</label>
+        <span>SMBs in regulated verticals</span>
+      </div>
+      <div class="cs-meta-item">
+        <label>Status</label>
+        <span>Research &amp; prototyping</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE FRAME -->
+<section class="cs-section bg-dark">
+  <div class="container">
+    <div class="cs-section-label">The Frame</div>
+    <h2 class="cs-section-title">Buy a template. Customize with AI. Ship.</h2>
+    <p>Most vertical SaaS is built the wrong way around. The vendor designs a generic dashboard, then asks the customer to learn it, configure it, and reshape their business to fit. The customer becomes the architect of a tool they paid someone else to build.</p>
+    <p>The frame I'm building works in the opposite direction. Start with a pre-built architecture template designed from real market research into a specific vertical. When a customer adopts it, they go through an LLM-powered onboarding flow that asks the right questions for their industry: clinic size, EHR system, project types, estimating method. The AI maps those answers to the template's configuration and customizes the system to their exact workflow. Compliance checks, documentation, automations, dashboards. Hours instead of months.</p>
+    <blockquote class="cs-quote">"The gap isn't a lack of tools. It's that every tool requires the customer to become the architect. The frame flips that."</blockquote>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="cs-section bg-surface">
+  <div class="container">
+    <div class="cs-section-label">How It Works</div>
+    <h2 class="cs-section-title">Three steps from prospect to production</h2>
+    <ul class="cs-findings">
+      <li><strong>Step 1. Pick a vertical.</strong> Each template starts from a deep research brief: market size, competitive landscape, real pain points, automation opportunities. The vertical isn't picked from a catalog. It's picked because the research surfaces a real gap.</li>
+      <li><strong>Step 2. AI onboarding.</strong> A guided wizard asks questions specific to the customer's industry and business. The LLM maps responses to template configuration: workflows, compliance checklists, documentation, automation rules. The customer never sees a blank dashboard.</li>
+      <li><strong>Step 3. Deploy.</strong> The customized system is ready to use. Local AI agents handle the repetitive work (filing, scheduling, billing, field communication) while the customer focuses on the work that matters.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="cs-demo">
+  <div class="container">
+    <div class="demo-intro">
+      <div class="cs-section-label">The Demo</div>
+      <h2>LLM Onboarding Simulator</h2>
+      <p>This is the heart of the framework. A working simulation of how a customer selects their industry, answers guided questions about their business, and receives a customized automation playbook driven by AI.</p>
+    </div>
+    <div class="demo-browser">
+      <div class="demo-chrome">
+        <div class="demo-dots"><span></span><span></span><span></span></div>
+        <span class="demo-url">luxiga.co/demo/llm-onboarding &middot; demo mode</span>
+        <a href="../demo/llm-onboarding.html" target="_blank" rel="noopener" class="demo-fullscreen">Open full screen &nearr;</a>
+      </div>
+      <iframe src="../demo/llm-onboarding.html" title="LLM Onboarding Simulator" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- VERTICALS IN STUDY -->
+<section class="cs-section verticals">
+  <div class="container">
+    <div class="cs-section-label">In Study</div>
+    <h2 class="cs-section-title">Verticals currently in research</h2>
+    <p>Each vertical below is a candidate template, backed by ongoing research into market dynamics, regulatory constraints, and operational pain points. Products and product names are withheld until research and prototyping resolve into something demoable. The frame is real. The named verticals below are research targets, not shipping products.</p>
+    <div class="verticals-grid">
+
+      <div class="vert-card">
+        <div class="vert-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5v1a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M20 21v-2a4 4 0 0 0-3-3.87"/><path d="M4 21v-2a4 4 0 0 1 3-3.87"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+        </div>
+        <div class="vert-name">Healthcare</div>
+        <div class="vert-status vert-status--active">Active research</div>
+        <div class="vert-desc">Small practices and clinics. Patient intake, smart scheduling with conflict detection, billing optimization, HIPAA-aware compliance workflows. $37.68B market, 16.9% CAGR.</div>
+      </div>
+
+      <div class="vert-card">
+        <div class="vert-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/><path d="M9 20v-5h6v5"/></svg>
+        </div>
+        <div class="vert-name">Construction</div>
+        <div class="vert-status vert-status--active">Active research</div>
+        <div class="vert-desc">Contractors and builders. Change order automation, field-to-office communication, AI-assisted estimating, permitting research agents. $11.58B market, 12.1% CAGR.</div>
+      </div>
+
+      <div class="vert-card">
+        <div class="vert-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="vert-name">SMB / Office</div>
+        <div class="vert-status vert-status--active">Active research</div>
+        <div class="vert-desc">SMB automation for HR onboarding, expense management, document workflows. Visual workflow builder with template-driven customization per industry. $19.6B BPA segment.</div>
+      </div>
+
+      <div class="vert-card vert-card--soon">
+        <div class="vert-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="vert-name">Legal</div>
+        <div class="vert-status">Planned</div>
+        <div class="vert-desc">Small law firms. Contract automation, playbook-learning review, jurisdiction-specific analysis, client portals, compliance tracking.</div>
+      </div>
+
+      <div class="vert-card vert-card--soon">
+        <div class="vert-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="vert-name">Real Estate</div>
+        <div class="vert-status">Planned</div>
+        <div class="vert-desc">Small landlords (5-15 properties). Tenant screening, maintenance tracking, ESG compliance, communication hub.</div>
+      </div>
+
+      <div class="vert-card vert-card--soon">
+        <div class="vert-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <div class="vert-name">Restaurant</div>
+        <div class="vert-status">Planned</div>
+        <div class="vert-desc">Independent operators. AI scheduling, inventory forecasting with spoilage prevention, demand prediction, loyalty automation.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cs-cta">
+  <div class="container">
+    <h2>Got a vertical in mind?</h2>
+    <p>Whether you're a potential customer, investor, or collaborator. The frame is portable. Talk to me about what it could do for your industry.</p>
+    <a href="../index.html#contact" class="btn-primary">Book a Strategy Call &rarr;</a>
+  </div>
+</div>
+
+<!-- PAGE NAV -->
+<div class="cs-page-nav">
+  <div class="container">
+    <a href="digital-media-research.html">&larr; Digital Media Research</a>
+    <a href="../index.html#projects">All Work &rarr;</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">L<span class="ux">UX</span>IGA</div>
+  <div class="footer-copy">&copy; 2026 LUXIGA LLC. All rights reserved.</div>
+</footer>
+
+<script>
+const hamburger = document.querySelector('.hamburger');
+const mobileNav = document.querySelector('.mobile-nav');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+});
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
