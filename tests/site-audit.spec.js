@@ -35,7 +35,7 @@ test.describe('Desktop Navigation', () => {
   test('Nav has all expected links', async ({ page }) => {
     await page.goto('/');
     const navLinks = page.locator('.nav-links a');
-    await expect(navLinks).toHaveCount(6);
+    await expect(navLinks).toHaveCount(7);
   });
 
   test('Nav brand links to home', async ({ page }) => {
@@ -70,7 +70,7 @@ test.describe('Mobile Navigation', () => {
     await hamburger.click();
     await expect(mobileNav).toBeVisible();
     // Verify all links present
-    await expect(mobileNav.locator('a')).toHaveCount(7);
+    await expect(mobileNav.locator('a')).toHaveCount(8);
   });
 
   test('Hamburger closes on second click', async ({ page }) => {
