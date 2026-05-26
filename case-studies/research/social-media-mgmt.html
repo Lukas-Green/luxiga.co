@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Media Management Research · LUXIGA</title>
+<meta name="description" content="Deep-dive competitive intelligence on 15+ social media management platforms. Pricing, features, market position, and automation gaps.">
+<meta property="og:title" content="Social Media Management Research · LUXIGA">
+<meta property="og:description" content="15+ platforms analyzed across scheduling, analytics, engagement, and social listening.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://luxiga.co/case-studies/research/social-media-mgmt.html">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080810;--surface:#0D0D1A;--accent:#C4FF53;--accent-hover:#d4ff73;
+  --violet:#8B5CF6;--violet-hover:#a78bfa;--text:#E8E8F0;--muted:#C0B8D8;
+  --border:#1a1a2e;--radius-btn:6px;--radius-card:12px;
+  --sans:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
+}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+ul{list-style:none}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,16,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-brand{font-family:var(--mono);font-size:1.25rem;font-weight:700;letter-spacing:2px;color:var(--text)}
+.nav-brand .ux{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:.875rem;color:var(--muted);transition:color .2s;font-weight:500;letter-spacing:.5px}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{padding:.5rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.8rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s}
+.nav-cta:hover{background:var(--accent-hover)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;min-width:44px;min-height:44px;align-items:center;justify-content:center}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .3s,opacity .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(8,8,16,.95);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:999}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-size:1.25rem;color:var(--muted);transition:color .2s}
+.mobile-nav a:hover{color:var(--text)}
+
+/* HERO */
+.cs-hero{padding:8rem 2rem 4rem;background:var(--bg)}
+.cs-hero .container{max-width:1000px;margin:0 auto}
+.cs-back{font-family:var(--mono);font-size:.85rem;color:var(--muted);transition:color .2s;display:inline-block;margin-bottom:2rem}
+.cs-back:hover{color:var(--accent)}
+.cs-tag{display:inline-block;font-family:var(--mono);font-size:.75rem;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase;padding:.35rem .85rem;border:1px solid var(--violet);border-radius:var(--radius-btn);margin-bottom:1.25rem}
+.cs-title{font-size:clamp(2.5rem,5vw,3.5rem);font-weight:700;line-height:1.1;margin-bottom:1rem;letter-spacing:-1px;text-wrap:balance}
+.cs-tagline{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:760px;margin-bottom:2.5rem;text-wrap:pretty}
+.cs-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;padding:1.75rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cs-meta-item label{display:block;font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.35rem}
+.cs-meta-item span{font-size:.9rem;color:var(--text);font-weight:500}
+
+/* MARKET STATS */
+.market-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:2rem 0 2.5rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card)}
+.market-stat{text-align:center}
+.market-stat-val{font-family:var(--mono);font-size:1.5rem;font-weight:700;color:var(--accent);margin-bottom:.35rem;line-height:1.1}
+.market-stat-label{font-size:.72rem;color:var(--muted);letter-spacing:.3px;line-height:1.4}
+
+/* BODY SECTIONS */
+.cs-section{padding:5rem 2rem}
+.cs-section .container{max-width:1000px;margin:0 auto}
+.cs-section.bg-surface{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.cs-section.bg-dark{background:var(--bg)}
+.cs-section-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem}
+.cs-section-title{font-size:1.75rem;font-weight:700;line-height:1.2;margin-bottom:1.5rem;text-wrap:balance}
+.cs-section p{color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:1.25rem}
+.cs-section p:last-child{margin-bottom:0}
+.cs-quote{border-left:3px solid var(--accent);padding:1.25rem 0 1.25rem 1.5rem;margin:2rem 0;font-size:1.15rem;color:var(--text);line-height:1.6;font-weight:500;font-style:italic}
+.cs-findings{margin:1.5rem 0;padding:0}
+.cs-findings li{position:relative;padding-left:1.25rem;color:var(--muted);font-size:1rem;line-height:1.7;margin-bottom:.85rem}
+.cs-findings li::before{content:'';position:absolute;left:0;top:.6rem;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.cs-findings li strong{color:var(--text);font-weight:600}
+
+/* COMPARISON TABLE */
+.comp-table-wrap{margin-top:2rem;overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-card);background:var(--bg)}
+.comp-table{width:100%;border-collapse:collapse;min-width:920px}
+.comp-table thead{background:var(--surface);border-bottom:1px solid var(--border)}
+.comp-table th{text-align:left;padding:.85rem 1rem;font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
+.comp-table td{padding:.85rem 1rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--border);line-height:1.45}
+.comp-table td:first-child{font-weight:600;color:var(--text)}
+.comp-table tbody tr:hover{background:rgba(196,255,83,.03)}
+
+/* PAGE NAV */
+.cs-page-nav{padding:3rem 2rem;background:var(--bg);border-top:1px solid var(--border)}
+.cs-page-nav .container{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.cs-page-nav a{font-family:var(--mono);font-size:.9rem;color:var(--muted);transition:color .2s}
+.cs-page-nav a:hover{color:var(--accent)}
+
+/* FOOTER */
+.footer{padding:2.5rem 2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;max-width:100%}
+.footer-brand{font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:2px}
+.footer-brand .ux{color:var(--accent)}
+.footer-copy{font-size:.8rem;color:var(--muted)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav{padding:0 1.25rem}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .cs-hero{padding:6rem 1.25rem 3rem}
+  .cs-meta{grid-template-columns:repeat(2,1fr);gap:1rem}
+  .market-stats{grid-template-columns:repeat(2,1fr);padding:1.25rem}
+  .market-stat-val{font-size:1.2rem}
+  .cs-section{padding:3.5rem 1.25rem}
+  .cs-section-title{font-size:1.5rem}
+  .cs-title{font-size:2.2rem}
+  .cs-page-nav{padding:2rem 1.25rem}
+  .footer{flex-direction:column;gap:.75rem;text-align:center;padding:2rem 1.25rem}
+  .comp-table{font-size:.78rem}
+  .comp-table th,.comp-table td{padding:.65rem .75rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="nav-brand">L<span class="ux">UX</span>IGA</a>
+  <div class="nav-links">
+    <a href="../../index.html#home">Home</a>
+    <a href="../../index.html#services">Services</a>
+    <a href="../../index.html#projects">Work</a>
+    <a href="../../index.html#about">About</a>
+    <a href="../../index.html#contact">Contact</a>
+  </div>
+  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a Call</a>
+  <button class="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-nav">
+  <a href="../../index.html#home">Home</a>
+  <a href="../../index.html#services">Services</a>
+  <a href="../../index.html#projects">Work</a>
+  <a href="../../index.html#about">About</a>
+  <a href="../../index.html#contact">Contact</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a Call</a>
+</div>
+
+<!-- HERO -->
+<section class="cs-hero">
+  <div class="container">
+    <a href="../digital-media-research.html" class="cs-back">&larr; Back to Digital Media Research</a>
+    <div class="cs-tag">Research / Social Media</div>
+    <h1 class="cs-title">Social Media Management</h1>
+    <p class="cs-tagline">15+ platforms analyzed across scheduling, analytics, engagement, and social listening. The market is saturated with tools that all claim to do everything. This brief maps who actually does what, what they charge, and where the automation gaps are.</p>
+    <div class="cs-meta">
+      <div class="cs-meta-item"><label>Tools Analyzed</label><span>15+</span></div>
+      <div class="cs-meta-item"><label>Market</label><span>$32-40B (2025)</span></div>
+      <div class="cs-meta-item"><label>Key Trend</label><span>AI content &amp; unified analytics</span></div>
+      <div class="cs-meta-item"><label>Status</label><span>Active Research</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET OVERVIEW -->
+<section class="cs-section bg-dark">
+  <div class="container">
+    <div class="cs-section-label">Market Overview</div>
+    <h2 class="cs-section-title">A $20B+ market where everyone looks the same</h2>
+    <div class="market-stats">
+      <div class="market-stat"><div class="market-stat-val">$32-40B</div><div class="market-stat-label">Market Size (2025)</div></div>
+      <div class="market-stat"><div class="market-stat-val">19-25%</div><div class="market-stat-label">CAGR</div></div>
+      <div class="market-stat"><div class="market-stat-val">4.9B</div><div class="market-stat-label">Global Social Users</div></div>
+      <div class="market-stat"><div class="market-stat-val">75%+</div><div class="market-stat-label">SMBs Using Social</div></div>
+    </div>
+    <p>The social media management software market has exploded to $32-40B, but differentiation has collapsed. Most tools now offer scheduling, analytics, and multi-platform publishing. The real competition has shifted to AI capabilities, unified inbox quality, social commerce integration ($2.6T market by 2026), and short-form video support. Enterprise players (Sprout, Hootsuite) are pushing upmarket while budget tools (Buffer, Pallyy) are eating the freelancer and SMB tier.</p>
+    <p>Key growth drivers: AI-powered content generation (59.5% of platforms now include AI), cross-platform Reels/Shorts/TikTok management, social commerce (TikTok Shop alone at $23.4B, up 48% YoY), and TikTok emerging as a search engine for Gen Z. Major pricing disruptions, including Hootsuite eliminating its free tier, Loomly's 996% price increases, and Crowdfire shutting down entirely, are driving migration opportunities.</p>
+  </div>
+</section>
+
+<!-- COMPETITIVE LANDSCAPE -->
+<section class="cs-section bg-surface">
+  <div class="container">
+    <div class="cs-section-label">Competitive Landscape</div>
+    <h2 class="cs-section-title">Who does what, and what they charge</h2>
+    <p>The market divides into four tiers: enterprise all-in-ones (Sprout, Hootsuite), mid-market challengers (Agorapulse, Sendible), focused tools (Later for visual, Metricool for analytics), and budget/solo options (Buffer, Pallyy, Publer).</p>
+    <div class="comp-table-wrap">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Tool</th><th>Category</th><th>Pricing</th><th>Target</th><th>Position</th><th>API</th><th>Differentiator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Hootsuite</td><td>All-in-one</td><td>$99–$739/mo</td><td>Enterprise / SMB</td><td>Market leader</td><td>Yes</td><td>Deepest integrations, oldest brand recognition</td></tr>
+          <tr><td>Sprout Social</td><td>All-in-one</td><td>$249–$499/mo</td><td>Mid-market / Enterprise</td><td>Premium challenger</td><td>Yes</td><td>Best-in-class analytics and social listening</td></tr>
+          <tr><td>Buffer</td><td>Publishing</td><td>Free–$120/mo</td><td>Freelancers / SMB</td><td>Budget leader</td><td>Yes</td><td>Simplicity and transparent pricing</td></tr>
+          <tr><td>Later</td><td>Visual planning</td><td>$25–$80/mo</td><td>Creators / SMB</td><td>Visual niche</td><td>Limited</td><td>Instagram-first visual planner with Linkin.bio</td></tr>
+          <tr><td>Metricool</td><td>Analytics</td><td>Free–$349/mo</td><td>Agencies / SMB</td><td>Analytics niche</td><td>Yes</td><td>Cross-platform analytics with competitor tracking</td></tr>
+          <tr><td>Agorapulse</td><td>All-in-one</td><td>$49–$149/mo</td><td>Agencies / SMB</td><td>Mid-market value</td><td>Yes</td><td>Strong inbox management and ROI reporting</td></tr>
+          <tr><td>Sendible</td><td>All-in-one</td><td>$29–$399/mo</td><td>Agencies</td><td>Agency-focused</td><td>Yes</td><td>White-label reports and client management</td></tr>
+          <tr><td>SocialBee</td><td>Scheduling</td><td>$29–$99/mo</td><td>SMB / Solopreneurs</td><td>Content recycling</td><td>Limited</td><td>Category-based content recycling and AI writer</td></tr>
+          <tr><td>Loomly</td><td>Collaboration</td><td>$32–$277/mo</td><td>Marketing teams</td><td>Team workflow</td><td>Limited</td><td>Best approval workflows and content calendar UX</td></tr>
+          <tr><td>Publer</td><td>Publishing</td><td>Free–$84/mo</td><td>Freelancers / SMB</td><td>Budget contender</td><td>Limited</td><td>Auto-scheduling with AI content suggestions</td></tr>
+          <tr><td>Planable</td><td>Collaboration</td><td>$33–$83/mo</td><td>Agencies / Teams</td><td>Approval niche</td><td>Limited</td><td>Visual approval workflows with client collaboration</td></tr>
+          <tr><td>Vista Social</td><td>All-in-one</td><td>$39–$379/mo</td><td>Agencies / SMB</td><td>Rising challenger</td><td>Yes</td><td>Modern UI with TikTok and review management</td></tr>
+          <tr><td>Pallyy</td><td>Visual planning</td><td>Free–$29/mo</td><td>Freelancers / Creators</td><td>Ultra-budget</td><td>No</td><td>Cheapest visual planner with grid preview</td></tr>
+          <tr><td>Crowdfire</td><td>Curation</td><td>Free–$74/mo</td><td>SMB / Solopreneurs</td><td>Content curation</td><td>Limited</td><td>Auto-suggests content from RSS feeds and topics</td></tr>
+          <tr><td>Iconosquare</td><td>Analytics</td><td>$49–$139/mo</td><td>Brands / Agencies</td><td>Analytics depth</td><td>Yes</td><td>Deep Instagram/TikTok analytics with benchmarking</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section class="cs-section bg-dark">
+  <div class="container">
+    <div class="cs-section-label">Pain Points</div>
+    <h2 class="cs-section-title">The tool sprawl problem nobody wants to admit</h2>
+    <p>Most teams use 3-5 social tools simultaneously and still have gaps. The tools that claim to do everything actually do most things at 70% quality. Here's where clients consistently struggle:</p>
+    <ul class="cs-findings">
+      <li><strong>Cross-platform fragmentation.</strong> Every platform's algorithm behaves differently, but most tools treat them identically. Optimal posting times, content formats, and engagement strategies vary wildly between Instagram, TikTok, LinkedIn, and X. Most schedulers apply the same logic everywhere.</li>
+      <li><strong>Analytics that don't answer business questions.</strong> Vanity metrics everywhere, attribution nowhere. Teams can see likes and reach but can't connect social activity to revenue, pipeline, or customer acquisition cost. Sprout and Metricool are closest, but the gap is still massive.</li>
+      <li><strong>Content creation bottleneck.</strong> Scheduling is solved. Creating content that's worth scheduling isn't. AI writing assistants are emerging but produce generic output without brand voice training. The human bottleneck has shifted from distribution to creation.</li>
+      <li><strong>Unified inbox chaos.</strong> DMs, comments, mentions, reviews spread across 5+ platforms. Even tools with "unified inbox" features miss platforms, drop context, or can't handle high volume without manual triage.</li>
+      <li><strong>Short-form video workflow.</strong> The entire industry pivoted to Reels/Shorts/TikTok but most management tools still treat video as an afterthought. Editing, captioning, format adaptation, and cross-posting workflows remain manual and painful.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- WHERE AI FITS -->
+<section class="cs-section bg-surface">
+  <div class="container">
+    <div class="cs-section-label">Where AI Fits</div>
+    <h2 class="cs-section-title">Automation gaps that map to consulting value</h2>
+    <p>The social media management space is ripe for AI-driven consulting. Every platform has bolted on "AI features" but none have solved the fundamental workflow problems. These are the gaps where a systems automation consultant creates the most value:</p>
+    <ul class="cs-findings">
+      <li><strong>Brand voice AI.</strong> Training content generation models on a client's existing voice, style, and messaging framework. Most built-in AI writers produce generic output. Custom fine-tuning is a high-value consulting engagement.</li>
+      <li><strong>Cross-platform content adaptation.</strong> Building automated workflows that take one piece of content and intelligently adapt it for each platform (format, copy length, hashtags, CTAs). Currently manual for most teams.</li>
+      <li><strong>Intelligent social listening + response.</strong> Connecting social monitoring to automated triage and suggested responses. Route complaints to support, route purchase intent to sales, auto-archive noise.</li>
+      <li><strong>Performance-to-strategy pipelines.</strong> Automated reporting that doesn't just show numbers but generates actionable recommendations. Connect social data to CRM/revenue data for real attribution.</li>
+      <li><strong>Approval workflow automation.</strong> Building custom approval chains that integrate with existing tools (Slack, email, project management). Most built-in approval features are too rigid for agency workflows.</li>
+    </ul>
+    <blockquote class="cs-quote">"The consulting angle isn't 'which tool should you use.' It's 'how do we make the tool you already have actually work for your business.'"</blockquote>
+  </div>
+</section>
+
+<!-- CONSULTING APPROACH -->
+<section class="cs-section bg-dark">
+  <div class="container">
+    <div class="cs-section-label">Consulting Approach</div>
+    <h2 class="cs-section-title">Three engagement models for social media clients</h2>
+    <p>Social media consulting has been commoditized at the strategy layer. The value has shifted to systems and automation. Here's how to position:</p>
+    <ul class="cs-findings">
+      <li><strong>Audit + Optimize ($2K-$5K).</strong> Review current tool stack, identify redundancies and gaps, build custom dashboards and automated workflows. Deliverable: documented system architecture with implementation.</li>
+      <li><strong>AI Content Pipeline ($5K-$15K).</strong> Build a custom content generation and adaptation system trained on the client's brand voice. Includes prompt engineering, workflow automation, and quality control processes.</li>
+      <li><strong>Full Systems Build ($15K-$40K).</strong> End-to-end social media operations architecture. Tool selection, integration, custom automation, reporting pipelines, team training. Ongoing retainer for optimization.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- PAGE NAV -->
+<div class="cs-page-nav">
+  <div class="container">
+    <a href="../digital-media-research.html">&larr; All Research</a>
+    <a href="content-dam-creative.html">Content &amp; DAM &rarr;</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-brand">L<span class="ux">UX</span>IGA</div>
+  <div class="footer-copy">&copy; 2026 LUXIGA LLC. All rights reserved.</div>
+</footer>
+
+<script>
+const hamburger = document.querySelector('.hamburger');
+const mobileNav = document.querySelector('.mobile-nav');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+});
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
