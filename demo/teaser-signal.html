@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUXIGA Teaser — The Signal</title>
+<title>LUXIGA Teaser · The Signal</title>
 <style>
 * { margin: 0; padding: 0; }
 body { background: #080810; overflow: hidden; cursor: none; }
@@ -160,7 +160,7 @@ function drawRadarSweep(angle) {
 function drawDataPoints() {
   for (const dp of dataPoints) {
     if (!dp.discovered) {
-      // Dormant — barely visible dot
+      // Dormant, barely visible dot
       ctx.globalAlpha = 0.06 * globalAlpha;
       ctx.fillStyle = '#888899';
       ctx.beginPath();
