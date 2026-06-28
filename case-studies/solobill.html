@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUXIGA Bill — LUXIGA Case Study</title>
+<title>LUXIGA Bill · LUXIGA Case Study</title>
 <meta name="description" content="A complete invoicing system built inside Google Sheets for independent contractors. Zero monthly fees, zero external dependencies.">
-<meta property="og:title" content="LUXIGA Bill — LUXIGA Case Study">
+<meta property="og:title" content="LUXIGA Bill · LUXIGA Case Study">
 <meta property="og:description" content="Invoice generation and tracking built inside Google Sheets for independent contractors.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://luxiga.co/case-studies/solobill.html">
@@ -198,7 +198,7 @@ ul{list-style:none}
   <div class="container">
     <div class="cs-section-label">The Pain</div>
     <h2 class="cs-section-title">Every platform charges for 90% you don't use</h2>
-    <p>A friend — journeyman plumber, licensed contractor — needed a way to send invoices. He'd been writing them by hand or using Word templates. Every invoicing platform he tried charged $20-30/month for features like team management, inventory tracking, and CRM pipelines. He needed one thing: generate a professional invoice, track it, and send it.</p>
+    <p>A friend, a journeyman plumber and licensed contractor, needed a way to send invoices. He'd been writing them by hand or using Word templates. Every invoicing platform he tried charged $20-30/month for features like team management, inventory tracking, and CRM pipelines. He needed one thing: generate a professional invoice, track it, and send it.</p>
     <p>The tools weren't built for people like him. They were built for companies that had outgrown the problem he was trying to solve for the first time.</p>
   </div>
 </section>
@@ -208,7 +208,7 @@ ul{list-style:none}
   <div class="container">
     <div class="cs-section-label">The Constraint</div>
     <h2 class="cs-section-title">Google Workspace only, zero external dependencies</h2>
-    <p>He already had Google Workspace through his email. The solution had to live there — no new accounts, no new passwords, no new monthly charges. Google Sheets as the ledger, Google Docs as the invoice template, Apps Script as the glue.</p>
+    <p>He already had Google Workspace through his email. The solution had to live there: no new accounts, no new passwords, no new monthly charges. Google Sheets as the ledger, Google Docs as the invoice template, Apps Script as the glue.</p>
     <p>This constraint eliminated entire categories of complexity. No server, no database, no deployment pipeline. The entire tool runs inside Google's infrastructure with zero hosting cost.</p>
   </div>
 </section>
@@ -219,7 +219,7 @@ ul{list-style:none}
     <div class="cs-section-label">What I Built</div>
     <h2 class="cs-section-title">Full invoicing flow with live calculations</h2>
     <p>LUXIGA Bill is a complete invoicing system that runs inside Google Sheets. The sidebar UI handles everything: client management, line-item entry with live calculation, tax computation, and one-click invoice generation.</p>
-    <p>Line items calculate dynamically — quantity &times; rate updates the subtotal in real time. Tax is computed at the row level. The total reflects everything as you type. When you click "Generate Invoice," Apps Script builds a formatted Google Doc from the data and exports it as a PDF.</p>
+    <p>Line items calculate dynamically. Quantity &times; rate updates the subtotal in real time. Tax is computed at the row level. The total reflects everything as you type. When you click "Generate Invoice," Apps Script builds a formatted Google Doc from the data and exports it as a PDF.</p>
     <blockquote class="cs-quote">"The best tool for a one-person operation is the one that doesn't require a second person to manage."</blockquote>
   </div>
 </section>
@@ -234,7 +234,7 @@ ul{list-style:none}
     <ul class="cs-findings">
       <li>Client-side calculation eliminates server round-trips during line item editing</li>
       <li>JSON serialization of line items in a flat Sheet avoids the "one row per line item" explosion</li>
-      <li>PDF generation uses Google Docs as a template engine — reliable, free, already trusted</li>
+      <li>PDF generation uses Google Docs as a template engine: reliable, free, already trusted</li>
     </ul>
   </div>
 </section>
@@ -245,7 +245,7 @@ ul{list-style:none}
     <div class="cs-section-label">Status</div>
     <h2 class="cs-section-title">MVP complete. Report tab coming.</h2>
     <p>The core invoicing flow is complete and functional. Create, calculate, generate, export. The Report tab (revenue by month, outstanding invoices) and automated email sending are next.</p>
-    <p>LUXIGA Bill is also a candidate for integration into FieldKit as a vertical configuration — the same engine, tuned for contractor invoicing.</p>
+    <p>LUXIGA Bill is also a candidate for integration into FieldKit as a vertical configuration: the same engine, tuned for contractor invoicing.</p>
   </div>
 </section>
 
