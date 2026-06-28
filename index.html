@@ -153,6 +153,24 @@ section{padding:6rem 2rem}
 .project-stack span{font-family:var(--mono);font-size:.7rem;padding:.3rem .65rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--muted)}
 .project-link{font-family:var(--mono);font-size:.8rem;color:var(--accent);transition:color .2s}
 .project-link:hover{color:var(--accent-hover)}
+.projects-more{margin-top:1.75rem;text-align:center;color:var(--muted);font-size:.9rem}
+.projects-more a{color:var(--violet);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+.projects-more a:hover{border-bottom-color:var(--violet)}
+
+/* ── PROOF ── */
+.proof-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem}
+.proof-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.85rem 1.5rem;text-align:center}
+.proof-stat .num{font-family:var(--mono);font-size:2.5rem;font-weight:700;color:var(--accent);line-height:1}
+.proof-stat .lbl{color:var(--muted);font-size:.85rem;margin-top:.6rem;line-height:1.45}
+.proof-client{background:linear-gradient(135deg,var(--surface) 0%,rgba(139,92,246,.05) 100%);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-card);padding:2.25rem 2rem}
+.proof-client-tag{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem}
+.proof-client h3{font-size:1.3rem;font-weight:600;margin-bottom:.75rem}
+.proof-client p{color:var(--muted);font-size:.92rem;line-height:1.7;margin-bottom:1.25rem;max-width:720px}
+.proof-points{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem}
+.proof-points span{font-family:var(--mono);font-size:.72rem;padding:.32rem .7rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--text);letter-spacing:.5px}
+.proof-quote{border-left:2px solid var(--accent);padding-left:1.25rem;margin:1.5rem 0;font-size:1.05rem;line-height:1.6;color:var(--text);font-style:italic}
+.proof-quote cite{display:block;margin-top:.6rem;font-style:normal;font-size:.85rem;color:var(--muted);font-family:var(--mono)}
+@media(max-width:680px){.proof-stats{grid-template-columns:1fr}}
 
 /* ── BUILDING IN (protected SaaS strip) ── */
 .building-strip{margin-top:3rem;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:var(--radius-card);padding:2.25rem 2rem;position:relative;overflow:hidden}
@@ -266,7 +284,7 @@ section{padding:6rem 2rem}
   :root{
     --bg:#FAFAF8;--surface:#F0EFF4;--accent:#C4FF53;--accent-hover:#b8f245;
     --accent-text:#3D6B00;--accent-btn-bg:#C4FF53;--accent-btn-text:#1a1a2e;
-    --violet:#6D28D9;--violet-hover:#5B21B6;--text:#1A1A2E;--muted:#6B6180;
+    --violet:#6D28D9;--violet-hover:#5B21B6;--text:#1A1A2E;--muted:#4E4760;
     --border:#D8D4E2;
   }
   body{background:var(--bg);color:var(--text)}
@@ -372,7 +390,7 @@ section{padding:6rem 2rem}
 [data-theme="light"]{
   --bg:#FAFAF8;--surface:#F0EFF4;--accent:#C4FF53;--accent-hover:#b8f245;
   --accent-text:#3D6B00;--accent-btn-bg:#C4FF53;--accent-btn-text:#1a1a2e;
-  --violet:#6D28D9;--violet-hover:#5B21B6;--text:#1A1A2E;--muted:#6B6180;
+  --violet:#6D28D9;--violet-hover:#5B21B6;--text:#1A1A2E;--muted:#4E4760;
   --border:#D8D4E2;
 }
 [data-theme="light"] body{background:var(--bg);color:var(--text)}
@@ -467,8 +485,9 @@ section{padding:6rem 2rem}
     <a href="#home">Home</a>
     <a href="#services">Services</a>
     <a href="#pulse">Pulse</a>
+    <a href="#projects">Products</a>
+    <a href="#proof">Proof</a>
     <a href="#sites">Sites</a>
-    <a href="#projects">Work</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </div>
@@ -483,8 +502,9 @@ section{padding:6rem 2rem}
   <a href="#home">Home</a>
   <a href="#services">Services</a>
   <a href="#pulse">Pulse</a>
+  <a href="#projects">Products</a>
+  <a href="#proof">Proof</a>
   <a href="#sites">Sites</a>
-  <a href="#projects">Work</a>
   <a href="#about">About</a>
   <a href="#contact">Contact</a>
   <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a Call</a>
@@ -504,8 +524,8 @@ section{padding:6rem 2rem}
     </p>
     <p class="hero-tagline reveal">Design intelligence meets smart automation. I partner with teams to eliminate operational pain points through LLM-powered tools built for local, private use that actually get adopted.</p>
     <div class="hero-ctas reveal">
-      <a href="/audit" class="btn-primary">Take the Pulse &rarr;</a>
-      <a href="https://calendly.com/lukasgreen-ai-design" class="btn-secondary" target="_blank" rel="noopener">Book a Strategy Call &rarr;</a>
+      <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a Call &rarr;</a>
+      <a href="/audit" class="btn-secondary">Or take the 3-min Pulse &rarr;</a>
     </div>
     <div class="stats-bar reveal">
       <div class="stat"><div class="stat-number" data-target="4" data-suffix=" yrs">0</div><div class="stat-label">UX Practice</div></div>
@@ -518,23 +538,24 @@ section{padding:6rem 2rem}
 <!-- SERVICES -->
 <section class="services" id="services">
   <div class="container">
-    <div class="section-label reveal">What I Do</div>
+    <div class="section-label reveal">How I Work</div>
     <h2 class="section-title reveal">Services</h2>
+    <p class="section-subtitle reveal">I listen for where the work actually hurts, scope the smallest tool that fixes it, and build it local-first so it gets adopted and stays adopted.</p>
     <div class="services-grid">
       <div class="service-card reveal">
         <div class="service-num">01</div>
         <h3>AI Consulting</h3>
-        <p>I help teams cut through the noise to find where AI actually creates leverage. Auditing workflows, identifying high-friction handoffs, scoping the right tool. Not the flashiest option. The one that still works six months after it ships.</p>
+        <p>Most AI advice is noise. I find the one place in your operation where it actually pays for itself, and I am honest about the ten places it does not. You leave with a tool that still works six months after it ships, not the demo that wowed the room and got abandoned.</p>
       </div>
       <div class="service-card reveal">
         <div class="service-num">02</div>
         <h3>Systems Automation</h3>
-        <p>Recurring manual work is a design failure. I map the exact repetition and eliminate it. The automations I build are lightweight, maintainable, and invisible by design. Your team should forget they exist.</p>
+        <p>Recurring manual work is a design failure, not a fact of life. I map the exact repetition and engineer it away. What I build is lightweight, maintainable, and invisible by design. Your team should forget it is there and just feel the day get shorter.</p>
       </div>
       <div class="service-card reveal">
         <div class="service-num">03</div>
-        <h3>UX-Informed Design</h3>
-        <p>Technical capability means nothing if adoption fails. I bring over two decades of design thinking into every build. Interfaces that match how people actually work. If someone needs a walkthrough to use it, it&rsquo;s not done yet.</p>
+        <h3>Design for Adoption</h3>
+        <p>Capability means nothing if no one uses it. Two decades of design thinking go into every build, so the interface matches how people actually work, not how an engineer wishes they would. If someone needs a walkthrough to use it, it&rsquo;s not done yet.</p>
       </div>
     </div>
   </div>
@@ -644,25 +665,38 @@ section{padding:6rem 2rem}
 <!-- PROJECTS -->
 <section class="projects" id="projects">
   <div class="container">
-    <div class="section-label reveal">Selected Work</div>
-    <h2 class="section-title reveal">Shipped Tools</h2>
+    <div class="section-label reveal">What I Build</div>
+    <h2 class="section-title reveal">Products</h2>
+    <p class="section-subtitle reveal">Local-first AI tools that ship and get used. Two in active build, one live today, more under wraps.</p>
     <div class="projects-grid">
 
-      <div class="project-card reveal">
-        <div class="project-tag">CRM / Outreach</div>
-        <h3>CanvassKit</h3>
-        <div class="project-origin">"outreach team drowning in spreadsheets"</div>
-        <p>A lightweight contact tracker for community outreach teams. Log calls, emails, meetings from a Google Sheets sidebar. No CRM subscription, no onboarding.</p>
+      <div class="project-card project-card--featured reveal">
+        <div class="project-card-badge">Flagship</div>
+        <div class="project-tag">Construction · Voice AI</div>
+        <h3>VozClara <span class="project-spark">⚡</span></h3>
+        <div class="project-origin">"the crew speaks Spanish, the foreman needs English"</div>
+        <p>Your crew records a 30-second voice memo in Spanish. Your foreman gets a structured daily log in English, with safety and blockers flagged. Nobody on the crew learns an app, and the jobsite data never leaves the machine.</p>
         <div class="project-stack">
-          <span>Apps Script</span><span>Sheets</span><span>HTML/Tailwind</span>
+          <span>Voice → Daily log</span><span>Spanish ⇄ English</span><span>On-device</span>
         </div>
-        <a href="case-studies/canvasskit.html" class="project-link">View Case Study &rarr;</a>
+        <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">See it live on a 5-min call &rarr;</a>
       </div>
 
-      <div class="project-card project-card--featured reveal">
+      <div class="project-card reveal">
+        <div class="project-tag">Local-First AI Platform</div>
+        <h3>LUXIGA OS</h3>
+        <div class="project-origin">"your files and recordings, understood, without the cloud"</div>
+        <p>A local-first intelligence layer for teams whose data can't leave the building. Scan, transcribe, summarize, and route files and voice memos on your own hardware. The engine the LUXIGA vertical tools are built on.</p>
+        <div class="project-stack">
+          <span>Local LLM</span><span>Whisper</span><span>Private by default</span>
+        </div>
+        <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">Book a walkthrough &rarr;</a>
+      </div>
+
+      <div class="project-card reveal">
         <div class="project-card-badge">Live</div>
         <div class="project-tag">Invoicing / Finance</div>
-        <h3>SoloBill <span class="project-spark">⚡</span></h3>
+        <h3>LUXIGA Bill <span class="project-spark">⚡</span></h3>
         <div class="project-origin">"contractor overpaying for 10% of a platform"</div>
         <p>Send a polished invoice in 90 seconds, straight from Google Sheets. PDF export, client tracking, auto-reminders, payment links. No SaaS subscription, no learning curve, no monthly fee for software you barely use.</p>
         <div class="project-stack">
@@ -671,44 +705,52 @@ section{padding:6rem 2rem}
         <a href="case-studies/solobill.html" class="project-link">View Case Study &rarr;</a>
       </div>
 
-      <div class="project-card reveal">
-        <div class="project-tag">Research / AI Consulting</div>
-        <h3>Digital Media Research</h3>
-        <div class="project-origin">"know the market before the first call"</div>
-        <p>Competitive intelligence across digital media verticals. 15+ tools per category, pain points mapped to consulting angles, automation gaps identified. Two briefs live.</p>
-        <div class="project-stack">
-          <span>Research</span><span>Competitive Intel</span><span>Strategy</span>
-        </div>
-        <a href="case-studies/digital-media-research.html" class="project-link">View Case Study &rarr;</a>
-      </div>
+    </div>
 
-      <div class="project-card reveal">
-        <div class="project-tag">Methodology / Vertical SaaS</div>
-        <h3>Productizing AI for Verticals</h3>
-        <div class="project-origin">"buy a template, customize with AI, ship"</div>
-        <p>The framework behind LUXIGA's vertical work. Pre-built architecture templates plus LLM-powered onboarding. Includes a working demo of the onboarding wizard.</p>
-        <div class="project-stack">
-          <span>LLM Onboarding</span><span>Vertical Templates</span><span>Demo Inside</span>
-        </div>
-        <a href="case-studies/methodology.html" class="project-link">View Case Study &rarr;</a>
-      </div>
-
+    <div class="projects-more reveal">
+      Also shipped: <a href="case-studies/canvasskit.html">CanvassKit</a>, an outreach CRM in a Google Sheets sidebar. More work in the <a href="#sites">live sites</a> above.
     </div>
 
     <!-- BUILDING IN: protected SaaS capability strip -->
     <div class="building-strip reveal">
-      <div class="building-label">Building In · Trademark Pending</div>
-      <h3>Local-First AI for environments where cloud APIs aren't an option</h3>
-      <p>Currently architecting a local-first AI stack for teams whose data can't leave the building. Privacy, latency, or compliance constraints. Product names are withheld until trademark and release. The capability is real; the playbook is protected.</p>
+      <div class="building-label">Building In · Names Withheld Until Release</div>
+      <h3>The same local-first engine, pointed at the next vertical</h3>
+      <p>VozClara is the first vertical on the LUXIGA OS engine. The same voice-to-structured-record pattern fits other trades and regulated fields where the work is spoken, not typed, and the data has to stay private. Those builds are in progress and named only under NDA.</p>
       <div class="building-domains">
-        <span>Local LLM Orchestration</span>
-        <span>Privacy-Preserving Transcription</span>
-        <span>Internal Ticketing Automation</span>
-        <span>Ollama · Whisper · Vector Search</span>
+        <span>Voice-to-record for the trades</span>
+        <span>Privacy-constrained workflows</span>
+        <span>Bilingual jobsite ops</span>
+        <span>Local LLM · Whisper · Structured output</span>
       </div>
       <div class="building-note">Live demos available under NDA. <a href="#contact">Start a conversation.</a></div>
     </div>
 
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof" id="proof">
+  <div class="container">
+    <div class="section-label reveal">Proof</div>
+    <h2 class="section-title reveal">It ships. It's live. It works.</h2>
+    <p class="section-subtitle reveal">Not slideware. Real products in production, and a client site doing its job right now.</p>
+    <div class="proof-stats reveal">
+      <div class="proof-stat"><div class="num">6+</div><div class="lbl">products designed, built, and shipped solo</div></div>
+      <div class="proof-stat"><div class="num">1</div><div class="lbl">client site live in production today</div></div>
+      <div class="proof-stat"><div class="num">100%</div><div class="lbl">local-first where the data has to stay private</div></div>
+    </div>
+    <div class="proof-client reveal">
+      <div class="proof-client-tag">Client Spotlight · Live</div>
+      <h3>Golden Goose Construction &middot; Salem, OR</h3>
+      <p>A roofing and renovation contractor needed leads without paying the CRM tax. I designed, built, and deployed the whole thing: a fast marketing site, affiliate tracking with QR campaigns, an admin panel, and automated lead notifications. When a real prospect was nearly lost to a social-media in-app browser, I shipped a safeguard so it would not happen again. Every change goes live behind passing end-to-end tests.</p>
+      <div class="proof-points">
+        <span>Live at goldgosling.com</span><span>Affiliate + QR tracking</span><span>Automated lead alerts</span><span>Playwright + CI</span>
+      </div>
+      <!-- TESTIMONIAL: paste Justin's real quote here when he sends it, then delete these comment markers.
+      <blockquote class="proof-quote">"[Justin's quote]"<cite>Justin &middot; Golden Goose Construction</cite></blockquote>
+      -->
+      <a href="https://goldgosling.com" class="project-link" target="_blank" rel="noopener">Open the live site &rarr;</a>
+    </div>
   </div>
 </section>
 
