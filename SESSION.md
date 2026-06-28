@@ -21,8 +21,8 @@ Owner: Lukas Green
 The site is live at `luxiga.co` with:
 - Homepage with hero animation (canvas node network), services, Pulse CTA, project cards, stack orbit, about, contact form (Formspree)
 - Pulse page (`pulse.html`) — 7-question digital readiness assessment (lightweight version; full React SaaS at `pulse.luxiga.co`)
-- Case studies: CanvassKit (`case-studies/canvasskit.html`), SoloBill (`case-studies/solobill.html`)
-- Demos: CanvassKit demo (`demo/canvasskit-demo.html`), SoloBill demo (`demo/solobill-demo.html`)
+- Case studies: CanvassKit (`case-studies/canvasskit.html`), LUXIGA Bill (`case-studies/solobill.html`)
+- Demos: CanvassKit demo (`demo/canvasskit-demo.html`), LUXIGA Bill demo (`demo/solobill-demo.html`)
 - Custom SVG favicon + apple-touch-icon
 - Open Graph tags on all pages
 - Mobile responsive with hamburger nav
@@ -62,7 +62,7 @@ The site is live at `luxiga.co` with:
 
 ### 2026-04-07 — Initial build + stack redesign
 
-- Initial LUXIGA site: homepage, Pulse assessment page, case studies (CanvassKit, SoloBill), demos
+- Initial LUXIGA site: homepage, Pulse assessment page, case studies (CanvassKit, LUXIGA Bill), demos
 - Redesigned stack section with compact orbit layout and floating pills
 - All pages built as self-contained HTML with inline styles (zero build step)
 
@@ -93,9 +93,9 @@ The site is live at `luxiga.co` with:
 | `index.html` | Homepage — hero, services, Pulse CTA, projects, stack, about, contact |
 | `pulse.html` | Pulse digital readiness assessment (7 questions, lightweight) |
 | `case-studies/canvasskit.html` | CanvassKit case study |
-| `case-studies/solobill.html` | SoloBill case study |
+| `case-studies/solobill.html` | LUXIGA Bill case study |
 | `demo/canvasskit-demo.html` | Interactive CanvassKit demo |
-| `demo/solobill-demo.html` | Interactive SoloBill demo |
+| `demo/solobill-demo.html` | Interactive LUXIGA Bill demo |
 | `favicon.svg` | LUXIGA product favicon |
 | `apple-touch-icon.svg` | Apple touch icon |
 | `assets/img/cartoon-lukas.jpeg` | Cartoon portrait (about section) |
@@ -110,7 +110,7 @@ The site is live at `luxiga.co` with:
 | Hero | `#home` | Canvas node animation, tagline, dual CTAs |
 | Services | `#services` | Service offerings grid |
 | Pulse | `#pulse` | Digital readiness assessment CTA |
-| Projects | `#projects` | Project cards (CanvassKit, SoloBill, FieldKit, GGC, RecallAI) |
+| Projects | `#projects` | Project cards (CanvassKit, LUXIGA Bill, FieldKit, GGC, RecallAI) |
 | Stack | `#stack` | Tech stack orbit visualization |
 | About | `#about` | Bio + cartoon avatar |
 | Contact | `#contact` | Formspree contact form |
