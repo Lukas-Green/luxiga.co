@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUXIGA Teaser — The Pulse</title>
+<title>LUXIGA Teaser · The Pulse</title>
 <style>
 * { margin: 0; padding: 0; }
 body { background: #080810; overflow: hidden; cursor: none; }
@@ -63,7 +63,7 @@ class Node {
 
   draw() {
     if (!this.active) {
-      // Dormant node — barely visible
+      // Dormant node, barely visible
       ctx.globalAlpha = 0.08 * globalAlpha;
       ctx.fillStyle = '#888899';
       ctx.beginPath();
@@ -355,7 +355,7 @@ function drawWordmark(alpha) {
 function drawGrain(opacity) {
   const imageData = ctx.getImageData(0, 0, W, H);
   const data = imageData.data;
-  // Light grain — only add to every 4th pixel for performance
+  // Light grain, only add to every 4th pixel for performance
   for (let i = 0; i < data.length; i += 16) {
     const noise = (Math.random() - 0.5) * 15 * opacity;
     data[i] += noise;
