@@ -142,7 +142,7 @@ section{padding:6rem 2rem}
 .project-card--featured:hover{border-color:var(--accent);box-shadow:0 0 36px rgba(196,255,83,.12);transform:translateY(-4px)}
 .project-card-badge{position:absolute;top:1.25rem;right:1.25rem;font-family:var(--mono);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;background:var(--accent);color:#0a0a0a;padding:.25rem .55rem;border-radius:999px;font-weight:700;animation:badgePulse 3s ease-in-out infinite}
 @keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(196,255,83,.5)}50%{box-shadow:0 0 0 6px rgba(196,255,83,0)}}
-.project-spark{display:inline-block;font-size:.95rem;animation:sparkSpin 4s ease-in-out infinite}
+.project-spark{display:inline-block;font-size:.7rem;color:var(--accent);vertical-align:middle;margin-left:.18em}
 @keyframes sparkSpin{0%,90%,100%{transform:rotate(0deg)}45%{transform:rotate(15deg)}55%{transform:rotate(-15deg)}}
 .project-status{display:inline-block;margin-top:.6rem;font-family:var(--mono);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:.18rem .5rem;border:1px solid var(--border);border-radius:999px}
 .project-tag{font-family:var(--mono);font-size:.7rem;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.75rem}
@@ -522,7 +522,7 @@ section{padding:6rem 2rem}
     <p class="hero-subtitle reveal">
       <span class="name-text">Lukas Green</span><span class="hero-subtitle-sep" aria-hidden="true"> &middot; </span><span class="title-text">Design Technologist</span>
     </p>
-    <p class="hero-tagline reveal">Design intelligence meets smart automation. I partner with teams to eliminate operational pain points through LLM-powered tools built for local, private use that actually get adopted.</p>
+    <p class="hero-tagline reveal">Design intelligence meets smart automation. I partner with teams to eliminate operational pain points through LLM-powered tools you own and control, sovereign by default, that actually get adopted.</p>
     <div class="hero-ctas reveal">
       <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a Call &rarr;</a>
       <a href="/audit" class="btn-secondary">Or take the 3-min Pulse &rarr;</a>
@@ -667,17 +667,17 @@ section{padding:6rem 2rem}
   <div class="container">
     <div class="section-label reveal">What I Build</div>
     <h2 class="section-title reveal">Products</h2>
-    <p class="section-subtitle reveal">Local-first AI tools that ship and get used. Two in active build, one live today, more under wraps.</p>
+    <p class="section-subtitle reveal">Software you own, sovereign by default and connected only when your team needs it. Two in active build, one live today, more under wraps.</p>
     <div class="projects-grid">
 
       <div class="project-card project-card--featured reveal">
         <div class="project-card-badge">Flagship</div>
         <div class="project-tag">Construction · Voice AI</div>
-        <h3>VozClara <span class="project-spark">⚡</span></h3>
+        <h3>VozClara <span class="project-spark" aria-hidden="true">◆</span></h3>
         <div class="project-origin">"the crew speaks Spanish, the foreman needs English"</div>
-        <p>Your crew records a 30-second voice memo in Spanish. Your foreman gets a structured daily log in English, with safety and blockers flagged. Nobody on the crew learns an app, and the jobsite data never leaves the machine.</p>
+        <p>Your crew records a 30-second voice memo in Spanish. Your foreman gets a structured daily log in English, with safety and blockers flagged. Nobody on the crew learns an app. It runs local-first and keeps working when the jobsite signal drops, then syncs the log to your foreman once there's a connection. Your data stays yours, never rented back to you.</p>
         <div class="project-stack">
-          <span>Voice → Daily log</span><span>Spanish ⇄ English</span><span>On-device</span>
+          <span>Voice → Daily log</span><span>Spanish ⇄ English</span><span>Offline-first sync</span>
         </div>
         <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">See it live on a 5-min call &rarr;</a>
       </div>
@@ -696,7 +696,7 @@ section{padding:6rem 2rem}
       <div class="project-card reveal">
         <div class="project-card-badge">Live</div>
         <div class="project-tag">Invoicing / Finance</div>
-        <h3>LUXIGA Bill <span class="project-spark">⚡</span></h3>
+        <h3>LUXIGA Bill <span class="project-spark" aria-hidden="true">◆</span></h3>
         <div class="project-origin">"contractor overpaying for 10% of a platform"</div>
         <p>Send a polished invoice in 90 seconds, straight from Google Sheets. PDF export, client tracking, auto-reminders, payment links. No SaaS subscription, no learning curve, no monthly fee for software you barely use.</p>
         <div class="project-stack">
