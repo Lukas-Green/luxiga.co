@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px}
+  body{
+    background:#080810;
+    color:#E8E8F0;
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:80px 90px;
+  }
+  .glow{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5}
+  .glow1{width:520px;height:520px;background:#C4FF53;top:-220px;right:-120px;opacity:.18}
+  .glow2{width:460px;height:460px;background:#8B5CF6;bottom:-220px;left:-140px;opacity:.22}
+  .watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Space Mono',monospace;font-size:340px;font-weight:700;color:rgba(196,255,83,.04);letter-spacing:.1em;white-space:nowrap;z-index:0}
+  .content{position:relative;z-index:2}
+  .brand{font-family:'Space Mono',monospace;font-size:34px;font-weight:700;letter-spacing:8px;margin-bottom:44px}
+  .brand .ux{color:#C4FF53}
+  .headline{font-size:72px;font-weight:500;line-height:1.08;letter-spacing:-1px;max-width:960px}
+  .headline .accent{color:#C4FF53}
+  .sub{font-family:'Space Mono',monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#C0B8D8;margin-top:40px}
+  .rule{position:absolute;bottom:70px;left:90px;width:120px;height:5px;background:#C4FF53;border-radius:3px}
+  .url{position:absolute;bottom:62px;right:90px;font-family:'Space Mono',monospace;font-size:24px;letter-spacing:2px;color:#8B5CF6;z-index:2}
+</style>
+</head>
+<body>
+  <div class="glow glow1"></div>
+  <div class="glow glow2"></div>
+  <div class="watermark">LUXIGA</div>
+  <div class="content">
+    <div class="brand">L<span class="ux">UX</span>IGA</div>
+    <div class="headline">I listen for friction,<br>then <span class="accent">engineer the fix.</span></div>
+    <div class="sub">AI Design Technology Studio</div>
+  </div>
+  <div class="rule"></div>
+  <div class="url">luxiga.co</div>
+</body>
+</html>
