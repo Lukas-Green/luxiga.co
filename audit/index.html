@@ -705,7 +705,8 @@ function handleEmail(e) {
   const r = window.pulseResults;
   const payload = {
     email: email,
-    _subject: 'Pulse Assessment Lead — ' + email,
+    source: 'luxiga.co / digital readiness audit',
+    _subject: 'New lead: Digital Readiness Audit (' + email + ')',
     score: r.totalScore + ' / 24',
     tier: r.totalScore <= 11 ? 'Getting Started' : r.totalScore <= 17 ? 'Building Foundation' : r.totalScore <= 22 ? 'Well Positioned' : 'Digitally Mature',
     automation: r.automation.toFixed(1) + ' / 4.0',
