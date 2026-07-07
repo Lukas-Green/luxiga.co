@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUXIGA Card &middot; Print files</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#080810">
+<style>
+  :root{--bg:#080810;--panel:#11111c;--line:rgba(196,255,83,.14);--ink:#f0f1ea;--muted:#8f9a78;--lime:#C4FF53;}
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;
+    min-height:100svh;padding:32px 20px;line-height:1.5}
+  main{max-width:560px;margin:0 auto}
+  .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--lime);font-weight:700;margin:0 0 8px}
+  h1{font-size:26px;margin:0 0 6px;font-weight:650;letter-spacing:-.3px}
+  p.lead{color:var(--muted);margin:0 0 24px;font-size:14.5px}
+  .previews{display:flex;flex-direction:column;gap:14px;margin-bottom:24px}
+  .previews img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line)}
+  .dl{display:flex;flex-direction:column;gap:11px}
+  a.btn{display:flex;align-items:center;gap:12px;padding:15px 18px;border-radius:13px;text-decoration:none;
+    font-weight:600;font-size:15px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+  a.btn:active{transform:scale(.99)} a.btn:hover{border-color:rgba(196,255,83,.4)}
+  a.primary{background:var(--lime);color:#0a0a0a;border-color:var(--lime);justify-content:center;font-size:16px;padding:17px}
+  a .sub{margin-left:auto;color:var(--muted);font-weight:500;font-size:12.5px}
+  a.primary .sub{color:rgba(10,10,10,.6)}
+  .note{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+  .note b{color:var(--ink)}
+  footer{margin-top:26px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);text-align:center;font-weight:600}
+</style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">LUXIGA &middot; Print</p>
+    <h1>Business card, ready to print</h1>
+    <p class="lead">Front and back at 3.5&Prime; &times; 2&Prime; with bleed. Download the PDF for a print shop, or the PNGs to print at home.</p>
+    <div class="previews">
+      <img src="front.png" alt="Card front: LUXIGA wordmark">
+      <img src="back.png" alt="Card back: Lukas Green, Founder, LUXIGA LLC, with QR codes">
+    </div>
+    <div class="dl">
+      <a class="primary" href="luxiga-business-card.pdf" download>Download print PDF <span class="sub">front + back, bleed</span></a>
+      <a class="btn" href="front.png" download>Front <span class="sub">PNG, 600 dpi</span></a>
+      <a class="btn" href="back.png" download>Back <span class="sub">PNG, 600 dpi</span></a>
+      <a class="btn" href="../lukas-green.vcf" download>Contact card <span class="sub">.vcf, with logo</span></a>
+    </div>
+    <p class="note"><b>For a print shop:</b> the PDF already includes 0.125&Prime; bleed and is sized per side. <b>At home:</b> print the PNGs at 3.5&times;2 inches, borderless, on heavy stock. <b>Digital card:</b> <a href="../" style="color:var(--lime)">luxiga.co/card</a>.</p>
+    <footer>Product Design &middot; Software</footer>
+  </main>
+</body>
+</html>
