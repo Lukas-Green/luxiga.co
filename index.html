@@ -14,6 +14,12 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="LUXIGA, AI Design Technology Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="LUXIGA · AI Design Technology Studio">
+<meta name="twitter:description" content="Design intelligence meets smart automation. Tools that eliminate operational pain points and actually get adopted.">
+<meta name="twitter:image" content="https://luxiga.co/assets/img/og-preview.png">
+<meta name="theme-color" content="#080810" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
 <link rel="canonical" href="https://luxiga.co/">
 <script type="application/ld+json">
 {
@@ -43,6 +49,11 @@
 <style>
 /* ── RESET & BASE ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* ── KEYBOARD FOCUS ── visible ring for keyboard users (body hides the mouse cursor) */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+/* ── SKIP LINK ── first tab stop, jumps past the nav */
+.skip-link{position:fixed;top:-100px;left:1rem;z-index:10001;padding:.7rem 1.2rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.85rem;border-radius:var(--radius-btn);transition:top .2s}
+.skip-link:focus{top:1rem}
 :root{
   --bg:#080810;--surface:#0D0D1A;--accent:#C4FF53;--accent-hover:#d4ff73;
   --violet:#8B5CF6;--violet-hover:#a78bfa;--text:#E8E8F0;--muted:#C0B8D8;
@@ -73,6 +84,17 @@ ul{list-style:none}
 .nav-links a:hover,.nav-links a.active{color:var(--text)}
 .nav-cta{padding:.5rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.8rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s}
 .nav-cta:hover{background:var(--accent-hover)}
+/* ── NAV DROPDOWN ── */
+.nav-dropdown{position:relative}
+.nav-dropdown-toggle{display:inline-flex;align-items:center;gap:.35rem;font-size:.875rem;color:var(--muted);font-weight:500;letter-spacing:.5px;font-family:var(--sans);background:none;border:none;padding:0;cursor:pointer;transition:color .2s}
+.nav-dropdown-toggle:hover,.nav-dropdown:hover .nav-dropdown-toggle,.nav-dropdown-toggle.active{color:var(--text)}
+.nav-dropdown-toggle svg{width:11px;height:11px;transition:transform .25s}
+.nav-dropdown:hover .nav-dropdown-toggle svg,.nav-dropdown:focus-within .nav-dropdown-toggle svg,.nav-dropdown-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}
+.nav-dropdown-menu{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%) translateY(6px);min-width:170px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.4rem;display:flex;flex-direction:column;gap:.1rem;opacity:0;visibility:hidden;transition:opacity .2s,transform .2s;box-shadow:0 14px 44px rgba(0,0,0,.4);z-index:1001}
+.nav-dropdown-menu::before{content:'';position:absolute;top:-14px;left:0;right:0;height:14px}
+.nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown:focus-within .nav-dropdown-menu,.nav-dropdown-menu.open{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.nav-dropdown-menu a{padding:.55rem .8rem;border-radius:8px;font-size:.85rem;color:var(--muted);white-space:nowrap;transition:background .15s,color .15s}
+.nav-dropdown-menu a:hover,.nav-dropdown-menu a.active{background:var(--bg);color:var(--text)}
 section[id]{scroll-margin-top:64px}
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-width:44px;min-height:44px;align-items:center;justify-content:center}
 .hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .3s,opacity .3s}
@@ -273,6 +295,13 @@ section{padding:6rem 2rem}
 /* ── UTILITIES ── */
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
+/* ── REDUCED MOTION ── respect the OS setting; content stays fully visible */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  html{scroll-behavior:auto}
+  .hero-orb{animation:none;opacity:.4}
+  .reveal{opacity:1;transform:none}
+}
 
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
@@ -492,6 +521,8 @@ section{padding:6rem 2rem}
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Skip to content</a>
+
 <!-- THEME TOGGLE -->
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
   <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -506,33 +537,41 @@ section{padding:6rem 2rem}
 <nav class="nav">
   <a href="#home" class="nav-brand">L<span class="ux">UX</span>IGA</a>
   <div class="nav-links">
-    <a href="#home">Home</a>
     <a href="#services">Services</a>
+    <div class="nav-dropdown">
+      <button class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+        Work
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
+      </button>
+      <div class="nav-dropdown-menu">
+        <a href="#projects">Products</a>
+        <a href="#sites">Live Sites</a>
+        <a href="#proof">Proof</a>
+      </div>
+    </div>
     <a href="#pulse">Pulse</a>
-    <a href="#projects">Products</a>
-    <a href="#proof">Proof</a>
-    <a href="#sites">Sites</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </div>
   <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a Call</a>
-  <button class="hamburger" aria-label="Toggle menu">
+  <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileNav">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE NAV -->
-<div class="mobile-nav">
-  <a href="#home">Home</a>
+<div class="mobile-nav" id="mobileNav">
   <a href="#services">Services</a>
-  <a href="#pulse">Pulse</a>
   <a href="#projects">Products</a>
+  <a href="#sites">Live Sites</a>
   <a href="#proof">Proof</a>
-  <a href="#sites">Sites</a>
+  <a href="#pulse">Pulse</a>
   <a href="#about">About</a>
   <a href="#contact">Contact</a>
   <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a Call</a>
 </div>
+
+<main id="main-content">
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -552,9 +591,9 @@ section{padding:6rem 2rem}
       <a href="/audit" class="btn-secondary">Or take the 3-min Pulse &rarr;</a>
     </div>
     <div class="stats-bar reveal">
-      <div class="stat"><div class="stat-number" data-target="4" data-suffix=" yrs">0</div><div class="stat-label">UX Practice</div></div>
+      <div class="stat"><div class="stat-number" data-target="20" data-suffix="+ yrs">0</div><div class="stat-label">Design Practice</div></div>
       <div class="stat"><div class="stat-number" data-target="6" data-suffix="+">0</div><div class="stat-label">Products Shipped</div></div>
-      <div class="stat"><div class="stat-number" data-target="100" data-suffix="%">0</div><div class="stat-label">Pain-Point Driven</div></div>
+      <div class="stat"><div class="stat-number" data-target="3" data-suffix="">0</div><div class="stat-label">Sites Live in Production</div></div>
     </div>
   </div>
 </section>
@@ -655,7 +694,7 @@ section{padding:6rem 2rem}
       <a href="https://goldgosling.com" class="site-card reveal" target="_blank" rel="noopener">
         <div class="site-card-tag">Client Build · Live</div>
         <div class="site-card-domain">goldgosling.com</div>
-        <div class="site-card-origin">"client needs leads without the CRM tax"</div>
+        <div class="site-card-origin">"a contractor site that books jobs, not just clicks"</div>
         <div class="site-card-stack">
           <span>GitHub Pages</span><span>CF Worker</span><span>Airtable</span><span>Playwright CI</span>
         </div>
@@ -887,6 +926,8 @@ section{padding:6rem 2rem}
   </div>
 </section>
 
+</main>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-brand">L<span class="ux">UX</span>IGA</div>
@@ -924,13 +965,15 @@ section{padding:6rem 2rem}
   const hamburger = document.querySelector('.hamburger');
   const mobileNav = document.querySelector('.mobile-nav');
   hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
+    const open = hamburger.classList.toggle('open');
     mobileNav.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
   mobileNav.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       hamburger.classList.remove('open');
       mobileNav.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
     });
   });
 
@@ -948,6 +991,7 @@ section{padding:6rem 2rem}
   /* ── ACTIVE NAV ON SCROLL ── */
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a');
+  const dropToggle = document.querySelector('.nav-dropdown-toggle');
   function updateActiveNav() {
     const scrollY = window.scrollY + 120;
     sections.forEach(sec => {
@@ -958,10 +1002,33 @@ section{padding:6rem 2rem}
         navLinks.forEach(l => l.classList.remove('active'));
         const link = document.querySelector('.nav-links a[href="#' + id + '"]');
         if (link) link.classList.add('active');
+        // Highlight the "Work" parent when its section is active
+        if (dropToggle) dropToggle.classList.toggle('active', !!link && link.closest('.nav-dropdown-menu') !== null);
       }
     });
   }
   window.addEventListener('scroll', updateActiveNav, { passive: true });
+
+  /* ── NAV DROPDOWN (touch + keyboard) ── */
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && dropToggle) {
+    const dropMenu = dropdown.querySelector('.nav-dropdown-menu');
+    dropToggle.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = dropMenu.classList.toggle('open');
+      dropToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    dropMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      dropMenu.classList.remove('open');
+      dropToggle.setAttribute('aria-expanded', 'false');
+    }));
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target)) {
+        dropMenu.classList.remove('open');
+        dropToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 
   /* ── CUSTOM CURSOR ── */
   const dot = document.querySelector('.cursor-dot');
@@ -970,8 +1037,8 @@ section{padding:6rem 2rem}
     let mx = 0, my = 0, rx = 0, ry = 0;
     document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
     (function moveCursor() {
-      rx += (mx - rx) * 0.18;
-      ry += (my - ry) * 0.18;
+      rx += (mx - rx) * 0.30;
+      ry += (my - ry) * 0.30;
       dot.style.left = mx + 'px';
       dot.style.top = my + 'px';
       ring.style.left = rx + 'px';
@@ -988,6 +1055,8 @@ section{padding:6rem 2rem}
   const canvas = document.getElementById('heroCanvas');
   const ctx = canvas.getContext('2d');
   let W, H, mouseX = 0, mouseY = 0, startTime = 0, nodes = [], animFrame;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let heroInView = true;
 
   function resize() {
     const hero = canvas.parentElement.parentElement;
@@ -1191,9 +1260,21 @@ section{padding:6rem 2rem}
     updateWatermark(elapsed);
     drawNodes(elapsed, t);
 
-    animFrame = requestAnimationFrame(animate);
+    // Under reduced-motion: render one static frame, don't loop.
+    // Off-screen: pause the loop to save CPU; the hero observer restarts it.
+    if (!reduceMotion && heroInView) animFrame = requestAnimationFrame(animate);
+    else animFrame = null;
   }
   requestAnimationFrame(animate);
+
+  // Pause the canvas animation when the hero scrolls out of view
+  const heroSection = document.getElementById('home');
+  if (heroSection) {
+    new IntersectionObserver(entries => {
+      heroInView = entries[0].isIntersecting;
+      if (heroInView && !reduceMotion && !animFrame) animFrame = requestAnimationFrame(animate);
+    }, { threshold: 0 }).observe(heroSection);
+  }
 
   /* ── COUNTER ANIMATION ── */
   const counters = document.querySelectorAll('.stat-number');
@@ -1203,6 +1284,7 @@ section{padding:6rem 2rem}
         const el = entry.target;
         const target = parseInt(el.dataset.target);
         const suffix = el.dataset.suffix || '';
+        if (reduceMotion) { el.textContent = target + suffix; counterObserver.unobserve(el); return; }
         const duration = 1500;
         const start = performance.now();
         function tick(now) {
