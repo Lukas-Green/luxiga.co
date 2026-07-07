@@ -32,10 +32,20 @@ test.describe('SEO', () => {
 // ── Desktop Navigation ──
 
 test.describe('Desktop Navigation', () => {
-  test('Nav has all expected links', async ({ page }) => {
+  test('Nav has expected links (4 top-level + 3 in Work dropdown)', async ({ page }) => {
     await page.goto('/');
-    const navLinks = page.locator('.nav-links a');
-    await expect(navLinks).toHaveCount(8);
+    // 4 direct links (Services, Pulse, About, Contact) + 3 dropdown links (Products, Live Sites, Proof)
+    await expect(page.locator('.nav-links a')).toHaveCount(7);
+    await expect(page.locator('.nav-dropdown-menu a')).toHaveCount(3);
+  });
+
+  test('Work dropdown reveals its links on hover', async ({ page }) => {
+    await page.goto('/');
+    const menu = page.locator('.nav-dropdown-menu');
+    await expect(menu).toHaveCSS('visibility', 'hidden');
+    await page.locator('.nav-dropdown-toggle').hover();
+    await expect(menu).toHaveCSS('visibility', 'visible');
+    await expect(menu.locator('a[href="#projects"]')).toBeVisible();
   });
 
   test('Nav brand links to home', async ({ page }) => {
@@ -69,8 +79,9 @@ test.describe('Mobile Navigation', () => {
     await expect(mobileNav).not.toBeVisible();
     await hamburger.click();
     await expect(mobileNav).toBeVisible();
-    // Verify all links present
-    await expect(mobileNav.locator('a')).toHaveCount(9);
+    // 7 section links (Services, Products, Live Sites, Proof, Pulse, About, Contact) + Book a Call
+    await expect(mobileNav.locator('a')).toHaveCount(8);
+    await expect(hamburger).toHaveAttribute('aria-expanded', 'true');
   });
 
   test('Hamburger closes on second click', async ({ page }) => {
@@ -93,20 +104,9 @@ test.describe('Mobile Navigation', () => {
     await expect(mobileNav).not.toBeVisible();
   });
 
-  test('Home link scrolls to top from scrolled position', async ({ page }) => {
-    await page.goto('/');
-    // Scroll down
-    await page.evaluate(() => window.scrollTo(0, 2000));
-    await page.waitForTimeout(500);
-    const scrolledY = await page.evaluate(() => window.scrollY);
-    expect(scrolledY).toBeGreaterThan(500);
-    // Open mobile nav and click Home
-    await page.locator('.hamburger').click();
-    await page.locator('.mobile-nav a[href="#home"]').click();
-    await page.waitForTimeout(800);
-    const finalY = await page.evaluate(() => window.scrollY);
-    expect(finalY).toBeLessThan(50);
-  });
+  // Note: the standalone "Home" link was removed from the nav by design
+  // (the LUXIGA wordmark now handles scroll-to-top). That behavior is
+  // covered by the "Nav brand scrolls to top on mobile" test below.
 
   test('Nav brand scrolls to top on mobile', async ({ page }) => {
     await page.goto('/');
