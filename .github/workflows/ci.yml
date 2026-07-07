@@ -40,7 +40,9 @@ jobs:
         run: npx playwright test
 
       - name: Upload test results
-        if: always()
+        # Only runs when a test fails — test-results/ is empty on green runs,
+        # which otherwise logged a "No files were found" warning every push.
+        if: failure()
         uses: actions/upload-artifact@v6
         with:
           name: playwright-report
