@@ -32,11 +32,11 @@ test.describe('SEO', () => {
 // ── Desktop Navigation ──
 
 test.describe('Desktop Navigation', () => {
-  test('Nav has expected links (4 top-level + 3 in Work dropdown)', async ({ page }) => {
+  test('Nav has expected links (4 top-level + 2 in Work dropdown)', async ({ page }) => {
     await page.goto('/');
-    // 4 direct links (Services, Pulse, About, Contact) + 3 dropdown links (Products, Live Sites, Proof)
-    await expect(page.locator('.nav-links a')).toHaveCount(7);
-    await expect(page.locator('.nav-dropdown-menu a')).toHaveCount(3);
+    // 4 direct links (Services, Pulse, About, Contact) + 2 dropdown links (Products, Proof)
+    await expect(page.locator('.nav-links a')).toHaveCount(6);
+    await expect(page.locator('.nav-dropdown-menu a')).toHaveCount(2);
   });
 
   test('Work dropdown reveals its links on hover', async ({ page }) => {
@@ -79,8 +79,8 @@ test.describe('Mobile Navigation', () => {
     await expect(mobileNav).not.toBeVisible();
     await hamburger.click();
     await expect(mobileNav).toBeVisible();
-    // 7 section links (Services, Products, Live Sites, Proof, Pulse, About, Contact) + Book a Call
-    await expect(mobileNav.locator('a')).toHaveCount(8);
+    // 6 section links (Services, Products, Proof, Pulse, About, Contact) + Book a Call
+    await expect(mobileNav.locator('a')).toHaveCount(7);
     await expect(hamburger).toHaveAttribute('aria-expanded', 'true');
   });
 
