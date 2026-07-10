@@ -1020,7 +1020,15 @@ section{padding:6rem 2rem}
   const NODE_COUNT = 24;
   const assembleDoneAt = 60 + (NODE_COUNT - 1) * 40 + 900;
   const isTouch = window.matchMedia('(hover:none)').matches;
-  const rgbaOf = (hex, a) => hex === '#8B5CF6' ? 'rgba(139,92,246,' + a + ')' : 'rgba(196,255,83,' + a + ')';
+  // Theme-aware node/edge colour. Dark: lime + violet on near-black. Light: deep green + deep
+  // violet so the constellation reads on a near-white field instead of washing out.
+  let curLight = false;
+  const isLight = () => { const th = document.documentElement.getAttribute('data-theme'); return th ? th === 'light' : window.matchMedia('(prefers-color-scheme: light)').matches; };
+  const rgbaOf = (hex, a) => {
+    const violet = hex === '#8B5CF6';
+    const c = violet ? (curLight ? '109,40,217' : '139,92,246') : (curLight ? '61,107,0' : '196,255,83');
+    return 'rgba(' + c + ',' + a + ')';
+  };
 
   // First TOOLS.length nodes are named products; the rest are smaller connective nodes
   for (let i = 0; i < NODE_COUNT; i++) {
@@ -1062,6 +1070,7 @@ section{padding:6rem 2rem}
   // ── The constellation: nodes orbit the LUXIGA hub; spokes run inward; pulses show it's live ──
   function drawConstellation(elapsed, t) {
     const settled = reduceMotion; // render fully-formed and motionless
+    curLight = isLight(); // resolve theme once per frame so node/edge colours follow light/dark
 
     // Focus = nearest labeled node to the cursor (using last frame's positions, within a generous
     // read radius). The focused node stops fleeing and magnetically eases toward the cursor so its
@@ -1124,7 +1133,7 @@ section{padding:6rem 2rem}
         if (a.alpha < 0.2 || b.alpha < 0.2) continue;
         const d = Math.hypot(a.x - b.x, a.y - b.y);
         if (d < 150) {
-          ctx.strokeStyle = 'rgba(196,255,83,' + ((1 - d / 150) * 0.09 * Math.min(a.alpha, b.alpha)) + ')';
+          ctx.strokeStyle = rgbaOf('#C4FF53', (1 - d / 150) * 0.09 * Math.min(a.alpha, b.alpha));
           ctx.lineWidth = 0.5;
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         }
@@ -1167,7 +1176,7 @@ section{padding:6rem 2rem}
       const label = hover.label.toUpperCase();
       const tw = ctx.measureText(label).width;
       const lx = hover.x, ly = hover.y - hover.r - 12;
-      ctx.fillStyle = 'rgba(8,8,16,0.85)';
+      ctx.fillStyle = curLight ? 'rgba(255,255,255,0.92)' : 'rgba(8,8,16,0.85)';
       ctx.fillRect(lx - tw / 2 - 8, ly - 13, tw + 16, 20);
       ctx.strokeStyle = rgbaOf(hover.color, 0.5); ctx.lineWidth = 1;
       ctx.strokeRect(lx - tw / 2 - 8, ly - 13, tw + 16, 20);
@@ -1203,6 +1212,11 @@ section{padding:6rem 2rem}
       if (heroInView && !reduceMotion && !frozen && !animFrame) animFrame = requestAnimationFrame(animate);
     }, { threshold: 0 }).observe(heroSection);
   }
+
+  // Repaint once on theme change when the loop is idle (reduced-motion / frozen mobile)
+  const onThemeChange = () => { if ((reduceMotion || frozen) && !animFrame) animFrame = requestAnimationFrame(animate); };
+  new MutationObserver(onThemeChange).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', onThemeChange);
 
   /* ── COUNTER ANIMATION ── */
   const counters = document.querySelectorAll('.stat-number');
