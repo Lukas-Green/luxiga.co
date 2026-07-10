@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LUXIGA · AI Design Technology Studio</title>
-<meta name="description" content="LUXIGA builds small, private AI tools that clear the busywork for small teams and the trades. Yours to own, no subscription, built to keep working after launch.">
+<meta name="description" content="LUXIGA builds small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in, built to keep working after launch.">
 <meta name="author" content="Lukas Green">
 <meta property="og:title" content="LUXIGA · AI Design Technology Studio">
-<meta property="og:description" content="I build small, private AI tools that clear the busywork slowing your team down. Made for small teams and the trades, yours to own, no subscription.">
+<meta property="og:description" content="LUXIGA builds small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in, built to keep working.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://luxiga.co/assets/img/og-preview.png">
 <meta property="og:url" content="https://luxiga.co">
@@ -16,7 +16,7 @@
 <meta property="og:image:alt" content="LUXIGA, AI Design Technology Studio">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="LUXIGA · AI Design Technology Studio">
-<meta name="twitter:description" content="Small, private AI tools that clear the busywork for small teams and the trades. Yours to own, no subscription.">
+<meta name="twitter:description" content="Small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in.">
 <meta name="twitter:image" content="https://luxiga.co/assets/img/og-preview.png">
 <meta name="theme-color" content="#080810" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
@@ -30,7 +30,7 @@
   "url": "https://luxiga.co",
   "logo": "https://luxiga.co/favicon.svg",
   "image": "https://luxiga.co/assets/img/og-preview.png",
-  "description": "LUXIGA builds small, private AI tools that clear the busywork for small teams and the trades. Yours to own, no subscription, built to keep working after launch.",
+  "description": "LUXIGA builds small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in, built to keep working after launch.",
   "founder": {
     "@type": "Person",
     "name": "Lukas Green",
@@ -117,20 +117,28 @@ section{padding:6rem 2rem}
 .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding-top:64px}
 .hero-canvas{position:absolute;inset:0;z-index:0}
 .hero-canvas canvas{width:100%;height:100%}
-.hero-watermark{position:absolute;top:28%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:clamp(7rem,17vw,16rem);font-weight:800;color:rgba(196,255,83,.06);letter-spacing:.16em;pointer-events:none;z-index:1;white-space:nowrap;user-select:none}
+/* Spotlight glow: manufactures the focal point behind the wordmark, where the constellation clusters */
+.hero-glow{position:absolute;top:44%;left:50%;width:min(820px,92vw);height:min(820px,92vw);transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(196,255,83,.11) 0%,rgba(139,92,246,.07) 40%,transparent 68%);pointer-events:none;z-index:1;opacity:0;animation:orbFadeIn 1.8s .2s forwards}
 .hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:1;opacity:0;animation:orbFadeIn 1.5s 1.5s forwards}
 .hero-orb--lime{width:340px;height:340px;background:rgba(196,255,83,.12);top:20%;left:15%;animation:orbFadeIn 1.5s 1.5s forwards,orbFloat 8s 3s ease-in-out infinite}
 .hero-orb--violet{width:280px;height:280px;background:rgba(139,92,246,.1);bottom:15%;right:10%;animation:orbFadeIn 1.5s 1.8s forwards,orbFloat 10s 3.3s ease-in-out infinite reverse}
 @keyframes orbFadeIn{to{opacity:1}}
 @keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
-.hero-content{position:relative;z-index:2;text-align:center;max-width:780px;padding:2rem}
-.hero-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:1.5rem}
-.hero h1{font-size:clamp(2.4rem,6vw,4.6rem);font-weight:800;line-height:1.08;margin-bottom:1.5rem;letter-spacing:-1.5px;color:var(--text);text-wrap:balance;max-width:22ch;margin-left:auto;margin-right:auto}
-.hero-subtitle{font-family:var(--mono);font-size:.95rem;margin-bottom:1.5rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:840px;padding:2rem}
+/* Kicker: Space Mono system-label with a live status dot */
+.hero-kicker{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:1.75rem;display:inline-flex;align-items:center;gap:.6rem;justify-content:center}
+.hero-kicker-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:kickerPulse 2.4s ease-in-out infinite}
+@keyframes kickerPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+/* The wordmark IS the hero object: bold, solid, the hub of the system. UX stays highlighted. */
+.hero-wordmark{font-family:var(--sans);font-weight:700;font-size:clamp(4rem,15vw,11rem);line-height:.9;letter-spacing:-.045em;color:var(--text);margin:0 0 1.4rem;position:relative;text-shadow:0 0 70px rgba(196,255,83,.14)}
+.hero-wordmark .ux{color:var(--accent);text-shadow:0 0 36px rgba(196,255,83,.5),0 0 12px rgba(196,255,83,.35)}
+/* Value line (the former h1): supports the wordmark, does not compete with it */
+.hero-headline{font-size:clamp(1.3rem,3.3vw,2rem);font-weight:500;line-height:1.2;letter-spacing:-.01em;color:var(--text);max-width:24ch;margin:0 auto 1.4rem;text-wrap:balance}
+.hero-subtitle{font-family:var(--mono);font-size:.85rem;margin-bottom:1.5rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center}
 .hero-subtitle .name-text{color:var(--accent)}
 .hero-subtitle .title-text{color:var(--violet)}
 .hero-subtitle-sep{color:var(--muted);opacity:.5;padding:0 .15rem}
-.hero-tagline{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:540px;margin:0 auto 2.5rem;text-wrap:balance}
+.hero-tagline{color:var(--muted);font-size:1rem;line-height:1.7;max-width:500px;margin:0 auto 2.25rem;text-wrap:balance}
 .hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
 .btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.9rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s,transform .1s;border:none;cursor:pointer;font-family:var(--sans)}
 .btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px)}
@@ -312,11 +320,10 @@ section{padding:6rem 2rem}
   .hamburger{display:flex}
   section{padding:4rem 1.25rem}
   .hero{padding-top:64px;min-height:auto;padding-bottom:3rem}
-  .hero h1{font-size:2.5rem}
-  .hero h1{font-size:clamp(2rem,8vw,2.8rem);letter-spacing:-1px;max-width:18ch}
-  .hero h1 br{display:none}
+  .hero-wordmark{font-size:clamp(3.2rem,20vw,5.5rem);letter-spacing:-.03em;margin-bottom:1.1rem}
+  .hero-headline{font-size:clamp(1.15rem,5vw,1.5rem);max-width:24ch}
   .hero-tagline{font-size:.95rem;max-width:32ch}
-  .hero-subtitle{display:flex;flex-direction:column;gap:.4rem;font-size:.85rem}
+  .hero-subtitle{display:flex;flex-direction:column;gap:.4rem;font-size:.8rem}
   .hero-subtitle-sep{display:none}
   .stats-bar{gap:2rem}
   .stat-number{font-size:1.5rem}
@@ -329,7 +336,7 @@ section{padding:6rem 2rem}
   .form-row{grid-template-columns:1fr}
   .section-title{font-size:2rem}
   .footer{flex-direction:column;gap:.75rem;text-align:center}
-  .hero-watermark{font-size:4rem}
+  .hero-kicker{font-size:.62rem;letter-spacing:2px}
 }
 
 /* ── LIGHT MODE ── */
@@ -349,11 +356,13 @@ section{padding:6rem 2rem}
   .nav-cta{background:var(--accent-btn-bg);color:var(--accent-btn-text)}
   .nav-cta:hover{background:var(--accent-hover)}
   .mobile-nav{background:rgba(250,250,248,.97)}
-  .hero-watermark{color:rgba(61,107,0,.06)}
   .hero-orb--lime{background:rgba(196,255,83,.15)}
   .hero-orb--violet{background:rgba(109,40,217,.08)}
-  .hero-label{color:var(--accent-text)}
-  .hero h1{color:var(--text)}
+  .hero-kicker{color:var(--accent-text)}
+  .hero-kicker-dot{background:var(--accent-text);box-shadow:0 0 8px rgba(61,107,0,.45)}
+  .hero-wordmark{color:var(--text);text-shadow:0 0 60px rgba(196,255,83,.28)}
+  .hero-wordmark .ux{color:var(--accent-text);text-shadow:none}
+  .hero-headline{color:var(--text)}
   .hero-subtitle .name-text{color:var(--accent-text)}
   .hero-subtitle .title-text{color:var(--violet)}
   .hero-tagline{color:var(--muted)}
@@ -451,11 +460,13 @@ section{padding:6rem 2rem}
 [data-theme="light"] .nav{background:rgba(250,250,248,.85);border-bottom-color:var(--border)}
 [data-theme="light"] .nav-brand{color:var(--text)}
 [data-theme="light"] .mobile-nav{background:rgba(250,250,248,.97)}
-[data-theme="light"] .hero-watermark{color:rgba(61,107,0,.06)}
 [data-theme="light"] .hero-orb--lime{background:rgba(196,255,83,.15)}
 [data-theme="light"] .hero-orb--violet{background:rgba(109,40,217,.08)}
-[data-theme="light"] .hero-label{color:var(--accent-text)}
-[data-theme="light"] .hero h1{color:var(--text)}
+[data-theme="light"] .hero-kicker{color:var(--accent-text)}
+[data-theme="light"] .hero-kicker-dot{background:var(--accent-text);box-shadow:0 0 8px rgba(61,107,0,.45)}
+[data-theme="light"] .hero-wordmark{color:var(--text);text-shadow:0 0 60px rgba(196,255,83,.28)}
+[data-theme="light"] .hero-wordmark .ux{color:var(--accent-text);text-shadow:none}
+[data-theme="light"] .hero-headline{color:var(--text)}
 [data-theme="light"] .hero-subtitle .name-text{color:var(--accent-text)}
 [data-theme="light"] .hero-subtitle .title-text{color:var(--violet)}
 [data-theme="light"] .btn-primary{background:var(--accent-btn-bg);color:var(--accent-btn-text)}
@@ -574,16 +585,17 @@ section{padding:6rem 2rem}
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-canvas"><canvas id="heroCanvas"></canvas></div>
-  <div class="hero-watermark">LUXIGA</div>
+  <div class="hero-glow" aria-hidden="true"></div>
   <div class="hero-orb hero-orb--lime"></div>
   <div class="hero-orb hero-orb--violet"></div>
   <div class="hero-content">
-    <div class="hero-label reveal">Design Technology Studio</div>
-    <h1 class="reveal">I listen for friction, then engineer the fix.</h1>
+    <p class="hero-kicker reveal"><span class="hero-kicker-dot" aria-hidden="true"></span>Design Technology Studio &middot; Local-First AI</p>
+    <h1 class="hero-wordmark reveal" aria-label="LUXIGA">L<span class="ux">UX</span>IGA</h1>
+    <p class="hero-headline reveal">I listen for friction, then engineer the fix.</p>
     <p class="hero-subtitle reveal">
       <span class="name-text">Lukas Green</span><span class="hero-subtitle-sep" aria-hidden="true"> &middot; </span><span class="title-text">Design Technologist</span>
     </p>
-    <p class="hero-tagline reveal">I build small, private AI tools that clear the busywork slowing your team down. Made for small teams and the trades, yours to own, no subscription.</p>
+    <p class="hero-tagline reveal">Small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in, and it keeps working.</p>
     <div class="hero-ctas reveal">
       <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a Call &rarr;</a>
       <a href="/audit" class="btn-secondary">Or take the 3-min Pulse &rarr;</a>
@@ -963,6 +975,7 @@ section{padding:6rem 2rem}
   const canvas = document.getElementById('heroCanvas');
   const ctx = canvas.getContext('2d');
   let W, H, mouseX = 0, mouseY = 0, startTime = 0, nodes = [], animFrame;
+  let cx, cy, ringInner, ringOuter, lite = false, frozen = false, pulses = [], nextPulseAt = 2400;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let heroInView = true;
 
@@ -970,9 +983,26 @@ section{padding:6rem 2rem}
     const hero = canvas.parentElement.parentElement;
     W = canvas.width = hero.offsetWidth;
     H = canvas.height = hero.offsetHeight;
+    const base = Math.min(W, H);
+    ringInner = base * 0.17;
+    ringOuter = base * 0.44;
+    lite = reduceMotion || W < 760;
+    // Anchor the hub to the wordmark's real position so the constellation reads as its system
+    const cr = canvas.getBoundingClientRect();
+    const wm = document.querySelector('.hero-wordmark');
+    if (wm) { const wr = wm.getBoundingClientRect(); cx = wr.left + wr.width / 2 - cr.left; cy = wr.top + wr.height / 2 - cr.top; }
+    else { cx = W / 2; cy = H * 0.44; }
+    // Keep the spotlight glow centered on the wordmark hub
+    const glow = document.querySelector('.hero-glow');
+    if (glow) { glow.style.top = cy + 'px'; glow.style.left = cx + 'px'; }
+    // Assigning canvas.width above clears the bitmap. When we are not looping
+    // (reduced-motion, or a frozen mobile frame), schedule one repaint.
+    if ((reduceMotion || frozen) && !animFrame) animFrame = requestAnimationFrame(animate);
   }
   resize();
   window.addEventListener('resize', resize);
+  // Re-measure once the display font swaps in (wordmark height changes)
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
 
   document.addEventListener('mousemove', e => {
     const rect = canvas.getBoundingClientRect();
@@ -980,18 +1010,27 @@ section{padding:6rem 2rem}
     mouseY = e.clientY - rect.top;
   });
 
-  // Init nodes
-  for (let i = 0; i < 55; i++) {
+  // ── The system: LUXIGA is the hub, its tools are the nodes clustered around it ──
+  const TOOLS = ['FieldKit','LUXIGA OS','LUXIGA Bill','RecallAI','Gradian','VozClara','Scrivener','Quarry','Pulse','Nightshift','Local Agent','Voice Library'];
+  const NODE_COUNT = 24;
+  const assembleDoneAt = 60 + (NODE_COUNT - 1) * 40 + 900;
+  const isTouch = window.matchMedia('(hover:none)').matches;
+  const rgbaOf = (hex, a) => hex === '#8B5CF6' ? 'rgba(139,92,246,' + a + ')' : 'rgba(196,255,83,' + a + ')';
+
+  // First TOOLS.length nodes are named products; the rest are smaller connective nodes
+  for (let i = 0; i < NODE_COUNT; i++) {
+    const labeled = i < TOOLS.length;
     nodes.push({
-      x: Math.random() * 2000,
-      y: Math.random() * 1200,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 2 + 1.5,
-      activated: false,
-      sparkTime: 0,
-      color: i % 3 === 0 ? '#8B5CF6' : '#C4FF53',
-      baseAlpha: 0
+      label: labeled ? TOOLS[i] : null,
+      angle: Math.random() * Math.PI * 2,
+      ringT: labeled ? 0.18 + Math.random() * 0.62 : 0.4 + Math.random() * 0.58,
+      angleSpeed: (Math.random() * 0.0006 + 0.0004) * (Math.random() < 0.5 ? -1 : 1),
+      wobblePhase: Math.random() * Math.PI * 2,
+      wobbleAmp: Math.random() * 0.045 + 0.02,
+      r: labeled ? Math.random() * 1.4 + 2.6 : Math.random() * 1.1 + 1.3,
+      color: (labeled ? i % 2 === 0 : i % 3 === 0) ? '#8B5CF6' : '#C4FF53',
+      born: 60 + i * 40,
+      dx: 0, dy: 0, x: 0, y: 0, alpha: 0, flash: -9999
     });
   }
 
@@ -1015,162 +1054,138 @@ section{padding:6rem 2rem}
     });
   }
 
-  // Signal pulse
-  function drawSignalPulse(elapsed) {
-    if (elapsed < 300 || elapsed > 2200) return;
-    const progress = (elapsed - 300) / 1900;
-    const px = progress * W;
-    const grad = ctx.createLinearGradient(px - 60, 0, px + 60, 0);
-    grad.addColorStop(0, 'rgba(196,255,83,0)');
-    grad.addColorStop(0.5, 'rgba(196,255,83,0.15)');
-    grad.addColorStop(1, 'rgba(196,255,83,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(px - 60, 0, 120, H);
-    // Thin center line
-    ctx.strokeStyle = 'rgba(196,255,83,0.3)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(px, 0);
-    ctx.lineTo(px, H);
-    ctx.stroke();
-    return px;
-  }
+  // ── The constellation: nodes orbit the LUXIGA hub; spokes run inward; pulses show it's live ──
+  function drawConstellation(elapsed, t) {
+    const settled = reduceMotion; // render fully-formed and motionless
 
-  // Grid behind pulse
-  function drawGrid(elapsed, pulseX) {
-    if (elapsed < 300 || elapsed > 2800) return;
-    let alpha;
-    if (elapsed < 2200) {
-      alpha = 0.04;
-    } else {
-      alpha = 0.04 * (1 - (elapsed - 2200) / 600);
+    // Focus = nearest labeled node to the cursor (using last frame's positions, within a generous
+    // read radius). The focused node stops fleeing and magnetically eases toward the cursor so its
+    // label parks under it and stays readable, while every other node keeps repelling.
+    let hover = null;
+    if (!lite && !isTouch) {
+      let best = 96 * 96;
+      nodes.forEach(n => {
+        if (!n.label || n.alpha < 0.6) return;
+        const d = (n.x - mouseX) ** 2 + (n.y - mouseY) ** 2;
+        if (d < best) { best = d; hover = n; }
+      });
     }
-    if (alpha <= 0) return;
-    ctx.strokeStyle = 'rgba(196,255,83,' + alpha + ')';
-    ctx.lineWidth = 0.5;
-    const spacing = 60;
-    const maxX = pulseX || W;
-    for (let x = spacing; x < Math.min(maxX, W); x += spacing) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
-    }
-    for (let y = spacing; y < H; y += spacing) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(Math.min(maxX, W), y); ctx.stroke();
-    }
-  }
 
-  // Watermark glow (CSS element, animated via JS)
-  const watermarkEl = document.querySelector('.hero-watermark');
-  function updateWatermark(elapsed) {
-    if (!watermarkEl) return;
-    let alpha = 0.04;
-    if (elapsed > 800 && elapsed < 1600) {
-      const mid = 1200;
-      const dist = Math.abs(elapsed - mid) / 400;
-      alpha = 0.04 + 0.08 * (1 - dist);
-    }
-    watermarkEl.style.color = 'rgba(196,255,83,' + alpha + ')';
-  }
-
-  // Nodes + edges
-  function drawNodes(elapsed, t) {
-    const pulseProgress = elapsed < 300 ? -1 : elapsed > 2200 ? 2 : (elapsed - 300) / 1900;
-    const pulseX = pulseProgress * W;
-
+    // Pass 1 — position every node in polar space around the hub, so it clusters IN, never flees to the edges
     nodes.forEach(n => {
-      // Activate when pulse crosses
-      if (!n.activated && pulseX >= n.x && elapsed >= 300) {
-        n.activated = true;
-        n.sparkTime = elapsed;
-        n.baseAlpha = 0;
+      let prog;
+      if (settled) { prog = 1; }
+      else {
+        const age = elapsed - n.born;
+        if (age <= 0) { n.alpha = 0; n.x = cx; n.y = cy; return; }
+        const p = Math.min(age / 750, 1);
+        prog = 1 - Math.pow(1 - p, 3); // ease-out: nodes emanate from the hub
       }
-
-      if (!n.activated) return;
-
-      // Fade in
-      const fadeAge = elapsed - n.sparkTime;
-      if (fadeAge < 500) {
-        n.baseAlpha = fadeAge / 500;
+      n.alpha = prog;
+      const focused = n === hover;
+      if (!lite && !focused) n.angle += n.angleSpeed; // the focused node holds its angle (stops drifting)
+      const wob = (lite || focused) ? 0 : Math.sin(t * 0.0004 + n.wobblePhase) * n.wobbleAmp;
+      const radius = (ringInner + (ringOuter - ringInner) * n.ringT) * (1 + wob) * (0.42 + 0.58 * prog);
+      const bx = cx + Math.cos(n.angle) * radius;
+      const by = cy + Math.sin(n.angle) * radius * 0.72; // elliptical: wider than tall, fits widescreen
+      if (focused) { // magnetic: ease toward the cursor and hold, so the label is easy to read
+        n.dx += ((mouseX - bx) * 0.5 - n.dx) * 0.2;
+        n.dy += ((mouseY - by) * 0.5 - n.dy) * 0.2;
       } else {
-        n.baseAlpha = 1;
+        if (!lite && !isTouch) { // cursor pushes the other nodes; they spring back
+          const mdx = bx - mouseX, mdy = by - mouseY, md = Math.hypot(mdx, mdy);
+          if (md < 150 && md > 0) { const f = (150 - md) / 150 * 6; n.dx += (mdx / md) * f; n.dy += (mdy / md) * f; }
+        }
+        n.dx *= 0.86; n.dy *= 0.86;
       }
-
-      // Mouse repulsion: snappy response
-      const dx = n.x - mouseX;
-      const dy = n.y - mouseY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 200 && dist > 0) {
-        const force = (200 - dist) / 200 * 1.8;
-        n.vx += (dx / dist) * force;
-        n.vy += (dy / dist) * force;
-      }
-
-      // Drift
-      n.vx *= 0.94;
-      n.vy *= 0.94;
-      n.x += n.vx;
-      n.y += n.vy;
-
-      // Bounds
-      if (n.x < 0) { n.x = 0; n.vx *= -0.5; }
-      if (n.x > W) { n.x = W; n.vx *= -0.5; }
-      if (n.y < 0) { n.y = 0; n.vy *= -0.5; }
-      if (n.y > H) { n.y = H; n.vy *= -0.5; }
-
-      // Spark burst
-      if (fadeAge < 400) {
-        const sparkAlpha = (1 - fadeAge / 400) * 0.6;
-        const sparkR = n.r + fadeAge * 0.06;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, sparkR, 0, Math.PI * 2);
-        ctx.fillStyle = n.color.replace(')', ',' + sparkAlpha + ')').replace('rgb', 'rgba').replace('#8B5CF6', 'rgba(139,92,246,' + sparkAlpha + ')').replace('#C4FF53', 'rgba(196,255,83,' + sparkAlpha + ')');
-        const sc = n.color === '#8B5CF6' ? 'rgba(139,92,246,' + sparkAlpha + ')' : 'rgba(196,255,83,' + sparkAlpha + ')';
-        ctx.fillStyle = sc;
-        ctx.fill();
-      }
-
-      // Node dot
-      const nc = n.color === '#8B5CF6' ? 'rgba(139,92,246,' + (n.baseAlpha * 0.8) + ')' : 'rgba(196,255,83,' + (n.baseAlpha * 0.8) + ')';
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fillStyle = nc;
-      ctx.fill();
+      n.x = bx + n.dx; n.y = by + n.dy;
     });
 
-    // Edges between nearby activated nodes
-    const activeNodes = nodes.filter(n => n.activated);
-    for (let i = 0; i < activeNodes.length; i++) {
-      for (let j = i + 1; j < activeNodes.length; j++) {
-        const a = activeNodes[i], b = activeNodes[j];
-        const d = Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-        if (d < 220) {
-          const alpha = (1 - d / 220) * 0.12 * Math.min(a.baseAlpha, b.baseAlpha);
-          ctx.strokeStyle = 'rgba(196,255,83,' + alpha + ')';
+    // Spokes — every tool connects back into the hub
+    nodes.forEach(n => {
+      if (n.alpha <= 0.02) return;
+      const bright = n === hover ? 0.5 : 0.06;
+      const g = ctx.createLinearGradient(cx, cy, n.x, n.y);
+      g.addColorStop(0, rgbaOf(n.color, 0));
+      g.addColorStop(1, rgbaOf(n.color, bright * n.alpha));
+      ctx.strokeStyle = g; ctx.lineWidth = n === hover ? 1.2 : 0.7;
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(n.x, n.y); ctx.stroke();
+    });
+
+    // Short edges between neighbours (organic mesh)
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        if (a.alpha < 0.2 || b.alpha < 0.2) continue;
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 150) {
+          ctx.strokeStyle = 'rgba(196,255,83,' + ((1 - d / 150) * 0.09 * Math.min(a.alpha, b.alpha)) + ')';
           ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
         }
       }
+    }
+
+    // Signal pulses travelling hub -> node (the system is doing something)
+    if (!lite && !settled) {
+      if (elapsed > nextPulseAt) {
+        const cand = nodes.filter(n => n.label && n.alpha > 0.9);
+        if (cand.length) pulses.push({ node: cand[Math.floor(Math.random() * cand.length)], start: elapsed });
+        nextPulseAt = elapsed + 1400 + Math.random() * 1400;
+      }
+      pulses = pulses.filter(p => {
+        const pr = (elapsed - p.start) / 900;
+        if (pr >= 1) { p.node.flash = elapsed; return false; }
+        const px = cx + (p.node.x - cx) * pr, py = cy + (p.node.y - cy) * pr;
+        ctx.beginPath(); ctx.arc(px, py, 2.4, 0, Math.PI * 2);
+        ctx.fillStyle = rgbaOf(p.node.color, 0.9 * (1 - pr * 0.3)); ctx.fill();
+        return true;
+      });
+    }
+
+    // Nodes (labeled ones get a soft halo; freshly-pulsed ones flash)
+    nodes.forEach(n => {
+      if (n.alpha <= 0.02) return;
+      const flash = Math.max(0, 1 - (elapsed - n.flash) / 600);
+      const hovered = n === hover;
+      if (n.label) {
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 4 + flash * 3, 0, Math.PI * 2);
+        ctx.fillStyle = rgbaOf(n.color, (0.1 + flash * 0.25) * n.alpha); ctx.fill();
+      }
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r + (hovered ? 1.5 : 0), 0, Math.PI * 2);
+      ctx.fillStyle = rgbaOf(n.color, Math.min(1, (0.75 + flash * 0.25) * n.alpha)); ctx.fill();
+    });
+
+    // Hover label chip
+    if (hover) {
+      ctx.font = '700 12px "Space Mono", monospace';
+      const label = hover.label.toUpperCase();
+      const tw = ctx.measureText(label).width;
+      const lx = hover.x, ly = hover.y - hover.r - 12;
+      ctx.fillStyle = 'rgba(8,8,16,0.85)';
+      ctx.fillRect(lx - tw / 2 - 8, ly - 13, tw + 16, 20);
+      ctx.strokeStyle = rgbaOf(hover.color, 0.5); ctx.lineWidth = 1;
+      ctx.strokeRect(lx - tw / 2 - 8, ly - 13, tw + 16, 20);
+      ctx.fillStyle = rgbaOf(hover.color, 1); ctx.textAlign = 'center';
+      ctx.fillText(label, lx, ly + 1);
+      ctx.textAlign = 'left';
     }
   }
 
   function animate(timestamp) {
     if (!startTime) startTime = timestamp;
     const elapsed = timestamp - startTime;
-    const t = timestamp;
 
     ctx.clearRect(0, 0, W, H);
+    drawMeshGradient(timestamp);
+    drawConstellation(elapsed, timestamp);
 
-    drawMeshGradient(t);
-    const pulseX = drawSignalPulse(elapsed);
-    drawGrid(elapsed, pulseX);
-    updateWatermark(elapsed);
-    drawNodes(elapsed, t);
-
-    // Under reduced-motion: render one static frame, don't loop.
+    // Reduced-motion: render one settled frame, don't loop.
+    if (reduceMotion) { animFrame = null; return; }
+    // Lite (small screens): play the assemble once, then hold static (no continuous physics on phones).
+    if (lite && elapsed > assembleDoneAt) { frozen = true; animFrame = null; return; }
     // Off-screen: pause the loop to save CPU; the hero observer restarts it.
-    if (!reduceMotion && heroInView) animFrame = requestAnimationFrame(animate);
+    if (heroInView) animFrame = requestAnimationFrame(animate);
     else animFrame = null;
   }
   requestAnimationFrame(animate);
@@ -1180,7 +1195,7 @@ section{padding:6rem 2rem}
   if (heroSection) {
     new IntersectionObserver(entries => {
       heroInView = entries[0].isIntersecting;
-      if (heroInView && !reduceMotion && !animFrame) animFrame = requestAnimationFrame(animate);
+      if (heroInView && !reduceMotion && !frozen && !animFrame) animFrame = requestAnimationFrame(animate);
     }, { threshold: 0 }).observe(heroSection);
   }
 
