@@ -1,0 +1,12 @@
+{
+  "name": "luxiga-crm-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "LUXIGA CRM Worker backend (Airtable proxy + campaigns + transactional email)",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "setup-tables": "node setup-crm-tables.mjs"
+  }
+}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUXIGA CRM</title>
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#080810">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ===== LUXIGA CRM ADMIN =====
+       Identity is owned by Cloudflare Access at the perimeter. Anyone who can
+       load this page has already authenticated with email OTP via Cloudflare
+       (same model as the GGC admin portal it was ported from).
+  -->
+  <div class="admin-panel" id="adminPanel">
+
+    <!-- Cloudflare Access identity banner — populated by ADMIN.initCloudflareBanner -->
+    <div class="cf-banner" id="cfAccessBanner" style="display:none;">
+      <span class="cf-label">Signed in as</span> <span id="cfAccessEmail">—</span>
+      <a href="/cdn-cgi/access/logout">Sign out</a>
+    </div>
+
+    <!-- Top bar -->
+    <div class="admin-topbar">
+      <div class="container">
+        <div class="brand">
+          <span class="wordmark">LUXIGA</span>
+          <span class="brand-sub">CRM</span>
+        </div>
+        <button class="btn btn-sm btn-outline" onclick="ADMIN.logout();">Log Out</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <div class="container">
+        <button class="admin-tab active" data-tab="dashboard">Dashboard</button>
+        <button class="admin-tab" data-tab="contacts">Contacts</button>
+        <button class="admin-tab" data-tab="campaigns">Campaigns</button>
+      </div>
+    </div>
+
+    <!-- Tab: Dashboard -->
+    <div class="admin-content" id="tab-dashboard">
+      <div class="container">
+        <div class="dash-cards">
+          <div class="dash-card">
+            <div class="dash-label">Total Contacts</div>
+            <div class="dash-value" id="dashContacts">—</div>
+            <div class="dash-sub">All people in the CRM</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">Active Clients</div>
+            <div class="dash-value" id="dashActive">—</div>
+            <div class="dash-sub">Stage: Active Client</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">New — need outreach</div>
+            <div class="dash-value" id="dashNew">—</div>
+            <div class="dash-sub">Awaiting first touch</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">Follow-ups Due</div>
+            <div class="dash-value" id="dashDue">—</div>
+            <div class="dash-sub">On or before today</div>
+          </div>
+          <div class="dash-card">
+            <div class="dash-label">Campaigns Sent</div>
+            <div class="dash-value" id="dashCampaigns">—</div>
+            <div class="dash-sub">Delivered emails</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Pipeline by stage</h3>
+          <div class="pipeline-bar" id="pipelineBar"></div>
+          <div class="pipeline-legend" id="pipelineLegend"></div>
+        </div>
+
+        <div class="panel">
+          <h3>Recent interactions</h3>
+          <div id="recentInteractions">
+            <div class="table-empty">Loading…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Contacts -->
+    <div class="admin-content" id="tab-contacts" style="display:none;">
+      <div class="container">
+        <div class="admin-section-header">
+          <h2>Contacts <span class="count" id="contactsCountBadge"></span></h2>
+          <div class="header-actions">
+            <button class="btn btn-sm btn-outline" id="importLeadsBtn" onclick="ADMIN.importFromLeads()" title="Create/refresh contacts from any inbound leads (safe to run repeatedly)">Import</button>
+            <button class="btn btn-sm btn-primary" onclick="ADMIN.openNewContact()">+ New Contact</button>
+          </div>
+        </div>
+
+        <div id="importStatus" class="inline-status" style="display:none;margin-bottom:1rem;"></div>
+
+        <div class="callout" id="newContactsCard" style="display:none;">
+          <h3>New — reach out</h3>
+          <div id="newContactsBody"></div>
+        </div>
+
+        <div class="callout callout--due" id="followupsDueCard" style="display:none;">
+          <h3>Follow-ups due</h3>
+          <div id="followupsDueBody"></div>
+        </div>
+
+        <input id="contactSearch" class="search-input" placeholder="Search name, phone, or email" oninput="ADMIN.renderContacts()">
+
+        <div class="table-wrap">
+          <table class="data-table" id="contactsTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone / Email</th>
+                <th>Stage</th>
+                <th>Next follow-up</th>
+                <th>Last touch</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="contactsBody">
+              <tr><td colspan="6" class="table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Campaigns -->
+    <div class="admin-content" id="tab-campaigns" style="display:none;">
+      <div class="container">
+        <div class="admin-section-header">
+          <h2>Campaigns <span class="count" id="campaignsCountBadge"></span></h2>
+          <div class="header-actions">
+            <span class="provider-badge" id="providerBadge">channel: …</span>
+            <button class="btn btn-sm btn-primary" onclick="ADMIN.openNewCampaign()">+ New Campaign</button>
+          </div>
+        </div>
+
+        <p class="section-note">
+          Build an email to a slice of your contacts, preview exactly who gets it, then send.
+          The sending channel (Resend, Mailchimp, or dry-run) is set once in the Worker config —
+          campaigns work the same either way.
+        </p>
+
+        <div class="table-wrap" style="margin-bottom:2rem;">
+          <table class="data-table" id="campaignsTable">
+            <thead>
+              <tr><th>Name</th><th>Status</th><th>Audience</th><th>Sent</th><th>When</th><th></th></tr>
+            </thead>
+            <tbody id="campaignsBody">
+              <tr><td colspan="6" class="table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="admin-section-header">
+          <h2>Suppression / do-not-email <span class="count" id="suppressionCountBadge"></span></h2>
+          <div class="header-actions">
+            <input id="suppEmailInput" placeholder="email to suppress" style="width:220px;">
+            <button class="btn btn-sm btn-outline" onclick="ADMIN.addSuppression()">Add</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="suppressionTable">
+            <thead><tr><th>Email</th><th>Reason</th><th>When</th></tr></thead>
+            <tbody id="suppressionBody">
+              <tr><td colspan="3" class="table-empty">No suppressions yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared modal (contact detail, new contact, campaign editor) -->
+    <div class="modal" id="crmModal">
+      <div class="modal-backdrop" onclick="ADMIN.closeModal()"></div>
+      <div class="modal-content">
+        <button class="modal-close" onclick="ADMIN.closeModal()" aria-label="Close">&times;</button>
+        <div id="modalBody"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

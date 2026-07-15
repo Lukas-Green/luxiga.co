@@ -1,0 +1,57 @@
+name = "luxiga-crm-api"
+main = "worker.js"
+compatibility_date = "2024-12-01"
+
+# Crons (free Workers plan allows 5):
+#   "0 15 * * 1" — weekly digest, Monday 15:00 UTC (8 AM PDT), sendWeeklyDigest().
+#   "0 16 * * *" — daily follow-ups-due nudge, 16:00 UTC (9 AM PDT), sendFollowupNudge().
+# Both no-op safely when nothing is due or the email/Airtable secrets are unset.
+# To ship without cron email, comment out the [triggers] block below.
+[triggers]
+crons = ["0 15 * * 1", "0 16 * * *"]
+
+# Cloudflare Workers Route — same-origin API on luxiga.co.
+# Until luxiga.co is a Cloudflare zone this Worker lives at its *.workers.dev URL
+# (deployed 2026-07-13: https://luxiga-crm-api.lukas-99c.workers.dev).
+# AFTER migrating luxiga.co onto Cloudflare (see docs/DEPLOY.md), UNCOMMENT the
+# block below and `npx wrangler deploy` — that routes luxiga.co/api/* to this
+# Worker on the same origin, so Cloudflare Access attaches the Cf-Access-Jwt
+# header for authenticated admin sessions on luxiga.co/admin.html.
+# routes = [
+#   { pattern = "luxiga.co/api/*", zone_name = "luxiga.co" }
+# ]
+
+# --- Secrets (npx wrangler secret put <NAME>) --------------------------------
+#   AIRTABLE_TOKEN            Airtable PAT, scoped data.records:read/write on the LUXIGA base
+#   AIRTABLE_BASE_ID          the LUXIGA base id (appXXXX)
+#   ADMIN_TOKEN               legacy bearer fallback (optional; kill via DISABLE_ADMIN_TOKEN=true)
+#
+#   CF_ACCESS_TEAM_DOMAIN     e.g. luxiga.cloudflareaccess.com
+#   CF_ACCESS_AUD             Application Audience tag from the Access app covering luxiga.co/api/admin/*
+#
+#   RESEND_API_KEY            Resend API key (domain lukasdgreen.com must be verified in Resend)
+#   NOTIFY_FROM              "Lukas Green · LUXIGA <lukas@lukasdgreen.com>"  (migrates to lukas@luxiga.co)
+#   NOTIFY_TO                 where internal notices land, e.g. lukas@lukasdgreen.com
+#
+# After verifying the CF Access path end-to-end, kill the legacy fallback:
+#   echo "true" | npx wrangler secret put DISABLE_ADMIN_TOKEN
+#
+# --- Marketing campaigns -----------------------------------------------------
+# CAMPAIGN_PROVIDER selects the sending channel. Default (unset) = "dryrun":
+# campaigns build + preview but send nothing. The rest of the CRM works the same
+# regardless of channel.
+#   echo "dryrun" | npx wrangler secret put CAMPAIGN_PROVIDER   # default; or "resend" / "mailchimp"
+#
+# If CAMPAIGN_PROVIDER=resend (send our own through Resend):
+#   npx wrangler secret put CAMPAIGN_FROM            # use a SUBDOMAIN, e.g. news@mail.luxiga.co
+#   npx wrangler secret put UNSUB_SECRET             # long random string; signs unsubscribe links
+#   npx wrangler secret put CAMPAIGN_POSTAL_ADDRESS  # required by CAN-SPAM (a real mailing address)
+#   # RESEND_API_KEY is reused from the notification setup above.
+#   # optional: CAMPAIGN_MAX_PER_SEND (default 200, warmup cap), CAMPAIGN_REPLY_TO, PUBLIC_BASE_URL
+#
+# If CAMPAIGN_PROVIDER=mailchimp:
+#   npx wrangler secret put MAILCHIMP_API_KEY        # ends in -usXX (server prefix)
+#   npx wrangler secret put MAILCHIMP_LIST_ID        # Audience ID
+#   npx wrangler secret put MAILCHIMP_FROM_NAME      # "LUXIGA"
+#   npx wrangler secret put CAMPAIGN_FROM            # verified from-email
+#   # optional: MAILCHIMP_SERVER_PREFIX (auto-derived from the API key otherwise)
