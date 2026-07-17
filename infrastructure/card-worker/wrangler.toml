@@ -13,5 +13,5 @@ ALLOW_ORIGIN = "https://luxiga.co"
 #   AIRTABLE_TOKEN   Airtable personal access token (scope: data.records:read+write on the base)
 #   AIRTABLE_BASE    Airtable base id (starts with "app...")
 #   RESEND_KEY       Resend API key (reuse the GGC one or make a new one)
-#   NOTIFY_EMAIL     where new-lead emails go (e.g. lukas@lukasdgreen.com)
+#   NOTIFY_EMAIL     where new-lead emails go (e.g. lukas@luxiga.co)
 #   DASH_TOKEN       any long random string; unlocks the /dashboard
