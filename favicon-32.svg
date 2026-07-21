@@ -1,26 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <filter id="lx-g32">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="1"/>
-    </filter>
-  </defs>
-
-  <!-- Base shape -->
-  <rect x="0" y="0" width="32" height="32" rx="6" fill="#080810"/>
-  <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="none" stroke="#1a1a2e" stroke-width="1"/>
-
-  <!-- Glow -->
-  <circle cx="16" cy="16" r="8" fill="#C4FF53" opacity="0.1" filter="url(#lx-g32)"/>
-
-  <!-- L -->
-  <path d="M8 7v18h6" stroke="#C4FF53" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-  <!-- X -->
-  <path d="M17 8l7 16M24 8l-7 16" stroke="#C4FF53" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-
-  <!-- X center dot -->
-  <circle cx="20.5" cy="16" r="1.5" fill="#C4FF53" opacity="0.4"/>
-
-  <!-- Accent line -->
-  <line x1="5" y1="28.5" x2="27" y2="28.5" stroke="#C4FF53" stroke-width="0.75" stroke-opacity="0.35"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="LUXIGA">
+  <title>LUXIGA</title>
+  <!-- tile -->
+  <rect width="32" height="32" rx="6" fill="#0D0D1A"/>
+  <!-- violet blade: technology (brightened for small-size contrast) -->
+  <path d="M21,4 L28,4 L11,28 L4,28 Z" fill="#A78BFA"/>
+  <!-- lime blade: design -->
+  <path d="M4,4 L11,4 L28,28 L21,28 Z" fill="#C4FF53"/>
 </svg>
