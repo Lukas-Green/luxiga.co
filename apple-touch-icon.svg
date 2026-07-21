@@ -1,31 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="LUXIGA">
+  <title>LUXIGA</title>
   <defs>
-    <linearGradient id="lx-at-glow" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#C4FF53" stop-opacity="0.2"/>
-      <stop offset="100%" stop-color="#C4FF53" stop-opacity="0"/>
-    </linearGradient>
-    <filter id="lx-at-blur">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="4"/>
+    <filter id="lx-at-soft" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="7"/>
     </filter>
+    <radialGradient id="lx-at-halo" cx="50%" cy="46%" r="58%">
+      <stop offset="0%" stop-color="#C4FF53" stop-opacity="0.16"/>
+      <stop offset="45%" stop-color="#8B5CF6" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+    </radialGradient>
   </defs>
 
-  <!-- Base — iOS clips to its own shape so fill full rect -->
-  <rect width="180" height="180" rx="0" fill="#080810"/>
+  <!-- iOS applies its own mask; fill full rect -->
+  <rect width="180" height="180" fill="#0D0D1A"/>
+  <rect width="180" height="180" fill="url(#lx-at-halo)"/>
 
-  <!-- Subtle glow -->
-  <ellipse cx="90" cy="90" rx="50" ry="50" fill="url(#lx-at-glow)" filter="url(#lx-at-blur)"/>
+  <g filter="url(#lx-at-soft)" opacity="0.5">
+    <path d="M34,34 L76,34 L146,146 L104,146 Z" fill="#C4FF53"/>
+    <path d="M104,34 L146,34 L76,146 L34,146 Z" fill="#8B5CF6"/>
+  </g>
 
-  <!-- L -->
-  <path d="M48 44v92h28" stroke="#C4FF53" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-  <!-- X -->
-  <path d="M96 48l44 88" stroke="#C4FF53" stroke-width="12" stroke-linecap="round" fill="none"/>
-  <path d="M140 48l-44 88" stroke="#C4FF53" stroke-width="12" stroke-linecap="round" fill="none"/>
-
-  <!-- X center glow -->
-  <circle cx="118" cy="92" r="8" fill="#C4FF53" opacity="0.2"/>
-  <circle cx="118" cy="92" r="4" fill="#C4FF53" opacity="0.35"/>
-
-  <!-- Family accent line -->
-  <line x1="28" y1="156" x2="152" y2="156" stroke="#C4FF53" stroke-width="1.5" stroke-opacity="0.35"/>
+  <!-- violet blade: technology -->
+  <path d="M104,34 L146,34 L76,146 L34,146 Z" fill="#8B5CF6"/>
+  <!-- lime blade: design -->
+  <path d="M34,34 L76,34 L146,146 L104,146 Z" fill="#C4FF53"/>
 </svg>

@@ -1,10 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-  <!-- Base shape -->
-  <rect width="16" height="16" rx="3" fill="#080810"/>
-
-  <!-- L — simplified, thick -->
-  <path d="M3.5 3v10h3.5" stroke="#C4FF53" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-
-  <!-- X — simplified -->
-  <path d="M9 3.5l4 9M13 3.5l-4 9" stroke="#C4FF53" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" aria-label="LUXIGA">
+  <title>LUXIGA</title>
+  <!-- tile -->
+  <rect width="16" height="16" rx="3" fill="#0D0D1A"/>
+  <!-- violet blade: technology (brightest for 16px legibility) -->
+  <path d="M9,2.5 L13.5,2.5 L7,13.5 L2.5,13.5 Z" fill="#B39DFF"/>
+  <!-- lime blade: design -->
+  <path d="M2.5,2.5 L7,2.5 L13.5,13.5 L9,13.5 Z" fill="#C4FF53"/>
 </svg>
