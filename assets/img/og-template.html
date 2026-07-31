@@ -29,14 +29,24 @@
   .sub{font-family:'Space Mono',monospace;font-size:22px;letter-spacing:3px;text-transform:uppercase;color:#C0B8D8;margin-top:40px}
   .rule{position:absolute;bottom:70px;left:90px;width:120px;height:5px;background:#C4FF53;border-radius:3px}
   .url{position:absolute;bottom:62px;right:90px;font-family:'Space Mono',monospace;font-size:24px;letter-spacing:2px;color:#8B5CF6;z-index:2}
+
+/* WORDMARK X: two-blade mark (design lime x technology violet), added 2026-07-30 */
+:root{--x-lime:#C4FF53;--x-violet:#8B5CF6}
+@media(prefers-color-scheme:light){:root{--x-lime:#3D6B00;--x-violet:#6D28D9}}
+[data-theme="light"]{--x-lime:#3D6B00;--x-violet:#6D28D9}
+[data-theme="dark"]{--x-lime:#C4FF53;--x-violet:#8B5CF6}
+.wm-x{height:.74em;width:.66em;display:inline-block;vertical-align:baseline;margin:0 -.008em}
+.nav-brand .wm-x{height:.8em;width:.64em}
+.footer-brand .wm-x,.foot-brand .wm-x,.brand .wm-x{height:.8em;width:.64em}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="lx-x" viewBox="12 12 40 40"><path d="M37,12 L52,12 L27,52 L12,52 Z" fill="var(--x-violet,#8B5CF6)"/><path d="M12,12 L27,12 L52,52 L37,52 Z" fill="var(--x-lime,#C4FF53)"/></symbol></svg>
   <div class="glow glow1"></div>
   <div class="glow glow2"></div>
   <div class="watermark">LUXIGA</div>
   <div class="content">
-    <div class="brand">L<span class="ux">UX</span>IGA</div>
+    <div class="brand" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</div>
     <div class="headline">I listen for friction,<br>then <span class="accent">engineer the fix.</span></div>
     <div class="sub">AI Design Technology Studio</div>
   </div>
