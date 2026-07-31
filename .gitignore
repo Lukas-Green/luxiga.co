@@ -2,3 +2,16 @@
 node_modules/
 test-results/
 playwright-report/
+
+# --- Sensitive-document guard (added 2026-07-30) ---
+# This repo is PUBLIC. Never let tax, entity, or identity documents in.
+*.pdf
+CP_575*
+CP-575*
+*EIN*
+*W-9*
+*W9*
+*.p12
+*.pem
+.env
+.env.*
