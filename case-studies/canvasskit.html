@@ -121,13 +121,23 @@ ul{list-style:none}
   .cs-page-nav{padding:2rem 1.25rem}
   .footer{flex-direction:column;gap:.75rem;text-align:center;padding:2rem 1.25rem}
 }
+
+/* WORDMARK X: two-blade mark (design lime x technology violet), added 2026-07-30 */
+:root{--x-lime:#C4FF53;--x-violet:#8B5CF6}
+@media(prefers-color-scheme:light){:root{--x-lime:#3D6B00;--x-violet:#6D28D9}}
+[data-theme="light"]{--x-lime:#3D6B00;--x-violet:#6D28D9}
+[data-theme="dark"]{--x-lime:#C4FF53;--x-violet:#8B5CF6}
+.wm-x{height:.74em;width:.66em;display:inline-block;vertical-align:baseline;margin:0 -.008em}
+.nav-brand .wm-x{height:.8em;width:.64em}
+.footer-brand .wm-x,.foot-brand .wm-x,.brand .wm-x{height:.8em;width:.64em}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="lx-x" viewBox="12 12 40 40"><path d="M37,12 L52,12 L27,52 L12,52 Z" fill="var(--x-violet,#8B5CF6)"/><path d="M12,12 L27,12 L52,52 L37,52 Z" fill="var(--x-lime,#C4FF53)"/></symbol></svg>
 
 <!-- NAV -->
 <nav class="nav">
-  <a href="../index.html" class="nav-brand">L<span class="ux">UX</span>IGA</a>
+  <a href="../index.html" class="nav-brand" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</a>
   <div class="nav-links">
     <a href="../index.html#home">Home</a>
     <a href="../index.html#services">Services</a>
@@ -260,7 +270,7 @@ ul{list-style:none}
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-brand">L<span class="ux">UX</span>IGA</div>
+  <div class="footer-brand" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</div>
   <div class="footer-copy">&copy; 2026 LUXIGA LLC. All rights reserved.</div>
 </footer>
 
