@@ -2,3 +2,20 @@
 node_modules/
 test-results/
 playwright-report/
+
+# --- Sensitive-document guard (added 2026-08-04) ---
+# THIS REPO IS PUBLIC AND SERVES luxiga.co.
+# Anything committed here is served at https://luxiga.co/<path> immediately.
+# Never let entity, tax, or identity documents in.
+*.pdf
+!card/print/luxiga-business-card.pdf
+ARTICLES*OF*ORGANIZATION*
+CP_575*
+CP-575*
+*EIN*
+*W-9*
+*W9*
+*.p12
+*.pem
+.env
+.env.*
