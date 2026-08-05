@@ -121,6 +121,21 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
+      # SECURITY: this repo is PUBLIC and this job publishes whatever it uploads
+      # to https://luxiga.co/<path>. The `exclude:` list in _config.yml does NOT
+      # protect anything here, because upload-pages-artifact bypasses the Jekyll
+      # build entirely. Prune explicitly instead.
+      - name: Strip non-public paths before publishing
+        run: |
+          set -euxo pipefail
+          rm -rf infrastructure .github tests
+          rm -f SESSION.md README.md
+          # Refuse to publish if anything sensitive survived the prune.
+          if ls infrastructure SESSION.md 2>/dev/null; then
+            echo "::error::Non-public paths still present, refusing to publish"
+            exit 1
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:

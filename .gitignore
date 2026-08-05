@@ -19,3 +19,7 @@ CP-575*
 *.pem
 .env
 .env.*
+
+# Non-public. This repo is PUBLIC and serves luxiga.co.
+infrastructure/
+SESSION.md
