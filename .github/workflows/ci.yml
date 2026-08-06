@@ -128,13 +128,25 @@ jobs:
       - name: Strip non-public paths before publishing
         run: |
           set -euxo pipefail
-          rm -rf infrastructure .github tests
-          rm -f SESSION.md README.md
-          # Refuse to publish if anything sensitive survived the prune.
-          if ls infrastructure SESSION.md 2>/dev/null; then
-            echo "::error::Non-public paths still present, refusing to publish"
-            exit 1
-          fi
+          # WIDENED 2026-08-05. The old list missed docs/, and every file in it
+          # was serving at 200 on the live site. docs/LUXIGA_DISCOVERY_PLAYBOOK.md
+          # published the internal pricing method ("half their pain saved = price
+          # they'll accept") and named Justin twice, on the vendor domain, to any
+          # prospect who guessed the URL. Add to this list, never shorten it.
+          rm -rf infrastructure .github tests docs scripts
+          rm -f SESSION.md README.md package.json package-lock.json playwright.config.js
+          rm -f "Idea rambling.moved-to-voicememo"
+          # Refuse to publish if anything sensitive survived the prune. This list
+          # must match the one above. A prune that silently no-ops looks exactly
+          # like a prune that worked.
+          for p in infrastructure .github tests docs scripts SESSION.md README.md \
+                   package.json package-lock.json playwright.config.js \
+                   "Idea rambling.moved-to-voicememo"; do
+            if [ -e "$p" ]; then
+              echo "::error::Non-public path '$p' survived the prune, refusing to publish"
+              exit 1
+            fi
+          done
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

@@ -391,66 +391,32 @@ section[id]{scroll-margin-top:64px}
 
 const questions = [
   {
-    text: "How does your team handle repetitive tasks?",
-    options: [
-      { label: "Manually, every time", desc: "Staff handle recurring work by hand with no automation", score: 1 },
-      { label: "Some spreadsheet macros or templates", desc: "Basic automation exists but it's fragile and person-dependent", score: 2 },
-      { label: "Dedicated tools for major workflows", desc: "Key processes have software support but gaps remain", score: 3 },
-      { label: "Mostly automated, humans handle exceptions", desc: "Systems run on their own; staff focus on edge cases", score: 4 }
+    text: "How does your team handle repetitive tasks?", options: [
+      { label: "Manually, every time", desc: "Staff handle recurring work by hand with no automation", score: 1 }, { label: "Some spreadsheet macros or templates", desc: "Basic automation exists but it's fragile and person-dependent", score: 2 }, { label: "Dedicated tools for major workflows", desc: "Key processes have software support but gaps remain", score: 3 }, { label: "Mostly automated, humans handle exceptions", desc: "Systems run on their own; staff focus on edge cases", score: 4 }
     ]
-  },
-  {
-    text: "How do you capture and manage client/customer data?",
-    options: [
-      { label: "Paper forms, notebooks, or memory", desc: "Critical information lives in analog or personal formats", score: 1 },
-      { label: "Spreadsheets and email folders", desc: "Digital but scattered across files and inboxes", score: 2 },
-      { label: "A CRM or database, but inconsistently used", desc: "The system exists but adoption and data quality vary", score: 3 },
-      { label: "Centralized system, consistently maintained", desc: "One source of truth that the team actually relies on", score: 4 }
+  }, {
+    text: "How do you capture and manage client/customer data?", options: [
+      { label: "Paper forms, notebooks, or memory", desc: "Critical information lives in analog or personal formats", score: 1 }, { label: "Spreadsheets and email folders", desc: "Digital but scattered across files and inboxes", score: 2 }, { label: "A CRM or database, but inconsistently used", desc: "The system exists but adoption and data quality vary", score: 3 }, { label: "Centralized system, consistently maintained", desc: "One source of truth that the team actually relies on", score: 4 }
     ]
-  },
-  {
-    text: "When someone leaves your team, how much knowledge walks out the door?",
-    options: [
-      { label: "Most of it, processes live in people's heads", desc: "Institutional knowledge is almost entirely informal", score: 1 },
-      { label: "Some is documented, but finding it is hard", desc: "Documentation exists in scattered, outdated locations", score: 2 },
-      { label: "Core processes are documented, edge cases aren't", desc: "The basics are captured but tribal knowledge persists", score: 3 },
-      { label: "Systems are self-documenting; onboarding is smooth", desc: "New hires can get up to speed with minimal hand-holding", score: 4 }
+  }, {
+    text: "When someone leaves your team, how much knowledge walks out the door?", options: [
+      { label: "Most of it, processes live in people's heads", desc: "Institutional knowledge is almost entirely informal", score: 1 }, { label: "Some is documented, but finding it is hard", desc: "Documentation exists in scattered, outdated locations", score: 2 }, { label: "Core processes are documented, edge cases aren't", desc: "The basics are captured but tribal knowledge persists", score: 3 }, { label: "Systems are self-documenting; onboarding is smooth", desc: "New hires can get up to speed with minimal hand-holding", score: 4 }
     ]
-  },
-  {
-    text: "How do you make decisions about what's working and what isn't?",
-    options: [
-      { label: "Gut feeling and anecdotal evidence", desc: "Decisions are based on intuition more than data", score: 1 },
-      { label: "Manual reports pulled when someone asks", desc: "Data exists but extracting it is slow and reactive", score: 2 },
-      { label: "Regular reports, but building them takes effort", desc: "Reporting cadence exists but it's a manual lift", score: 3 },
-      { label: "Live dashboards or automated reports", desc: "Real-time visibility into key metrics without effort", score: 4 }
+  }, {
+    text: "How do you make decisions about what's working and what isn't?", options: [
+      { label: "Gut feeling and anecdotal evidence", desc: "Decisions are based on intuition more than data", score: 1 }, { label: "Manual reports pulled when someone asks", desc: "Data exists but extracting it is slow and reactive", score: 2 }, { label: "Regular reports, but building them takes effort", desc: "Reporting cadence exists but it's a manual lift", score: 3 }, { label: "Live dashboards or automated reports", desc: "Real-time visibility into key metrics without effort", score: 4 }
     ]
-  },
-  {
-    text: "How does your team communicate about ongoing work?",
-    options: [
-      { label: "Verbal updates, texts, or scattered messages", desc: "No central thread; updates get lost between channels", score: 1 },
-      { label: "Email threads and occasional meetings", desc: "Structured but slow; context lives in inboxes", score: 2 },
-      { label: "Project tools exist but adoption is mixed", desc: "Some use the system, others default to old habits", score: 3 },
-      { label: "Single source of truth everyone actually uses", desc: "Status, tasks, and context live in one place the team trusts", score: 4 }
+  }, {
+    text: "How does your team communicate about ongoing work?", options: [
+      { label: "Verbal updates, texts, or scattered messages", desc: "No central thread; updates get lost between channels", score: 1 }, { label: "Email threads and occasional meetings", desc: "Structured but slow; context lives in inboxes", score: 2 }, { label: "Project tools exist but adoption is mixed", desc: "Some use the system, others default to old habits", score: 3 }, { label: "Single source of truth everyone actually uses", desc: "Status, tasks, and context live in one place the team trusts", score: 4 }
     ]
-  },
-  {
-    text: "How often do errors or missed handoffs cause rework?",
-    options: [
-      { label: "Weekly, it's a known issue", desc: "Dropped balls and redo loops are a regular frustration", score: 1 },
-      { label: "Monthly, it happens but we recover", desc: "Not constant, but enough to notice the pattern", score: 2 },
-      { label: "Rarely, we've built checks for the big ones", desc: "Critical handoffs are protected; smaller ones still slip", score: 3 },
-      { label: "Almost never, systems catch problems before humans need to", desc: "Validation and alerts prevent most errors automatically", score: 4 }
+  }, {
+    text: "How often do errors or missed handoffs cause rework?", options: [
+      { label: "Weekly, it's a known issue", desc: "Dropped balls and redo loops are a regular frustration", score: 1 }, { label: "Monthly, it happens but we recover", desc: "Not constant, but enough to notice the pattern", score: 2 }, { label: "Rarely, we've built checks for the big ones", desc: "Critical handoffs are protected; smaller ones still slip", score: 3 }, { label: "Almost never, systems catch problems before humans need to", desc: "Validation and alerts prevent most errors automatically", score: 4 }
     ]
-  },
-  {
-    text: "If you could wave a magic wand, what would you fix first?",
-    options: [
-      { label: "We're drowning in manual data entry", desc: "Too much time spent typing things that should flow automatically", category: "automation" },
-      { label: "We can't see what's happening across the team", desc: "Lack of visibility makes coordination guesswork", category: "visibility" },
-      { label: "Our tools don't talk to each other", desc: "Information gets siloed and re-entered between systems", category: "integration" },
-      { label: "We don't know what we don't know", desc: "No clear picture of where inefficiencies actually are", category: "intelligence" }
+  }, {
+    text: "If you could wave a magic wand, what would you fix first?", options: [
+      { label: "We're drowning in manual data entry", desc: "Too much time spent typing things that should flow automatically", category: "automation" }, { label: "We can't see what's happening across the team", desc: "Lack of visibility makes coordination guesswork", category: "visibility" }, { label: "Our tools don't talk to each other", desc: "Information gets siloed and re-entered between systems", category: "integration" }, { label: "We don't know what we don't know", desc: "No clear picture of where inefficiencies actually are", category: "intelligence" }
     ]
   }
 ];
@@ -603,9 +569,7 @@ function animateResults() {
 
   // -- Category bars --
   const cats = [
-    { name: 'Automation', value: r.automation },
-    { name: 'Data Management', value: r.data },
-    { name: 'Knowledge & Process', value: r.knowledge }
+    { name: 'Automation', value: r.automation }, { name: 'Data Management', value: r.data }, { name: 'Knowledge & Process', value: r.knowledge }
   ];
   const barsContainer = document.getElementById('categoryBars');
   barsContainer.innerHTML = '';
@@ -647,24 +611,13 @@ function animateResults() {
   // -- Recommendations --
   const recsMap = {
     automation: [
-      { title: "Map your top 5 repetitive tasks", desc: "Catalog the recurring work that eats the most hours. Rank by frequency and time cost per occurrence.", impact: "high" },
-      { title: "Identify what runs on tools you already have", desc: "Most teams only use 30% of their existing tool capabilities. Audit before buying anything new.", impact: "high" },
-      { title: "Start with the highest time-saver", desc: "Pick the one task that saves the most minutes per week and automate it first. Build momentum from wins.", impact: "medium" }
-    ],
-    visibility: [
-      { title: "Audit where team status lives today", desc: "List every place someone checks to understand what's happening. You'll likely find 5+ sources of partial truth.", impact: "high" },
-      { title: "Consolidate to a single dashboard", desc: "Choose one shared space for status updates. It doesn't need to be perfect, it needs to be used.", impact: "high" },
-      { title: "Set up a weekly async update ritual", desc: "Replace status meetings with a structured written check-in. Recovers meeting time while improving visibility.", impact: "medium" }
-    ],
-    integration: [
-      { title: "List every tool your team touches in a week", desc: "Map the full tool landscape. Include the unofficial ones, personal spreadsheets, sticky notes, workarounds.", impact: "high" },
-      { title: "Identify the manual bridges between tools", desc: "Find where someone is copy-pasting, re-entering, or manually syncing data between systems.", impact: "high" },
-      { title: "Prioritize the connection that eliminates the most copy-paste", desc: "One well-placed integration can remove hours of weekly manual work and reduce errors.", impact: "medium" }
-    ],
-    intelligence: [
-      { title: "Run a process audit", desc: "Document what actually happens vs. what should happen. The gap between the two is where your leverage is.", impact: "high" },
-      { title: "Identify your top 3 decision-making blind spots", desc: "Where do you wish you had data but don't? These are the areas where better information creates the most value.", impact: "high" },
-      { title: "Build a lightweight reporting habit", desc: "Start tracking key metrics weekly before investing in dashboards. The habit matters more than the tool.", impact: "medium" }
+      { title: "Map your top 5 repetitive tasks", desc: "Catalog the recurring work that eats the most hours. Rank by frequency and time cost per occurrence.", impact: "high" }, { title: "Identify what runs on tools you already have", desc: "Most teams only use 30% of their existing tool capabilities. Audit before buying anything new.", impact: "high" }, { title: "Start with the highest time-saver", desc: "Pick the one task that saves the most minutes per week and automate it first. Build momentum from wins.", impact: "medium" }
+    ], visibility: [
+      { title: "Audit where team status lives today", desc: "List every place someone checks to understand what's happening. You'll likely find 5+ sources of partial truth.", impact: "high" }, { title: "Consolidate to a single dashboard", desc: "Choose one shared space for status updates. It doesn't need to be perfect, it needs to be used.", impact: "high" }, { title: "Set up a weekly async update ritual", desc: "Replace status meetings with a structured written check-in. Recovers meeting time while improving visibility.", impact: "medium" }
+    ], integration: [
+      { title: "List every tool your team touches in a week", desc: "Map the full tool landscape. Include the unofficial ones, personal spreadsheets, sticky notes, workarounds.", impact: "high" }, { title: "Identify the manual bridges between tools", desc: "Find where someone is copy-pasting, re-entering, or manually syncing data between systems.", impact: "high" }, { title: "Prioritize the connection that eliminates the most copy-paste", desc: "One well-placed integration can remove hours of weekly manual work and reduce errors.", impact: "medium" }
+    ], intelligence: [
+      { title: "Run a process audit", desc: "Document what actually happens vs. what should happen. The gap between the two is where your leverage is.", impact: "high" }, { title: "Identify your top 3 decision-making blind spots", desc: "Where do you wish you had data but don't? These are the areas where better information creates the most value.", impact: "high" }, { title: "Build a lightweight reporting habit", desc: "Start tracking key metrics weekly before investing in dashboards. The habit matters more than the tool.", impact: "medium" }
     ]
   };
 
@@ -714,32 +667,14 @@ function handleEmail(e) {
 
   const r = window.pulseResults;
   const payload = {
-    email: email,
-    source: 'luxiga.co / pulse assessment',
-    _subject: 'New lead: Pulse assessment (' + email + ')',
-    score: r.totalScore + ' / 24',
-    tier: r.totalScore <= 11 ? 'Getting Started' : r.totalScore <= 17 ? 'Building Foundation' : r.totalScore <= 22 ? 'Well Positioned' : 'Digitally Mature',
-    automation: r.automation.toFixed(1) + ' / 4.0',
-    data_management: r.data.toFixed(1) + ' / 4.0',
-    knowledge_process: r.knowledge.toFixed(1) + ' / 4.0',
-    priority_area: r.q7Category,
-    q1_repetitive_tasks: questions[0].options[answers[0]].label,
-    q2_data_capture: questions[1].options[answers[1]].label,
-    q3_knowledge_retention: questions[2].options[answers[2]].label,
-    q4_decision_making: questions[3].options[answers[3]].label,
-    q5_team_comms: questions[4].options[answers[4]].label,
-    q6_error_rate: questions[5].options[answers[5]].label,
-    q7_priority_fix: questions[6].options[answers[6]].label,
-    answers_summary: answers.map((a, i) =>
+    email: email, source: 'luxiga.co / pulse assessment', _subject: 'New lead: Pulse assessment (' + email + ')', score: r.totalScore + ' / 24', tier: r.totalScore <= 11 ? 'Getting Started' : r.totalScore <= 17 ? 'Building Foundation' : r.totalScore <= 22 ? 'Well Positioned' : 'Digitally Mature', automation: r.automation.toFixed(1) + ' / 4.0', data_management: r.data.toFixed(1) + ' / 4.0', knowledge_process: r.knowledge.toFixed(1) + ' / 4.0', priority_area: r.q7Category, q1_repetitive_tasks: questions[0].options[answers[0]].label, q2_data_capture: questions[1].options[answers[1]].label, q3_knowledge_retention: questions[2].options[answers[2]].label, q4_decision_making: questions[3].options[answers[3]].label, q5_team_comms: questions[4].options[answers[4]].label, q6_error_rate: questions[5].options[answers[5]].label, q7_priority_fix: questions[6].options[answers[6]].label, answers_summary: answers.map((a, i) =>
       (i + 1) + '. ' + questions[i].text + '\n   → ' + questions[i].options[a].label
     ).join('\n\n')
   };
 
   // Send to Formspree
   fetch('https://formspree.io/f/mkopjjab', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify(payload)
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload)
   }).then(res => {
     if (res.ok) {
       document.getElementById('emailForm').style.display = 'none';
