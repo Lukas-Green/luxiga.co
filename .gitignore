@@ -23,3 +23,9 @@ CP-575*
 # Non-public. This repo is PUBLIC and serves luxiga.co.
 infrastructure/
 SESSION.md
+
+# Never publish: this repo is PUBLIC and Pages serves whatever is tracked.
+# docs/ shipped the internal pricing playbook (naming Justin) at 200 until 2026-08-05.
+docs/
+scripts/
+Idea rambling.moved-to-voicememo
