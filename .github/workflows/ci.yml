@@ -148,6 +148,62 @@ jobs:
             fi
           done
 
+      # ADDED 2026-08-05. The check above is tautological: it re-tests only the
+      # paths the line above it just deleted, so it can confirm a delete worked
+      # and can NEVER catch a sensitive file nobody thought to add to the list.
+      # That is how docs/ shipped. This step scans what is ACTUALLY about to be
+      # uploaded, by shape rather than by name, so a new file is caught on its
+      # first deploy instead of on the next audit.
+      - name: Scan the artifact for anything that should not be public
+        run: |
+          set -uo pipefail
+          fail=0
+
+          # Filenames by shape.
+          # The internal-doc terms are anchored to .md ON PURPOSE. A dry run of an
+          # earlier draft matched audit/index.html, which is the public Pulse tool,
+          # and would have blocked every deploy. Scope beats zeal: a guard that
+          # cries wolf gets disabled, and a disabled guard protects nothing.
+          BADNAME='articles.?of.?organization|operating.?agreement|\.env($|\.)|\.p12$|\.pem$|\.pfx$|id_rsa|credentials|liability|tcpa|dealmachine|owner.?list|homeowner|skip.?trace|\.prproj$|\.aep$|\.psd$|discharge.?summary|polygraph|(SESSION|HANDOFF|WORKLIST|AUDIT|BACKLOG|TODO|NEXT|RETAINER|PETITION)[A-Za-z0-9_-]*\.md$'
+          hits="$(find . -type f -not -path './.git/*' | grep -iE "$BADNAME" || true)"
+          if [ -n "$hits" ]; then
+            echo "::error::sensitive-looking filename(s) in the publish artifact:"
+            echo "$hits"; fail=1
+          fi
+
+          # Internal-only docs that are not part of the site. Any markdown outside
+          # an explicitly public folder is suspect on a marketing site.
+          stray="$(find . -maxdepth 2 -name '*.md' -not -path './.git/*' \
+                   -not -path './case-studies/*' -not -path './research/*' || true)"
+          if [ -n "$stray" ]; then
+            echo "::error::unexpected markdown in the publish artifact:"
+            echo "$stray"; fail=1
+          fi
+
+          # Secret shapes in content. Same classes as scripts/publish-guard.sh.
+          SECRET='re_[A-Za-z0-9_]{16,}|sk-ant-[A-Za-z0-9_-]{20,}|sk-proj-[A-Za-z0-9_-]{20,}|sk_live_[A-Za-z0-9]{16,}|AIza[0-9A-Za-z_-]{30,}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|xox[baprs]-[A-Za-z0-9-]{10,}|AKIA[0-9A-Z]{16}|SG\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}|BEGIN [A-Z ]*PRIVATE KEY'
+          if grep -rIlE "$SECRET" . --exclude-dir=.git >/dev/null 2>&1; then
+            echo "::error::possible secret in the publish artifact:"
+            grep -rIlE "$SECRET" . --exclude-dir=.git | head -10
+            fail=1
+          fi
+
+          # Prove the scanner itself works. An empty result from a broken grep
+          # looks exactly like safety, so plant a control and require a hit.
+          # Assembled from parts on purpose. Written as one literal it is itself a
+          # key-shaped string in a PUBLIC repo, and publish-guard blocked this very
+          # push over it. Correct outcome, so the fix is to stop shipping the shape,
+          # not to weaken the scanner. The runtime value is identical.
+          printf '%s%s\n' 'AKIA' '0123456789ABCDEF' > .__guard_control
+          if ! grep -qE "$SECRET" .__guard_control; then
+            echo "::error::the secret scanner did not match its own control string. Scan is broken."
+            fail=1
+          fi
+          rm -f .__guard_control
+
+          [ "$fail" -eq 0 ] || exit 1
+          echo "artifact scan clean (and the scanner was validated against a control)"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
