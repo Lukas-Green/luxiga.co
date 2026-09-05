@@ -677,6 +677,9 @@ function handleEmail(e) {
     method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload)
   }).then(res => {
     if (res.ok) {
+      // Reset the text. A previous failed attempt leaves the error string here,
+      // so a successful retry was telling people it had failed.
+      document.getElementById('emailSuccess').textContent = "Saved! We'll be in touch.";
       document.getElementById('emailForm').style.display = 'none';
       document.getElementById('emailSuccess').style.display = 'block';
     } else {
@@ -688,10 +691,9 @@ function handleEmail(e) {
     document.getElementById('emailSuccess').style.display = 'block';
   });
 
-  // Also store locally as backup
-  const stored = JSON.parse(localStorage.getItem('pulse_leads') || '[]');
-  stored.push({ ...payload, timestamp: new Date().toISOString() });
-  localStorage.setItem('pulse_leads', JSON.stringify(stored));
+  // Deliberately NOT stored locally. This runs on shared and campus machines,
+  // and a previous visitor's email and answers must not be readable by the next.
+  try { localStorage.removeItem('pulse_leads'); } catch (e) {}
 }
 
 // Mobile nav toggle
