@@ -136,11 +136,22 @@ jobs:
           rm -rf infrastructure .github tests docs scripts
           rm -f SESSION.md README.md package.json package-lock.json playwright.config.js
           rm -f "Idea rambling.moved-to-voicememo"
+          # WIDENED 2026-09-05. Every path above is top-level, so the prune could
+          # not reach a nested one. CASSANDRA found that card/resume/src/ and
+          # card/resume/README.md would have published the build script (with a
+          # /Users/lukasgreen path in it), the source HTML, and a note naming a
+          # client engagement, at https://luxiga.co/card/resume/src/. That source
+          # now lives in the private forge at business/resume-build/. These two
+          # lines are the tripwire if it ever comes back. NESTED PATHS BELONG HERE
+          # TOO, not just top-level ones.
+          rm -rf card/resume/src
+          rm -f card/resume/README.md
           # Refuse to publish if anything sensitive survived the prune. This list
           # must match the one above. A prune that silently no-ops looks exactly
           # like a prune that worked.
           for p in infrastructure .github tests docs scripts SESSION.md README.md \
                    package.json package-lock.json playwright.config.js \
+                   card/resume/src card/resume/README.md \
                    "Idea rambling.moved-to-voicememo"; do
             if [ -e "$p" ]; then
               echo "::error::Non-public path '$p' survived the prune, refusing to publish"

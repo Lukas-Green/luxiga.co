@@ -80,6 +80,8 @@
       <a class="btn" id="call" href="tel:+15034278497"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>Call<span class="sub">503-427-8497</span></a>
       <a class="btn" id="email" href="mailto:lukas@luxiga.co"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>Email<span class="sub">lukas@luxiga.co</span></a>
       <a class="btn" id="visit" href="https://luxiga.co" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>Visit site<span class="sub">luxiga.co</span></a>
+      <a class="btn" id="resume" href="resume/"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span>Resume &amp; cover letter<span class="sub">PDF</span></a>
+      <button class="btn" id="share" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg></span>Share my card<span class="sub" id="shareSub">Send the link</span></button>
     </nav>
 
     <details class="req" id="req">
@@ -121,9 +123,30 @@
   flip.addEventListener("click",doFlip);
   flip.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); doFlip(); }});
 
-  ["save","call","email","visit"].forEach(function(id){
+  ["save","call","email","visit","resume"].forEach(function(id){
     var el=document.getElementById(id);
     if(el) el.addEventListener("click",function(){ track("click",{action:id}); });
+  });
+
+  // --- share. Native sheet where it exists (iOS and Android), clipboard everywhere else. ---
+  var shareBtn=document.getElementById("share"), shareSub=document.getElementById("shareSub");
+  var SHARE_URL=(document.querySelector('link[rel=canonical]')||{}).href||location.href;
+  function saidIt(msg){ var was=shareSub.textContent; shareSub.textContent=msg;
+    setTimeout(function(){ shareSub.textContent=was; },2200); }
+  shareBtn.addEventListener("click",function(){
+    var data={title:"Lukas Green · LUXIGA",
+              text:"Lukas Green, Design Technologist at LUXIGA. Contact, resume and cover letter.",
+              url:SHARE_URL};
+    if(navigator.share){
+      track("click",{action:"share",via:"native"});
+      navigator.share(data).catch(function(){});
+      return;
+    }
+    track("click",{action:"share",via:"clipboard"});
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(SHARE_URL).then(function(){ saidIt("Link copied"); })
+        .catch(function(){ saidIt(SHARE_URL); });
+    } else { saidIt(SHARE_URL); }
   });
   document.getElementById("req").addEventListener("toggle",function(e){ if(e.target.open) track("open_request"); });
 
