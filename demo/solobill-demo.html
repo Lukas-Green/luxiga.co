@@ -12,7 +12,7 @@
       --header-dark:#2f8e52;
       --card:#ffffff;
       --text:#1a1a1a;
-      --muted:#6b7280;
+      --muted:#374151; /* 9.24:1 on --bg, 10.31:1 on white (was #6b7280 at 4.83:1) */
       --line:#dde5db;
       --radius:14px;
       --shadow:0 6px 20px rgba(0,0,0,.08);
@@ -59,7 +59,7 @@
 
     .table-actions{padding:10px}
     .btn{border:none;background:#dfeee4;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer;font-size:15px;}
-    .btn.primary{background:#34a853;color:#fff}
+    .btn.primary{background:#17602a;color:#fff}
     .btn.outline{background:#fff;border:1px solid var(--line)}
     .btn.ghost{background:transparent}
     .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
@@ -69,10 +69,30 @@
       padding:12px 16px;font-size:13px;color:#166534;margin-top:8px;
     }
 
+    .input,select.input,.btn,.pill,.search-input{min-height:44px;box-sizing:border-box}
+    .nav-link{min-height:44px;display:inline-flex;align-items:center;box-sizing:border-box}
+    .icon-btn{min-width:44px;min-height:44px}
+    .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .input:focus-visible,.btn:focus-visible,.pill:focus-visible,.icon-btn:focus-visible,.nav-link:focus-visible{outline:3px solid #1a1a1a;outline-offset:2px}
+
     @media (max-width:820px){
       .grid.two{grid-template-columns:1fr}
       .table-head,tbody tr{grid-template-columns:120px 1fr 80px 80px 100px 90px 40px}
       .search{display:none}
+    }
+    /* Phones: header wraps, line items stack as labeled cards */
+    @media (max-width:600px){
+      .app-header{flex-wrap:wrap;gap:8px 12px}
+      .nav{margin-left:0;gap:6px;flex-wrap:wrap}
+      h1{font-size:28px}
+      .table-head{display:none}
+      tbody tr{grid-template-columns:1fr 1fr;padding:8px 0}
+      tbody td{padding:6px 8px;min-width:0}
+      tbody td:nth-child(2){grid-column:1 / -1}
+      tbody td[data-label]::before{content:attr(data-label);display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+      tbody td .input,tbody td .pill{width:100%;box-sizing:border-box}
+      .value{text-align:left}
+      .actions{flex-wrap:wrap}
     }
   </style>
 </head>
@@ -82,14 +102,14 @@
   <header class="app-header">
     <div class="brand">LUXIGA Bill</div>
     <nav class="nav">
-      <a class="nav-link active" data-target="tab-invoice" onclick="showTab('tab-invoice')">Invoices</a>
-      <a class="nav-link" data-target="tab-report" onclick="showTab('tab-report')">Report</a>
-      <a class="nav-link" data-target="tab-settings" onclick="showTab('tab-settings')">Settings</a>
+      <a class="nav-link active" href="#tab-invoice" data-target="tab-invoice" onclick="showTab('tab-invoice'); return false;">Invoices</a>
+      <a class="nav-link" href="#tab-report" data-target="tab-report" onclick="showTab('tab-report'); return false;">Report</a>
+      <a class="nav-link" href="#tab-settings" data-target="tab-settings" onclick="showTab('tab-settings'); return false;">Settings</a>
     </nav>
     <div class="search">
-      <input class="search-input" placeholder="Search" />
+      <input class="search-input" placeholder="Search" aria-label="Search invoices" />
     </div>
-    <div class="avatar">LG</div>
+    <div class="avatar" aria-hidden="true">LG</div>
   </header>
 
   <main class="container">
@@ -99,11 +119,11 @@
 
       <div class="grid two">
         <div class="field">
-          <label>Invoice number</label>
+          <label for="invoiceNumber">Invoice number</label>
           <input id="invoiceNumber" class="input" placeholder="INV-2026-0001" />
         </div>
         <div class="field">
-          <label>Client</label>
+          <label for="clientSelect">Client</label>
           <select id="clientSelect" class="input">
             <option value="">Select client</option>
             <option value="1">Acme Corp</option>
@@ -114,27 +134,27 @@
         </div>
 
         <div class="field">
-          <label>PO number</label>
-          <input class="input" placeholder="Optional" />
+          <label for="poNumber">PO number</label>
+          <input id="poNumber" class="input" placeholder="Optional" />
         </div>
         <div class="field">
-          <label>Tax number</label>
-          <input class="input" placeholder="Optional" />
+          <label for="taxNumber">Tax number</label>
+          <input id="taxNumber" class="input" placeholder="Optional" />
         </div>
 
         <div class="field">
-          <label>Issue date</label>
+          <label for="issueDate">Issue date</label>
           <input id="issueDate" class="input" type="date" />
         </div>
         <div class="field">
-          <label>Currency</label>
-          <select class="input">
+          <label for="currency">Currency</label>
+          <select id="currency" class="input">
             <option>United States Dollar - USD - $</option>
           </select>
         </div>
 
         <div class="field">
-          <label>Due date</label>
+          <label for="dueTerm">Due date</label>
           <select id="dueTerm" class="input">
             <option>14 days</option>
             <option>30 days</option>
@@ -142,7 +162,7 @@
           </select>
         </div>
         <div class="field">
-          <label>Contractor type</label>
+          <label for="contractorType">Contractor type</label>
           <select id="contractorType" class="input">
             <option>Contractor</option>
             <option>Freelancer</option>
@@ -152,8 +172,8 @@
         </div>
 
         <div class="field full">
-          <label>Subject</label>
-          <input class="input" placeholder="Project / job description" />
+          <label for="subject">Subject</label>
+          <input id="subject" class="input" placeholder="Project / job description" />
         </div>
       </div>
 
@@ -161,16 +181,18 @@
         <div class="table-head">
           <div>Type</div><div>Description</div><div>Qty.</div><div>Unit</div><div>Rate</div><div>Value</div><div></div>
         </div>
-        <table>
-          <tbody id="lineBody"></tbody>
-        </table>
+        <div class="table-scroll">
+          <table>
+            <tbody id="lineBody"></tbody>
+          </table>
+        </div>
         <div class="table-actions">
           <button class="btn" onclick="addLine()">+ Add line</button>
         </div>
       </div>
 
       <div class="card" style="margin-top:8px;display:grid;grid-template-columns:1fr 200px;align-items:center;">
-        <div style="color:#6b7280;">Totals</div>
+        <div style="color:var(--muted);">Totals</div>
         <div>
           <div style="display:flex;justify-content:space-between;padding:4px 0;">
             <span>Subtotal</span><strong id="subtotal">$0.00</strong>
@@ -197,7 +219,7 @@
 
     <section id="tab-report" class="tabview hidden">
       <h1>Report</h1>
-      <p style="color:var(--muted);margin-top:16px;">This tab will list invoices with status (New, Paid, Late) and running balances. Coming in v2.</p>
+      <p style="color:var(--muted);margin-top:16px;">This tab will list invoices with status (New, Paid, Late) and running balances.</p>
     </section>
 
     <section id="tab-settings" class="tabview hidden">
@@ -241,6 +263,7 @@
     function buildUnitSelect(){
       const sel = document.createElement('select');
       sel.className = 'input line-unit';
+      sel.setAttribute('aria-label', 'Unit');
       UNITS.forEach(u => sel.append(new Option(u, u)));
       return sel;
     }
@@ -250,19 +273,19 @@
       const row   = document.createElement('tr');
       const unitSel = buildUnitSelect();
       row.innerHTML = `
-        <td>
-          <select class="pill small type-pill">
+        <td data-label="Type">
+          <select class="pill small type-pill" aria-label="Line type">
             <option>Services</option>
             <option>Deposit</option>
             <option>Items</option>
           </select>
         </td>
-        <td><input class="input" placeholder="Description"></td>
-        <td><input class="input qty" type="number" step="0.01" value="1"></td>
-        <td></td>
-        <td><input class="input rate" type="number" step="0.01" value="0"></td>
-        <td class="value">$0.00</td>
-        <td><button class="icon-btn" onclick="this.closest('tr').remove(); updateTotals();">🗑</button></td>
+        <td data-label="Description"><input class="input" placeholder="Description" aria-label="Description"></td>
+        <td data-label="Qty."><input class="input qty" type="number" step="0.01" value="1" aria-label="Quantity"></td>
+        <td data-label="Unit"></td>
+        <td data-label="Rate"><input class="input rate" type="number" step="0.01" value="0" aria-label="Rate"></td>
+        <td class="value" data-label="Value">$0.00</td>
+        <td><button type="button" class="icon-btn" aria-label="Remove line" onclick="this.closest('tr').remove(); updateTotals();"><span aria-hidden="true">🗑</span></button></td>
       `;
       row.querySelectorAll('td')[3].appendChild(unitSel);
       tbody.appendChild(row);

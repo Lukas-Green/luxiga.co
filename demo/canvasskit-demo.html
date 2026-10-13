@@ -6,12 +6,17 @@
   <title>CanvassKit · Contact Tracker Demo</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/assets/vendor/tailwind-play-3.4.17.js"></script>
   <script>
-    tailwind.config = { theme: { extend: { colors: { primary: '#cca346' } } } }
+    tailwind.config = { theme: { extend: { colors: { primary: '#684c0e' } } } }
   </script>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <link href="/assets/vendor/aos-2.3.4.css" rel="stylesheet"/>
+  <script src="/assets/vendor/feather-4.29.2.min.js"></script>
+  <style>
+    /* 44px minimum tap targets */
+    button, select, input, textarea { min-height: 44px; }
+    button { min-width: 44px; }
+  </style>
 
 </head>
 <body class="bg-gray-50">
@@ -24,7 +29,7 @@
   <div class="min-h-screen">
     <header class="bg-primary text-white shadow-lg">
       <div class="container mx-auto px-4 py-6">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-wrap justify-between items-center gap-4">
           <div>
             <h1 class="text-3xl font-bold">CanvassKit</h1>
             <p class="text-white/90">Community Safety Contact Tracker</p>
@@ -47,24 +52,24 @@
           <div class="bg-white rounded-xl shadow-lg p-6 text-center">
             <h3 class="text-2xl font-bold text-gray-700">Total Contacts</h3>
             <p class="text-5xl font-bold text-primary my-4" id="totalContacts">0</p>
-            <p class="text-gray-500">All recorded interactions</p>
+            <p class="text-gray-700">All recorded interactions</p>
           </div>
           <div class="bg-white rounded-xl shadow-lg p-6 text-center">
             <h3 class="text-2xl font-bold text-gray-700">Hard Contacts</h3>
             <p class="text-5xl font-bold text-primary my-4" id="hardContacts">0</p>
-            <p class="text-gray-500">Detailed engagements</p>
+            <p class="text-gray-700">Detailed engagements</p>
           </div>
           <div class="bg-white rounded-xl shadow-lg p-6 text-center">
             <h3 class="text-2xl font-bold text-gray-700">Active Users</h3>
             <p class="text-5xl font-bold text-primary my-4" id="activeUsers">1</p>
-            <p class="text-gray-500">Team members tracking</p>
+            <p class="text-gray-700">Team members tracking</p>
           </div>
         </div>
       </section>
 
       <section class="mb-12" data-aos="fade-up">
         <div class="flex flex-col md:flex-row justify-center gap-6">
-          <button id="hardContactBtn" class="bg-primary hover:bg-yellow-600 text-white text-xl font-bold py-4 px-8 rounded-lg shadow-lg flex items-center gap-2">
+          <button id="hardContactBtn" class="bg-primary hover:bg-yellow-900 text-white text-xl font-bold py-4 px-8 rounded-lg shadow-lg flex items-center gap-2">
             <i data-feather="plus-circle"></i><span>Record Hard Contact</span>
           </button>
           <button id="softContactBtn" class="bg-gray-700 hover:bg-gray-800 text-white text-xl font-bold py-4 px-8 rounded-lg shadow-lg flex items-center gap-2">
@@ -77,23 +82,23 @@
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
           <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
             <h2 class="text-xl font-bold text-gray-800">Recent Contacts</h2>
-            <button id="refreshBtn" class="text-primary hover:text-yellow-600"><i data-feather="refresh-cw"></i></button>
+            <button id="refreshBtn" aria-label="Refresh contacts" class="text-primary hover:text-yellow-600"><i data-feather="refresh-cw"></i></button>
           </div>
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Contacts table, scrolls sideways">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Type</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Staff</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Location</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">User</th>
-                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Type</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Name</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Staff</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Location</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Date</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">User</th>
+                  <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody id="contactsTable" class="bg-white divide-y divide-gray-200">
-                <tr class="text-center"><td colspan="7" class="py-4 text-gray-500">No contacts recorded yet</td></tr>
+                <tr class="text-center"><td colspan="7" class="py-4 text-gray-700">No contacts recorded yet</td></tr>
               </tbody>
             </table>
           </div>
@@ -108,15 +113,15 @@
     <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md relative z-10">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-bold text-gray-800">User Settings</h3>
-        <button id="closeUserModal" class="text-gray-500 hover:text-gray-700"><i data-feather="x"></i></button>
+        <button id="closeUserModal" aria-label="Close" class="text-gray-700 hover:text-gray-700"><i data-feather="x"></i></button>
       </div>
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+          <label for="usernameInput" class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
           <input type="text" id="usernameInput" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Enter your name">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Staff Role</label>
+          <label for="staffRoleSelect" class="block text-sm font-medium text-gray-700 mb-1">Staff Role</label>
           <select id="staffRoleSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
             <option value="">Select your role</option>
             <option value="Outreach Worker">Outreach Worker</option>
@@ -137,26 +142,26 @@
     <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md relative z-10">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-bold text-gray-800">Record Hard Contact</h3>
-        <button id="closeHardContactModal" class="text-gray-500 hover:text-gray-700"><i data-feather="x"></i></button>
+        <button id="closeHardContactModal" aria-label="Close" class="text-gray-700 hover:text-gray-700"><i data-feather="x"></i></button>
       </div>
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Staff Member</label>
+          <label for="staffSelect" class="block text-sm font-medium text-gray-700 mb-1">Staff Member</label>
           <select id="staffSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
             <option value="">Select staff member</option>
             <option>John D.</option><option>Maria G.</option><option>Alex T.</option><option>Sam R.</option>
           </select>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
+          <label for="contactNameInput" class="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
           <input type="text" id="contactNameInput" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Enter name">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+          <label for="locationInput" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
           <input type="text" id="locationInput" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Enter location">
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+          <label for="notesInput" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
           <textarea id="notesInput" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Add notes"></textarea>
         </div>
         <button id="submitHardContactBtn" class="w-full bg-primary hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg">Submit Contact</button>
@@ -170,21 +175,21 @@
     <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md relative z-10">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-bold text-gray-800">Export Data</h3>
-        <button id="closeExportModal" class="text-gray-500 hover:text-gray-700"><i data-feather="x"></i></button>
+        <button id="closeExportModal" aria-label="Close" class="text-gray-700 hover:text-gray-700"><i data-feather="x"></i></button>
       </div>
       <div class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs text-gray-500 mb-1">Start Date</label>
+            <label for="startDate" class="block text-xs text-gray-700 mb-1">Start Date</label>
             <input type="date" id="startDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
           </div>
           <div>
-            <label class="block text-xs text-gray-500 mb-1">End Date</label>
+            <label for="endDate" class="block text-xs text-gray-700 mb-1">End Date</label>
             <input type="date" id="endDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
           </div>
         </div>
         <div>
-          <label class="block text-sm text-gray-700 mb-1">Export Format</label>
+          <label for="exportFormat" class="block text-sm text-gray-700 mb-1">Export Format</label>
           <select id="exportFormat" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
             <option value="csv">CSV (Excel)</option>
             <option value="json">JSON</option>
@@ -195,7 +200,7 @@
     </div>
   </div>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="/assets/vendor/aos-2.3.4.js"></script>
 
   <script>
     const STORAGE_KEY = 'canvaskit_contacts';
@@ -216,6 +221,19 @@
       saveContacts(items);
     }
 
+    // Current-user key. The old GH2-era key is migrated once, then removed.
+    const USER_KEY = 'canvaskit_current_user';
+    (function migrateUserKey(){
+      const old = localStorage.getItem('gh2CurrentUser');
+      if (old === null) return;
+      if (localStorage.getItem(USER_KEY) === null) localStorage.setItem(USER_KEY, old);
+      localStorage.removeItem('gh2CurrentUser');
+    })();
+    function currentUser(){
+      try { return JSON.parse(localStorage.getItem(USER_KEY)) || { name:'Guest' }; }
+      catch (e) { return { name:'Guest' }; }
+    }
+
     let contacts = [];
 
     function loadContacts(){
@@ -225,9 +243,8 @@
     }
 
     function loadUserSettings(){
-      const s = localStorage.getItem('gh2CurrentUser');
-      if (!s) return;
-      const u = JSON.parse(s);
+      if (localStorage.getItem(USER_KEY) === null) return;
+      const u = currentUser();
       document.getElementById('usernameInput').value = u.name || '';
       document.getElementById('staffRoleSelect').value = u.role || '';
       document.getElementById('usernameDisplay').textContent = u.name || 'Guest';
@@ -236,7 +253,7 @@
       const name = document.getElementById('usernameInput').value.trim();
       const role = document.getElementById('staffRoleSelect').value;
       if (!name) return alert('Please enter your name.');
-      localStorage.setItem('gh2CurrentUser', JSON.stringify({name, role, lastActive:new Date().toISOString()}));
+      localStorage.setItem(USER_KEY, JSON.stringify({name, role, lastActive:new Date().toISOString()}));
       document.getElementById('usernameDisplay').textContent = name;
       document.getElementById('userModal').classList.add('hidden');
     }
@@ -246,7 +263,7 @@
       const name     = document.getElementById('contactNameInput').value.trim();
       const location = document.getElementById('locationInput').value.trim();
       const notes    = document.getElementById('notesInput').value.trim();
-      const current  = JSON.parse(localStorage.getItem('gh2CurrentUser')) || { name:'Guest' };
+      const current  = currentUser();
       if (!staff || !name) return alert('Please select a staff member and enter a contact name.');
 
       createContact({
@@ -262,7 +279,7 @@
     }
 
     function recordSoftContact(){
-      const current = JSON.parse(localStorage.getItem('gh2CurrentUser')) || { name:'Guest' };
+      const current = currentUser();
       createContact({
         id: Date.now(), type:'soft', name:'Quick Contact', staff:'N/A',
         location:'N/A', notes:'Quick contact recorded',
@@ -283,27 +300,49 @@
       const tb = document.getElementById('contactsTable');
       tb.innerHTML = '';
       if (!contacts.length){
-        tb.innerHTML = `<tr class="text-center"><td colspan="7" class="py-4 text-gray-500">No contacts recorded yet</td></tr>`;
+        tb.innerHTML = `<tr class="text-center"><td colspan="7" class="py-4 text-gray-700">No contacts recorded yet</td></tr>`;
         return;
       }
+      // Built with textContent only: every value here comes from localStorage,
+      // so none of it is ever parsed as HTML.
+      const cell = (text, cls) => {
+        const td = document.createElement('td');
+        td.className = 'px-6 py-4 whitespace-nowrap text-sm ' + cls;
+        if (text !== undefined) td.textContent = text;
+        return td;
+      };
+      const iconBtn = (icon, label, cls, onClick) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = cls;
+        b.setAttribute('aria-label', label);
+        const i = document.createElement('i');
+        i.setAttribute('data-feather', icon);
+        b.appendChild(i);
+        b.addEventListener('click', onClick);
+        return b;
+      };
       contacts.slice(0,10).forEach(c=>{
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-gray-50';
-        tr.innerHTML = `
-          <td class="px-6 py-4 whitespace-nowrap">
-            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${c.type==='hard'?'bg-green-100 text-green-800':'bg-blue-100 text-blue-800'}">
-              ${c.type==='hard'?'Hard':'Soft'}
-            </span>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${c.name||''}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${c.staff||''}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${c.location||''}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(c.date).toLocaleDateString()}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${c.user||''}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            <button onclick="viewContactDetails(${c.id})" class="text-primary hover:text-yellow-600 mr-2"><i data-feather="eye"></i></button>
-            <button onclick="deleteContact(${c.id})" class="text-red-500 hover:text-red-700"><i data-feather="trash-2"></i></button>
-          </td>`;
+        const typeTd = cell(undefined, '');
+        const tag = document.createElement('span');
+        tag.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded ' + (c.type==='hard'?'bg-green-100 text-green-800':'bg-blue-100 text-blue-800');
+        tag.textContent = c.type==='hard' ? 'Hard' : 'Soft';
+        typeTd.appendChild(tag);
+        const actions = cell(undefined, 'text-gray-700');
+        const id = c.id;
+        actions.appendChild(iconBtn('eye', 'View details', 'text-primary hover:text-yellow-600 mr-2', () => viewContactDetails(id)));
+        actions.appendChild(iconBtn('trash-2', 'Delete contact', 'text-red-500 hover:text-red-700', () => deleteContact(id)));
+        tr.append(
+          typeTd,
+          cell(String(c.name||''), 'font-medium text-gray-900'),
+          cell(String(c.staff||''), 'text-gray-700'),
+          cell(String(c.location||''), 'text-gray-700'),
+          cell(new Date(c.date).toLocaleDateString(), 'text-gray-700'),
+          cell(String(c.user||''), 'text-gray-700'),
+          actions
+        );
         tb.appendChild(tr);
       });
       feather.replace();
@@ -320,10 +359,17 @@
       loadContacts();
     };
 
+    // Quote every field, double inner quotes, and defuse spreadsheet formulas
+    // (a cell starting with = + - @ gets a leading single quote).
+    function csvCell(v){
+      let s = String(v == null ? '' : v);
+      if (/^[=+\-@]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
     function exportToCSV(rows){
       let csv = 'Type,Name,Staff,Location,Date,User,Notes\n';
       rows.forEach(c=>{
-        csv += `"${c.type}","${c.name}","${c.staff}","${c.location}","${new Date(c.date).toLocaleString()}","${c.user}","${String(c.notes||'').replace(/"/g,'""')}"\n`;
+        csv += [c.type, c.name, c.staff, c.location, new Date(c.date).toLocaleString(), c.user, c.notes].map(csvCell).join(',') + '\n';
       });
       const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
       const a = document.createElement('a');

@@ -67,7 +67,57 @@ test.describe('Homepage contact form', () => {
   });
 });
 
+test.describe('Homepage contact form honeypot', () => {
+  test('a filled _gotcha field sends nothing to Formspree', async ({ page }) => {
+    let calls = 0;
+    await page.route('**formspree.io/**', route => {
+      calls++;
+      route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+    await page.goto('/');
+    await page.fill('#name', 'Bot Name');
+    await page.fill('#email', 'bot@example.com');
+    await page.selectOption('#scope', 'AI Consulting');
+    await page.fill('#message', 'Spam message body from a bot.');
+    // The field is visually hidden and aria-hidden; bots fill it via the DOM.
+    const hp = page.locator('#contactForm [name="_gotcha"]');
+    await expect(hp).toHaveCount(1);
+    await hp.evaluate(el => { el.value = 'http://spam.example'; });
+    await page.click('.form-submit');
+    await page.waitForTimeout(800);
+    expect(calls).toBe(0);
+  });
+});
+
 test.describe('Digital Readiness Audit (Pulse) assessment', () => {
+  test('keyboard only: Tab to Start, answer all 7, reach results', async ({ page, browserName }) => {
+    // WebKit on macOS does not move focus to buttons with Tab by default.
+    test.skip(browserName === 'webkit', 'Safari Tab skips buttons unless Option+Tab');
+    await page.goto('/audit/');
+    const start = page.locator('#screen-intro .btn-primary');
+    let found = false;
+    for (let i = 0; i < 40; i++) {
+      await page.keyboard.press('Tab');
+      if (await start.evaluate(el => el === document.activeElement)) { found = true; break; }
+    }
+    expect(found, 'Start button never received focus via Tab').toBe(true);
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#screen-question')).toHaveClass(/active/);
+
+    for (let q = 0; q < 7; q++) {
+      await expect(page.locator('#questionStep')).toHaveText(`Question ${q + 1} of 7`);
+      // renderQuestion() focuses the heading, so the next Tab lands on option 1.
+      await page.keyboard.press('Tab');
+      const focusedIsOption = await page.evaluate(() => document.activeElement.classList.contains('option'));
+      expect(focusedIsOption, `Q${q + 1}: Tab did not land on an answer`).toBe(true);
+      await page.keyboard.press(q % 2 === 0 ? 'Enter' : 'Space');
+      await page.waitForTimeout(q === 6 ? 2200 : 700);
+    }
+
+    await expect(page.locator('#screen-results')).toHaveClass(/active/);
+    await expect(page.locator('#recCards .rec-card')).toHaveCount(3);
+  });
+
   test('answering all 7 questions reaches a results screen with a working CTA', async ({ page }) => {
     await page.goto('/audit/');
     await page.click('#screen-intro .btn-primary');
@@ -85,15 +135,14 @@ test.describe('Digital Readiness Audit (Pulse) assessment', () => {
     await expect(page.locator('#scoreDisplay')).not.toHaveText('0');
     await expect(page.locator('#tierBadge')).not.toBeEmpty();
     await expect(page.locator('#recCards .rec-card')).toHaveCount(3);
-    const bookCall = page.locator('#screen-results a', { hasText: 'Book a 30-min call' });
+    const bookCall = page.locator('#screen-results a', { hasText: 'Book a free 30-min call' });
     await expect(bookCall).toHaveAttribute('href', CALENDLY);
   });
 
-  test('BUG: a successful retry after a failed email submit still shows the old error text', async ({ page }) => {
-    // Reproduces the flow: assessment completes, first email submit fails (network
-    // blip), visitor retries, second submit succeeds. handleEmail() in
-    // audit/index.html only sets emailSuccess.textContent on the error path; the
-    // success path just toggles display, so it never clears prior error text.
+  test('successful retry clears the prior error text', async ({ page }) => {
+    // Flow: assessment completes, first email submit fails (network blip), visitor
+    // retries, second submit succeeds. Regression guard for the old bug where the
+    // success path never replaced the earlier error text.
     let attempt = 0;
     await page.route('https://formspree.io/f/mkopjjab', route => {
       attempt++;
@@ -121,7 +170,8 @@ test.describe('Digital Readiness Audit (Pulse) assessment', () => {
 
     // Expected (correct) behavior: the form is gone AND the message reflects success.
     await expect(page.locator('#emailForm')).toBeHidden();
-    await expect(page.locator('#emailSuccess')).toHaveText("Saved! We'll be in touch.");
+    await expect(page.locator('#emailSuccess')).toHaveText('Sent. Lukas will be in touch.');
+    await expect(page.locator('#emailSuccess')).not.toContainText('wrong');
   });
 });
 

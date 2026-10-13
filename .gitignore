@@ -9,14 +9,13 @@ playwright-report/
 # Never let entity, tax, or identity documents in.
 *.pdf
 !card/print/luxiga-business-card.pdf
-# Allowed 2026-09-05. These two are deliberately public: they are the download
+# Allowed 2026-09-05. This one is deliberately public: they are the download
 # targets of the primary buttons on card/resume/. Without these exceptions the
 # blanket *.pdf rule kept them out of the deploy and both buttons 404'd, while
 # still looking correct on disk. Their SOURCE lives in the private forge at
 # business/resume-build/, never here. Add a PDF here only if it is meant to be
 # world-readable at https://luxiga.co/<path>.
 !card/resume/Lukas-Green-Resume.pdf
-!card/resume/Lukas-Green-Cover-Letter.pdf
 ARTICLES*OF*ORGANIZATION*
 CP_575*
 CP-575*
@@ -33,7 +32,7 @@ infrastructure/
 SESSION.md
 
 # Never publish: this repo is PUBLIC and Pages serves whatever is tracked.
-# docs/ shipped the internal pricing playbook (naming Justin) at 200 until 2026-08-05.
+# docs/ once shipped an internal sales document at 200 (fixed 2026-08-05).
 docs/
 scripts/
 Idea rambling.moved-to-voicememo
