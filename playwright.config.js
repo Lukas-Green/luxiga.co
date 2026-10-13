@@ -1,4 +1,4 @@
-const { defineConfig } = require('@playwright/test');
+const { defineConfig, devices } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
@@ -19,5 +19,11 @@ module.exports = defineConfig({
   },
   projects: [
     { name: 'chromium', use: { browserName: 'chromium' } },
+    // Real Safari engine at iPhone size: catches WebKit-only layout and a11y gaps.
+    {
+      name: 'webkit-iphone',
+      use: { ...devices['iPhone 13'] },
+      testMatch: /(site-audit|a11y)\.spec\.js$/,
+    },
   ],
 });

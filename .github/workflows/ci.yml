@@ -9,10 +9,9 @@ on:
     # Weekly Monday 8am UTC (1am PDT) — Lighthouse + link check
     - cron: '0 8 * * 1'
 
+# Least privilege: every job reads only. The deploy job alone gets Pages rights.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -31,10 +30,10 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install chromium --with-deps
+        run: npx playwright install chromium webkit --with-deps
 
       - name: Run tests
         run: npx playwright test
@@ -65,8 +64,9 @@ jobs:
         with:
           urls: |
             https://luxiga.co/
-            https://luxiga.co/pulse.html
+            https://luxiga.co/audit/
             https://luxiga.co/case-studies/solobill.html
+          configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
 
@@ -82,8 +82,9 @@ jobs:
         with:
           urls: |
             https://luxiga.co/
-            https://luxiga.co/pulse.html
+            https://luxiga.co/audit/
             https://luxiga.co/case-studies/solobill.html
+          configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
 
@@ -103,15 +104,20 @@ jobs:
             --exclude 'calendly.com'
             --exclude 'linkedin.com'
             --exclude 'mailto:'
-            '*.html'
-            'case-studies/*.html'
+            --exclude-path node_modules
+            --exclude-path test-results
+            '**/*.html'
           fail: true
 
   deploy:
     name: Deploy to Pages
-    needs: test
+    needs: [test, links]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -129,13 +135,13 @@ jobs:
         run: |
           set -euxo pipefail
           # WIDENED 2026-08-05. The old list missed docs/, and every file in it
-          # was serving at 200 on the live site. docs/LUXIGA_DISCOVERY_PLAYBOOK.md
-          # published the internal pricing method ("half their pain saved = price
-          # they'll accept") and named Justin twice, on the vendor domain, to any
-          # prospect who guessed the URL. Add to this list, never shorten it.
+          # was serving at 200 on the live site, including an internal sales
+          # document. Add to this list, never shorten it.
           rm -rf infrastructure .github tests docs scripts
           rm -f SESSION.md README.md package.json package-lock.json playwright.config.js
           rm -f "Idea rambling.moved-to-voicememo"
+          # WIDENED 2026-10-13. Repo config files served at 200 on the live site.
+          rm -f _config.yml .gitignore lighthouserc.json
           # WIDENED 2026-09-05. Every path above is top-level, so the prune could
           # not reach a nested one. CASSANDRA found that card/resume/src/ and
           # card/resume/README.md would have published the build script (with a
@@ -151,7 +157,7 @@ jobs:
           # like a prune that worked.
           for p in infrastructure .github tests docs scripts SESSION.md README.md \
                    package.json package-lock.json playwright.config.js \
-                   card/resume/src card/resume/README.md \
+                   card/resume/src card/resume/README.md _config.yml .gitignore lighthouserc.json \
                    "Idea rambling.moved-to-voicememo"; do
             if [ -e "$p" ]; then
               echo "::error::Non-public path '$p' survived the prune, refusing to publish"

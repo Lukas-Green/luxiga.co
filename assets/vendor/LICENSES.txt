@@ -1,0 +1,15 @@
+Third-party files in this folder, copied byte-for-byte from their published releases.
+
+aos-2.3.4.js, aos-2.3.4.css
+  AOS (Animate On Scroll) by Michał Sajnóg. MIT License.
+  https://github.com/michalsnik/aos
+
+feather-4.29.2.min.js
+  Feather Icons by Cole Bemis. MIT License.
+  https://github.com/feathericons/feather
+
+tailwind-play-3.4.17.js
+  Tailwind CSS Play CDN by Tailwind Labs. MIT License.
+  https://github.com/tailwindlabs/tailwindcss
+
+MIT License text: https://opensource.org/license/mit

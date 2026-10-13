@@ -82,14 +82,18 @@ section[id]{scroll-margin-top:64px}
 .question-wrap{max-width:680px;width:100%;margin:0 auto}
 .question-step{font-family:var(--mono);font-size:.8rem;color:var(--muted);letter-spacing:2px;margin-bottom:1.5rem}
 .question-text{font-size:clamp(1.4rem,3vw,1.85rem);font-weight:700;line-height:1.3;margin-bottom:2.5rem}
+.question-text:focus,.results-title:focus{outline:none}
 .options{display:flex;flex-direction:column;gap:.75rem}
-.option{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.25rem 1.5rem;cursor:pointer;transition:border-color .2s,background .2s,transform .15s}
+.option{display:block;width:100%;min-height:44px;text-align:left;font-family:var(--sans);color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.25rem 1.5rem;cursor:pointer;transition:border-color .2s,background .2s,transform .15s}
 .option:hover{border-color:var(--accent);background:rgba(196,255,83,.03);transform:translateX(4px)}
+.option:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .option.selected{border-color:var(--accent);background:rgba(196,255,83,.07)}
-.option-label{font-weight:600;font-size:1rem;margin-bottom:.25rem}
-.option-desc{font-size:.85rem;color:var(--muted);line-height:1.5}
-.back-btn{display:inline-flex;align-items:center;gap:.35rem;background:none;border:none;color:var(--muted);font-family:var(--sans);font-size:.85rem;cursor:pointer;margin-top:2rem;padding:.5rem 0;transition:color .2s}
+.option-label{display:block;font-weight:600;font-size:1rem;margin-bottom:.25rem}
+.option-desc{display:block;font-size:.85rem;color:var(--muted);line-height:1.5}
+.back-btn{display:inline-flex;align-items:center;gap:.35rem;background:none;border:none;color:var(--muted);font-family:var(--sans);font-size:.85rem;cursor:pointer;margin-top:2rem;padding:.5rem 0;min-height:44px;min-width:44px;transition:color .2s}
 .back-btn:hover{color:var(--text)}
+.back-btn:focus-visible,.btn-primary:focus-visible,.btn-secondary:focus-visible,.email-submit:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ── CALCULATING SCREEN ── */
 .calculating{align-items:center;justify-content:center;text-align:center;min-height:calc(100vh - 64px);gap:1.5rem}
@@ -115,7 +119,7 @@ section[id]{scroll-margin-top:64px}
 .score-circle-fg{fill:none;stroke:var(--accent);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.5s ease}
 .score-number{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.75rem;font-weight:700;font-family:var(--mono)}
 .score-number span{font-size:1.1rem;color:var(--muted)}
-.tier-badge{display:inline-block;padding:.4rem 1.25rem;border-radius:20px;font-weight:600;font-size:.85rem;letter-spacing:.5px}
+.tier-badge{display:inline-block;padding:.4rem 1.25rem;border-radius:4px;font-weight:600;font-size:.85rem;letter-spacing:.5px}
 
 /* Category bars */
 .categories{margin-bottom:3rem}
@@ -142,15 +146,10 @@ section[id]{scroll-margin-top:64px}
 .rec-num{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:2px;margin-bottom:.5rem}
 .rec-title{font-weight:600;font-size:1rem;margin-bottom:.35rem}
 .rec-desc{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem}
-.rec-impact{font-family:var(--mono);font-size:.7rem;letter-spacing:1px;padding:.25rem .75rem;border-radius:4px;display:inline-block}
+.rec-impact{font-family:var(--mono);font-size:.75rem;letter-spacing:1px;padding:.25rem .75rem;border-radius:4px;display:inline-block}
 .rec-impact.high{background:rgba(196,255,83,.12);color:var(--accent)}
-.rec-impact.medium{background:rgba(139,92,246,.12);color:var(--violet)}
-
-/* ROI */
-.roi{margin-bottom:3rem;padding:1.75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);text-align:center}
-.roi h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
-.roi-subtitle{font-size:.85rem;color:var(--muted);margin-bottom:.75rem}
-.roi-stat{font-size:1.1rem;font-weight:600;color:var(--accent);line-height:1.6}
+/* #C4B5FD on the tinted surface measures 9.37:1 (was #8B5CF6 at 4.09:1) */
+.rec-impact.medium{background:rgba(139,92,246,.12);color:#C4B5FD}
 
 /* CTA section */
 .results-cta{text-align:center;margin-bottom:2.5rem;padding:2.5rem 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card)}
@@ -164,10 +163,18 @@ section[id]{scroll-margin-top:64px}
 .email-capture{text-align:center;padding:2rem 0}
 .email-capture p{font-size:.9rem;color:var(--muted);margin-bottom:1rem}
 .email-form{display:flex;gap:.5rem;max-width:400px;margin:0 auto}
-.email-input{flex:1;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--text);font-family:var(--sans);font-size:.9rem;outline:none;transition:border-color .2s}
+.email-note{font-size:.8rem !important;margin-top:-.5rem}
+.email-input{flex:1;min-height:44px;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--text);font-family:var(--sans);font-size:.9rem;outline:none;transition:border-color .2s}
 .email-input:focus{border-color:var(--accent)}
+.email-input{border-color:#666684}
+.email-input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:fixed;top:-100px;left:1rem;z-index:10001;padding:.7rem 1.2rem;background:#C4FF53;color:#080810;font-weight:600;border-radius:6px}
+.skip-link:focus{top:1rem}
+.mobile-nav a{display:inline-flex;align-items:center;min-height:44px}
+.footer-link{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline;color:inherit}
 .email-input::placeholder{color:var(--muted)}
-.email-submit{padding:.75rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.85rem;border:none;border-radius:var(--radius-btn);cursor:pointer;font-family:var(--sans);transition:background .2s;white-space:nowrap}
+.email-submit{min-height:44px;padding:.75rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.85rem;border:none;border-radius:var(--radius-btn);cursor:pointer;font-family:var(--sans);transition:background .2s;white-space:nowrap}
 .email-submit:hover{background:var(--accent-hover)}
 .email-success{color:var(--accent);font-size:.85rem;margin-top:.75rem;display:none}
 
@@ -197,6 +204,7 @@ section[id]{scroll-margin-top:64px}
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to content</a>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="lx-x" viewBox="12 12 40 40"><path d="M37,12 L52,12 L27,52 L12,52 Z" fill="var(--x-violet,#8B5CF6)"/><path d="M12,12 L27,12 L52,52 L37,52 Z" fill="var(--x-lime,#C4FF53)"/></symbol></svg>
 
 <!-- NAV -->
@@ -205,30 +213,33 @@ section[id]{scroll-margin-top:64px}
   <div class="nav-links">
     <a href="/">Home</a>
     <a href="/#services">Services</a>
-    <a href="/audit" class="active">Pulse</a>
-    <a href="/#projects">Projects</a>
+    <a href="/#projects">Products</a>
+    <a href="/#proof">Proof</a>
+    <a href="/audit/" class="active" aria-current="page">Pulse</a>
     <a href="/#about">About</a>
     <a href="/#contact">Contact</a>
   </div>
-  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a call</a>
-  <button class="hamburger" aria-label="Toggle menu">
+  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
+  <button class="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE NAV -->
-<div class="mobile-nav">
+<div class="mobile-nav" id="mobileNav">
   <a href="/">Home</a>
   <a href="/#services">Services</a>
-  <a href="/audit">Pulse</a>
-  <a href="/#projects">Projects</a>
+  <a href="/#projects">Products</a>
+  <a href="/#proof">Proof</a>
+  <a href="/audit/" aria-current="page">Pulse</a>
   <a href="/#about">About</a>
   <a href="/#contact">Contact</a>
-  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a call</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
 </div>
+<div id="main-content" tabindex="-1"></div>
 
 <!-- PROGRESS BAR (hidden on intro/results) -->
-<div class="progress-wrap" id="progressWrap" style="display:none">
+<div class="progress-wrap" id="progressWrap" style="display:none" role="progressbar" aria-label="Assessment progress" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" aria-valuetext="Question 0 of 7">
   <div class="progress-bar" id="progressBar" style="width:0%"></div>
 </div>
 
@@ -240,7 +251,7 @@ section[id]{scroll-margin-top:64px}
     <div class="intro">
       <div class="intro-label">Digital Readiness Assessment</div>
       <h1>Take the Pulse</h1>
-      <p class="intro-subtitle">7 questions. 3 minutes. A clear picture of where your business stands , and where the leverage is.</p>
+      <p class="intro-subtitle">7 questions. 3 minutes. A clear picture of where your business stands, and where the leverage is.</p>
       <div class="intro-features">
         <div class="intro-feature">
           <div class="icon" aria-hidden="true">
@@ -268,7 +279,7 @@ section[id]{scroll-margin-top:64px}
             </svg>
           </div>
           <div class="label">Scored</div>
-          <div class="desc">Benchmarked against your industry</div>
+          <div class="desc">Scored across three categories</div>
         </div>
         <div class="intro-feature">
           <div class="icon" aria-hidden="true">
@@ -292,17 +303,17 @@ section[id]{scroll-margin-top:64px}
   <!-- QUESTION SCREENS (generated by JS) -->
   <div class="screen question-screen" id="screen-question">
     <div class="question-wrap">
-      <div class="question-step" id="questionStep"></div>
-      <div class="question-text" id="questionText"></div>
-      <div class="options" id="optionsContainer"></div>
-      <button class="back-btn" id="backBtn" onclick="goBack()">&larr; Back</button>
+      <div class="question-step" id="questionStep" aria-live="polite"></div>
+      <h2 class="question-text" id="questionText" tabindex="-1"></h2>
+      <div class="options" id="optionsContainer" role="group" aria-labelledby="questionText"></div>
+      <button type="button" class="back-btn" id="backBtn" onclick="goBack()">&larr; Back</button>
     </div>
   </div>
 
   <!-- CALCULATING SCREEN -->
   <div class="screen calculating" id="screen-calculating">
-    <div class="calc-text">Calculating your results</div>
-    <div class="calc-dots">
+    <div class="calc-text" role="status" aria-live="polite">Calculating your results</div>
+    <div class="calc-dots" aria-hidden="true">
       <div class="calc-dot"></div>
       <div class="calc-dot"></div>
       <div class="calc-dot"></div>
@@ -314,7 +325,7 @@ section[id]{scroll-margin-top:64px}
     <div class="results-wrap">
       <div class="results-header">
         <div class="results-label">Your Results</div>
-        <div class="results-title">Digital Readiness Score</div>
+        <h2 class="results-title" id="resultsTitle" tabindex="-1">Digital Readiness Score</h2>
       </div>
 
       <!-- Score Circle -->
@@ -347,31 +358,27 @@ section[id]{scroll-margin-top:64px}
         <div class="rec-cards" id="recCards"></div>
       </div>
 
-      <!-- ROI -->
-      <div class="roi">
-        <h3>Estimated Impact</h3>
-        <div class="roi-subtitle">Based on typical businesses at your readiness level...</div>
-        <div class="roi-stat" id="roiStat"></div>
-      </div>
-
       <!-- CTA -->
       <div class="results-cta">
         <h3>Ready to act on this?</h3>
         <p>I help businesses turn these insights into working systems. Let's talk about where to start.</p>
         <div class="results-cta-btns">
-          <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a 30-min call &rarr;</a>
+          <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
           <a href="/" class="btn-secondary">&larr; Back to LUXIGA</a>
         </div>
       </div>
 
       <!-- Email Capture -->
       <div class="email-capture">
-        <p>Want a copy of your results?</p>
+        <p>Want Lukas to follow up on these results?</p>
+        <p class="email-note">Your email and answers go only to Lukas. No list, no spam. <a href="/privacy.html" style="text-decoration:underline;display:inline-flex;align-items:center;min-height:44px">Privacy</a></p>
         <form class="email-form" id="emailForm" onsubmit="handleEmail(event)">
-          <input type="email" class="email-input" id="emailInput" placeholder="you@company.com" required>
-          <button type="submit" class="email-submit">Send Results</button>
+          <label for="emailInput" class="sr-only">Your email address</label>
+          <input type="email" class="email-input" id="emailInput" name="email" placeholder="you@company.com" autocomplete="email" required>
+          <input type="text" name="_gotcha" id="lxHp7f" tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore style="position:absolute;left:-9999px" aria-hidden="true">
+          <button type="submit" class="email-submit">Send to Lukas</button>
         </form>
-        <div class="email-success" id="emailSuccess">Saved! We'll be in touch.</div>
+        <div class="email-success" id="emailSuccess" role="status" aria-live="polite"></div>
       </div>
     </div>
   </div>
@@ -381,7 +388,7 @@ section[id]{scroll-margin-top:64px}
 <!-- FOOTER -->
 <footer class="footer" style="padding:2.5rem 2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;max-width:100%">
   <div class="footer-brand" aria-label="LUXIGA" style="font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:2px">L<span class="ux" style="color:var(--accent)">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</div>
-  <div class="footer-copy" style="font-size:.8rem;color:var(--muted)">&copy; 2026 LUXIGA LLC. All rights reserved.</div>
+  <div class="footer-copy" style="font-size:.8rem;color:var(--muted)">&copy; 2026 LUXIGA LLC. All rights reserved. &middot; <a href="/privacy.html" class="footer-link">Privacy</a></div>
 </footer>
 
 <script>
@@ -457,25 +464,41 @@ function startAssessment() {
 function renderQuestion() {
   const q = questions[currentQuestion];
   document.getElementById('questionStep').textContent = 'Question ' + (currentQuestion + 1) + ' of 7';
-  document.getElementById('questionText').textContent = q.text;
+  const heading = document.getElementById('questionText');
+  heading.textContent = q.text;
 
   // Progress bar
   document.getElementById('progressBar').style.width = ((currentQuestion + 1) / 7 * 100) + '%';
+  const pw = document.getElementById('progressWrap');
+  pw.setAttribute('aria-valuenow', currentQuestion + 1);
+  pw.setAttribute('aria-valuetext', 'Question ' + (currentQuestion + 1) + ' of 7');
 
   // Back button
   document.getElementById('backBtn').style.display = currentQuestion === 0 ? 'none' : 'inline-flex';
 
-  // Options
+  // Options: real buttons so keyboard and screen reader users can answer
   const container = document.getElementById('optionsContainer');
   container.innerHTML = '';
   q.options.forEach((opt, i) => {
-    const div = document.createElement('div');
-    div.className = 'option';
-    if (answers[currentQuestion] === i) div.classList.add('selected');
-    div.innerHTML = '<div class="option-label">' + opt.label + '</div><div class="option-desc">' + opt.desc + '</div>';
-    div.addEventListener('click', () => selectOption(i));
-    container.appendChild(div);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'option';
+    const selected = answers[currentQuestion] === i;
+    btn.classList.toggle('selected', selected);
+    btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    const label = document.createElement('span');
+    label.className = 'option-label';
+    label.textContent = opt.label;
+    const desc = document.createElement('span');
+    desc.className = 'option-desc';
+    desc.textContent = opt.desc;
+    btn.append(label, desc);
+    btn.addEventListener('click', () => selectOption(i));
+    container.appendChild(btn);
   });
+
+  // Move focus to the question so the next Tab lands on its first answer
+  heading.focus({ preventScroll: true });
 }
 
 function selectOption(index) {
@@ -486,6 +509,7 @@ function selectOption(index) {
   // Visual feedback
   document.querySelectorAll('.option').forEach((o, i) => {
     o.classList.toggle('selected', i === index);
+    o.setAttribute('aria-pressed', i === index ? 'true' : 'false');
   });
 
   // Auto-advance
@@ -518,6 +542,7 @@ function showCalculating() {
     calculateResults();
     showScreen('results');
     animateResults();
+    document.getElementById('resultsTitle').focus({ preventScroll: true });
   }, 1500);
 }
 
@@ -559,7 +584,8 @@ function animateResults() {
   // -- Tier badge --
   const badge = document.getElementById('tierBadge');
   let tierText, tierColor;
-  if (r.totalScore <= 11) { tierText = 'Getting Started'; tierColor = '#FF6B6B'; }
+  // All four tier colors measure 7:1 or better on their own 10% tint (#FF8A8A is 7.79:1)
+  if (r.totalScore <= 11) { tierText = 'Getting Started'; tierColor = '#FF8A8A'; }
   else if (r.totalScore <= 17) { tierText = 'Building Foundation'; tierColor = '#FFD166'; }
   else if (r.totalScore <= 22) { tierText = 'Well Positioned'; tierColor = '#64B5FF'; }
   else { tierText = 'Digitally Mature'; tierColor = '#C4FF53'; }
@@ -596,7 +622,7 @@ function animateResults() {
   if (r.automation < 2.5) findings.push("Your team spends significant time on tasks that could be automated. This is your highest-leverage improvement area.");
   if (r.data < 2.5) findings.push("Client and operational data isn't consistently captured. Decisions are likely based on incomplete information.");
   if (r.knowledge < 2.5) findings.push("Institutional knowledge is at risk. When team members leave, critical process knowledge goes with them.");
-  if (findings.length === 0) findings.push("Your foundation is solid. The next step is connecting your systems and finding the 20% of remaining manual work that creates 80% of the friction.");
+  if (findings.length === 0) findings.push("Your foundation is solid. The next step is connecting your systems.");
   // Add a general finding if we have fewer than 3
   if (findings.length < 3 && r.automation >= 2.5) findings.push("Your automation is in good shape. Look for opportunities to connect existing automations for compound efficiency gains.");
   if (findings.length < 3 && r.data >= 2.5) findings.push("Your data practices provide a solid base. Consider how real-time analytics could accelerate decision-making.");
@@ -611,9 +637,9 @@ function animateResults() {
   // -- Recommendations --
   const recsMap = {
     automation: [
-      { title: "Map your top 5 repetitive tasks", desc: "Catalog the recurring work that eats the most hours. Rank by frequency and time cost per occurrence.", impact: "high" }, { title: "Identify what runs on tools you already have", desc: "Most teams only use 30% of their existing tool capabilities. Audit before buying anything new.", impact: "high" }, { title: "Start with the highest time-saver", desc: "Pick the one task that saves the most minutes per week and automate it first. Build momentum from wins.", impact: "medium" }
+      { title: "Map your top 5 repetitive tasks", desc: "Catalog the recurring work that eats the most hours. Rank by frequency and time cost per occurrence.", impact: "high" }, { title: "Identify what runs on tools you already have", desc: "Check what your current tools can already do. Audit before buying anything new.", impact: "high" }, { title: "Start with the highest time-saver", desc: "Pick the one task that saves the most minutes per week and automate it first. Build momentum from wins.", impact: "medium" }
     ], visibility: [
-      { title: "Audit where team status lives today", desc: "List every place someone checks to understand what's happening. You'll likely find 5+ sources of partial truth.", impact: "high" }, { title: "Consolidate to a single dashboard", desc: "Choose one shared space for status updates. It doesn't need to be perfect. It needs to be used.", impact: "high" }, { title: "Set up a weekly async update ritual", desc: "Replace status meetings with a structured written check-in. Recovers meeting time while improving visibility.", impact: "medium" }
+      { title: "Audit where team status lives today", desc: "List every place someone checks to understand what's happening.", impact: "high" }, { title: "Consolidate to a single dashboard", desc: "Choose one shared space for status updates. It doesn't need to be perfect. It needs to be used.", impact: "high" }, { title: "Set up a weekly async update ritual", desc: "Replace status meetings with a structured written check-in. Recovers meeting time while improving visibility.", impact: "medium" }
     ], integration: [
       { title: "List every tool your team touches in a week", desc: "Map the full tool landscape. Include the unofficial ones: personal spreadsheets, sticky notes, workarounds.", impact: "high" }, { title: "Identify the manual bridges between tools", desc: "Find where someone is copy-pasting, re-entering, or manually syncing data between systems.", impact: "high" }, { title: "Prioritize the connection that eliminates the most copy-paste", desc: "One well-placed integration can remove hours of weekly manual work and reduce errors.", impact: "medium" }
     ], intelligence: [
@@ -634,16 +660,6 @@ function animateResults() {
       '<span class="rec-impact ' + rec.impact + '">' + rec.impact.toUpperCase() + ' IMPACT</span>';
     recCardsEl.appendChild(card);
   });
-
-  // -- ROI --
-  const roiEl = document.getElementById('roiStat');
-  if (r.totalScore < 15) {
-    roiEl.textContent = "Organizations at this stage typically recover 10\u201315 hours/week through targeted automation.";
-  } else if (r.totalScore <= 21) {
-    roiEl.textContent = "Organizations at this stage typically recover 5\u201310 hours/week by connecting existing systems.";
-  } else {
-    roiEl.textContent = "Organizations at this stage typically see 15\u201325% efficiency gains from strategic optimization.";
-  }
 }
 
 function animateCounter(el, from, to, duration) {
@@ -665,9 +681,18 @@ function handleEmail(e) {
   const email = document.getElementById('emailInput').value;
   if (!email) return;
 
+  // Honeypot: only bots fill this. Abort silently, as if it sent.
+  const gotcha = document.getElementById('lxHp7f').value;
+  if (gotcha) {
+    document.getElementById('emailSuccess').textContent = "Sent. Lukas will be in touch.";
+    document.getElementById('emailForm').style.display = 'none';
+    document.getElementById('emailSuccess').style.display = 'block';
+    return;
+  }
+
   const r = window.pulseResults;
   const payload = {
-    email: email, source: 'luxiga.co / digital readiness audit', _subject: 'New lead: Digital Readiness Audit (' + email + ')', score: r.totalScore + ' / 24', tier: r.totalScore <= 11 ? 'Getting Started' : r.totalScore <= 17 ? 'Building Foundation' : r.totalScore <= 22 ? 'Well Positioned' : 'Digitally Mature', automation: r.automation.toFixed(1) + ' / 4.0', data_management: r.data.toFixed(1) + ' / 4.0', knowledge_process: r.knowledge.toFixed(1) + ' / 4.0', priority_area: r.q7Category, q1_repetitive_tasks: questions[0].options[answers[0]].label, q2_data_capture: questions[1].options[answers[1]].label, q3_knowledge_retention: questions[2].options[answers[2]].label, q4_decision_making: questions[3].options[answers[3]].label, q5_team_comms: questions[4].options[answers[4]].label, q6_error_rate: questions[5].options[answers[5]].label, q7_priority_fix: questions[6].options[answers[6]].label, answers_summary: answers.map((a, i) =>
+    _gotcha: gotcha, email: email, source: 'luxiga.co / digital readiness audit', _subject: 'New lead: Digital Readiness Audit (' + email + ')', score: r.totalScore + ' / 24', tier: r.totalScore <= 11 ? 'Getting Started' : r.totalScore <= 17 ? 'Building Foundation' : r.totalScore <= 22 ? 'Well Positioned' : 'Digitally Mature', automation: r.automation.toFixed(1) + ' / 4.0', data_management: r.data.toFixed(1) + ' / 4.0', knowledge_process: r.knowledge.toFixed(1) + ' / 4.0', priority_area: r.q7Category, q1_repetitive_tasks: questions[0].options[answers[0]].label, q2_data_capture: questions[1].options[answers[1]].label, q3_knowledge_retention: questions[2].options[answers[2]].label, q4_decision_making: questions[3].options[answers[3]].label, q5_team_comms: questions[4].options[answers[4]].label, q6_error_rate: questions[5].options[answers[5]].label, q7_priority_fix: questions[6].options[answers[6]].label, answers_summary: answers.map((a, i) =>
       (i + 1) + '. ' + questions[i].text + '\n   → ' + questions[i].options[a].label
     ).join('\n\n')
   };
@@ -679,7 +704,7 @@ function handleEmail(e) {
     if (res.ok) {
       // Reset the text. A previous failed attempt leaves the error string here,
       // so a successful retry was telling people it had failed.
-      document.getElementById('emailSuccess').textContent = "Saved! We'll be in touch.";
+      document.getElementById('emailSuccess').textContent = "Sent. Lukas will be in touch.";
       document.getElementById('emailForm').style.display = 'none';
       document.getElementById('emailSuccess').style.display = 'block';
     } else {
@@ -698,8 +723,17 @@ function handleEmail(e) {
 
 // Mobile nav toggle
 document.querySelector('.hamburger').addEventListener('click', function() {
-  this.classList.toggle('open');
+  const open = this.classList.toggle('open');
   document.querySelector('.mobile-nav').classList.toggle('open');
+  this.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) { const first = document.querySelector('.mobile-nav a'); if (first) first.focus(); }
+});
+document.addEventListener('keydown', e => {
+  const nav = document.querySelector('.mobile-nav'), hb = document.querySelector('.hamburger');
+  if (e.key === 'Escape' && nav.classList.contains('open')) {
+    hb.classList.remove('open'); nav.classList.remove('open');
+    hb.setAttribute('aria-expanded', 'false'); hb.focus();
+  }
 });
 
 // Close mobile nav on link click

@@ -5,7 +5,8 @@ const { test, expect } = require('@playwright/test');
 test.describe('Page loads', () => {
   const pages = [
     ['Home', '/'],
-    ['Pulse', '/pulse.html'],
+    ['Pulse', '/audit/'],
+    ['Pulse redirect stub', '/pulse.html'],
     ['LUXIGA Bill case study', '/case-studies/solobill.html'],
     ['CanvassKit case study', '/case-studies/canvasskit.html'],
   ];
@@ -32,6 +33,9 @@ test.describe('SEO', () => {
 // ── Desktop Navigation ──
 
 test.describe('Desktop Navigation', () => {
+  // Desktop nav is hidden below 768px by design; hover has no meaning on touch.
+  test.skip(({ isMobile }) => isMobile, 'desktop-only nav behavior');
+
   test('Nav has expected links (4 top-level + 2 in Work dropdown)', async ({ page }) => {
     await page.goto('/');
     // 4 direct links (Services, Pulse, About, Contact) + 2 dropdown links (Products, Proof)
@@ -131,24 +135,62 @@ test.describe('Mobile Navigation', () => {
 test.describe('Subpage mobile nav', () => {
   test.use({ viewport: { width: 375, height: 812 } });
 
-  test('Pulse page hamburger works', async ({ page }) => {
-    await page.goto('/pulse.html');
+  // Pulse lives at /audit/ only. Its hamburger has no aria-expanded (see report),
+  // so these assert the class-based open state that audit/index.html actually uses.
+  test('Pulse (/audit/) hamburger opens and closes the mobile nav', async ({ page }) => {
+    await page.goto('/audit/');
     const hamburger = page.locator('.hamburger');
     const mobileNav = page.locator('.mobile-nav');
     await expect(hamburger).toBeVisible();
+    await expect(mobileNav).not.toBeVisible();
     await hamburger.click();
     await expect(mobileNav).toBeVisible();
+    await hamburger.click();
+    await expect(mobileNav).not.toBeVisible();
   });
 
-  test('Pulse page has Home link to index', async ({ page }) => {
-    await page.goto('/pulse.html');
-    const homeLink = page.locator('.mobile-nav a[href="index.html"]');
+  test('Pulse (/audit/) mobile nav has a Home link to /', async ({ page }) => {
+    await page.goto('/audit/');
+    const homeLink = page.locator('.mobile-nav a').filter({ hasText: /^Home$/ });
     await expect(homeLink).toHaveCount(1);
+    await expect(homeLink).toHaveAttribute('href', '/');
+  });
+
+  test('/pulse.html forwards to /audit/ (meta refresh + visible link)', async ({ request, page }) => {
+    const res = await request.get('/pulse.html');
+    expect(res.status()).toBe(200);
+    const html = await res.text();
+    expect(html).toMatch(/<meta[^>]+http-equiv="refresh"[^>]+url=\/audit\//i);
+    expect(html).toMatch(/<a[^>]+href="\/audit\/"/i);
+    await page.goto('/pulse.html');
+    await page.waitForURL('**/audit/');
+    await expect(page.locator('h1')).toHaveText('Take the Pulse');
+  });
+
+  test('Case study hamburger toggles aria-expanded and Escape closes it', async ({ page }) => {
+    await page.goto('/case-studies/solobill.html');
+    const hamburger = page.locator('.hamburger');
+    const mobileNav = page.locator('#mobileNav');
+    await expect(hamburger).toHaveAttribute('aria-expanded', 'false');
+    await hamburger.click();
+    await expect(mobileNav).toBeVisible();
+    await expect(hamburger).toHaveAttribute('aria-expanded', 'true');
+    await page.keyboard.press('Escape');
+    await expect(mobileNav).not.toBeVisible();
+    await expect(hamburger).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('Case study skip link targets the main content', async ({ page }) => {
+    await page.goto('/case-studies/solobill.html');
+    const skip = page.locator('a.skip-link');
+    await expect(skip).toHaveCount(1);
+    const target = (await skip.getAttribute('href')).slice(1);
+    await expect(page.locator(`[id="${target}"]`)).toHaveCount(1);
   });
 
   test('Case study has Home link to parent index', async ({ page }) => {
     await page.goto('/case-studies/solobill.html');
-    const homeLink = page.locator('.mobile-nav a').filter({ hasText: 'Home' });
+    const homeLink = page.locator('#mobileNav a').filter({ hasText: 'Home' });
     await expect(homeLink).toHaveCount(1);
     const href = await homeLink.getAttribute('href');
     expect(href).toContain('index.html');

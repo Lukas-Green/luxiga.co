@@ -130,9 +130,24 @@ ul{list-style:none}
 .wm-x{height:.74em;width:.66em;display:inline-block;vertical-align:baseline;margin:0 -.008em}
 .nav-brand .wm-x{height:.8em;width:.64em}
 .footer-brand .wm-x,.foot-brand .wm-x,.brand .wm-x{height:.8em;width:.64em}
+
+/* ══ AUDIT FIXES 2026-10 ══ */
+:root{--x-lime:#C4FF53;--x-violet:#8B5CF6}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:fixed;top:-100px;left:1rem;z-index:10001;padding:.7rem 1.2rem;background:#C4FF53;color:#080810;font-weight:600;border-radius:6px}
+.skip-link:focus{top:1rem}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid #C4FF53;outline-offset:3px;border-radius:4px}
+.nav-links a{display:inline-flex;align-items:center;min-height:44px}
+.cs-page-nav a{display:inline-flex;align-items:center;min-height:44px}
+.cs-tag{color:#A78BFA}
+.cs-meta-item label,.demo-url,.demo-fullscreen,.vert-status{font-size:.75rem}
+.demo-fullscreen{display:inline-flex;align-items:center;min-height:44px}
+.mobile-nav a{display:inline-flex;align-items:center;min-height:44px}
+.footer-link{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline;color:inherit}
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to content</a>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="lx-x" viewBox="12 12 40 40"><path d="M37,12 L52,12 L27,52 L12,52 Z" fill="var(--x-violet,#8B5CF6)"/><path d="M12,12 L27,12 L52,52 L37,52 Z" fill="var(--x-lime,#C4FF53)"/></symbol></svg>
 
 <!-- NAV -->
@@ -141,25 +156,30 @@ ul{list-style:none}
   <div class="nav-links">
     <a href="../index.html#home">Home</a>
     <a href="../index.html#services">Services</a>
-    <a href="../index.html#projects">Projects</a>
+    <a href="../index.html#projects">Products</a>
+    <a href="../index.html#proof">Proof</a>
+    <a href="../audit/">Pulse</a>
     <a href="../index.html#about">About</a>
     <a href="../index.html#contact">Contact</a>
   </div>
-  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a call</a>
-  <button class="hamburger" aria-label="Toggle menu">
+  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
+  <button class="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- MOBILE NAV -->
-<div class="mobile-nav">
+<div class="mobile-nav" id="mobileNav">
   <a href="../index.html#home">Home</a>
   <a href="../index.html#services">Services</a>
-  <a href="../index.html#projects">Projects</a>
+  <a href="../index.html#projects">Products</a>
+  <a href="../index.html#proof">Proof</a>
+  <a href="../audit/">Pulse</a>
   <a href="../index.html#about">About</a>
   <a href="../index.html#contact">Contact</a>
-  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a call</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
 </div>
+<div id="main-content" tabindex="-1"></div>
 
 <!-- HERO -->
 <section class="cs-hero">
@@ -167,7 +187,7 @@ ul{list-style:none}
     <a href="../index.html#projects" class="cs-back">&larr; Back to Projects</a>
     <div class="cs-tag">Invoicing / Finance</div>
     <h1 class="cs-title">LUXIGA Bill</h1>
-    <p class="cs-tagline">A journeyman plumber needed to send invoices. Every platform wanted $30/month for features he'd never touch. I built one inside the tools he already had open.</p>
+    <p class="cs-tagline">A one-person trade business needs to send invoices. Most platforms charge a monthly fee for features it will never touch. This one runs inside the tools it already has open.</p>
     <div class="cs-meta">
       <div class="cs-meta-item">
         <label>Role</label>
@@ -175,7 +195,7 @@ ul{list-style:none}
       </div>
       <div class="cs-meta-item">
         <label>Stack</label>
-        <span>Google Apps Script, Google Docs, PDF</span>
+        <span>Google Apps Script, Google Sheets, PDF</span>
       </div>
       <div class="cs-meta-item">
         <label>Built For</label>
@@ -183,7 +203,7 @@ ul{list-style:none}
       </div>
       <div class="cs-meta-item">
         <label>Status</label>
-        <span>MVP complete, in refinement</span>
+        <span>Live</span>
       </div>
     </div>
   </div>
@@ -207,8 +227,8 @@ ul{list-style:none}
 <section class="cs-section bg-dark">
   <div class="container">
     <div class="cs-section-label">The Pain</div>
-    <h2 class="cs-section-title">Every platform charges for 90% you don't use</h2>
-    <p>A friend, a journeyman plumber and licensed contractor, needed a way to send invoices. He'd been writing them by hand or using Word templates. Every invoicing platform he tried charged $20-30/month for features like team management, inventory tracking, and CRM pipelines. He needed one thing: generate a professional invoice, track it, and send it.</p>
+    <h2 class="cs-section-title">Every platform charges for features you don't use</h2>
+    <p>A one-person contractor needs to send invoices. The usual options are writing them by hand, a word-processor template, or an invoicing platform with a monthly fee for team management, inventory tracking and CRM pipelines. The actual job is one thing: generate a professional invoice, track it, and send it.</p>
     <p>The tools weren't built for people like him. They were built for companies that had outgrown the problem he was trying to solve for the first time.</p>
   </div>
 </section>
@@ -228,9 +248,9 @@ ul{list-style:none}
   <div class="container">
     <div class="cs-section-label">What I Built</div>
     <h2 class="cs-section-title">Full invoicing flow with live calculations</h2>
-    <p>LUXIGA Bill is a complete invoicing system that runs inside Google Sheets. The sidebar UI handles everything: client management, line-item entry with live calculation, tax computation, and one-click invoice generation.</p>
-    <p>Line items calculate dynamically. Quantity &times; rate updates the subtotal in real time. Tax is computed at the row level. The total reflects everything as you type. When you click "Generate Invoice," Apps Script builds a formatted Google Doc from the data and exports it as a PDF.</p>
-    <blockquote class="cs-quote">"The best tool for a one-person operation is the one that doesn't require a second person to manage."</blockquote>
+    <p>LUXIGA Bill is a complete invoicing system that runs inside Google Sheets. The web app handles everything: client management, line-item entry with live calculation, tax computation, and one-click invoice generation.</p>
+    <p>Line items calculate dynamically. Quantity &times; rate updates the subtotal in real time. Tax is computed on the subtotal. The total reflects everything as you type. When you click "Generate Invoice," Apps Script renders the invoice from an HTML template and saves it as a PDF.</p>
+    <blockquote class="cs-quote">The best tool for a one-person operation is the one that doesn't require a second person to manage.</blockquote>
   </div>
 </section>
 
@@ -240,11 +260,11 @@ ul{list-style:none}
     <div class="cs-section-label">How It Works</div>
     <h2 class="cs-section-title">Multi-tab Sheet model with client-side calculations</h2>
     <p>The Sheet has dedicated tabs: Invoices (the ledger), Clients (contact details), and Settings (business info, tax rate, invoice numbering). The sidebar reads and writes to these tabs through Apps Script.</p>
-    <p>All line-item math happens client-side for instant feedback. When saved, the complete invoice data writes to the Invoices tab as a single row with a JSON-serialized line items field. This keeps the ledger flat and queryable while supporting arbitrary line item counts.</p>
+    <p>All line-item math happens client-side for instant feedback. When saved, the invoice writes one row to the Invoices tab and one row per line item to a separate sheet, so the ledger stays queryable with any number of line items.</p>
     <ul class="cs-findings">
       <li>Client-side calculation eliminates server round-trips during line item editing</li>
-      <li>JSON serialization of line items in a flat Sheet avoids the "one row per line item" explosion</li>
-      <li>PDF generation uses Google Docs as a template engine: reliable, free, already trusted</li>
+      <li>Line items live in their own sheet, linked by invoice ID, so the main ledger stays one row per invoice</li>
+      <li>PDF generation uses an HTML template inside Apps Script: free, and nothing extra to install</li>
     </ul>
   </div>
 </section>
@@ -253,9 +273,8 @@ ul{list-style:none}
 <section class="cs-section bg-dark">
   <div class="container">
     <div class="cs-section-label">Status</div>
-    <h2 class="cs-section-title">MVP complete. Report tab coming.</h2>
-    <p>The core invoicing flow is complete and functional. Create, calculate, generate, export. The Report tab (revenue by month, outstanding invoices) and automated email sending are next.</p>
-    <p>LUXIGA Bill is also a candidate for integration into FieldKit as a vertical configuration: the same engine, tuned for contractor invoicing.</p>
+    <h2 class="cs-section-title">Live.</h2>
+    <p>The core invoicing flow is live: create, calculate, generate, save the PDF to a per-client folder, and send by email.</p>
   </div>
 </section>
 
@@ -270,7 +289,7 @@ ul{list-style:none}
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-brand" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</div>
-  <div class="footer-copy">&copy; 2026 LUXIGA LLC. All rights reserved.</div>
+  <div class="footer-copy">&copy; 2026 LUXIGA LLC. All rights reserved. &middot; <a href="/privacy.html" class="footer-link">Privacy</a></div>
 </footer>
 
 <script>
@@ -278,8 +297,18 @@ ul{list-style:none}
 const hamburger = document.querySelector('.hamburger');
 const mobileNav = document.querySelector('.mobile-nav');
 hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
+  const open = hamburger.classList.toggle('open');
   mobileNav.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) { const first = mobileNav.querySelector('a'); if (first) first.focus(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.focus();
+  }
 });
 mobileNav.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => {

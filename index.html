@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- CSP: script hashes must be regenerated after ANY edit to an inline script (tests/csp.spec.js fails if stale). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-OyzdfCirH8txlCBzyw/Q0oJYcXEYzLhRJFosnd1tePA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://formspree.io; form-action https://formspree.io; frame-src 'self'; object-src 'none'; base-uri 'self'">
 <title>LUXIGA · AI Design Technology Studio</title>
 <meta name="description" content="LUXIGA builds small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in, built to keep working after launch.">
 <meta name="author" content="Lukas Green">
@@ -32,6 +34,7 @@
 <link rel="icon" type="image/svg+xml" sizes="32x32" href="/favicon-32.svg">
 <link rel="icon" type="image/svg+xml" sizes="16x16" href="/favicon-16.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.svg">
+<script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -457,7 +460,6 @@ section{padding:6rem 2rem}
 [data-theme="light"] .hero-wordmark .ux{color:var(--accent-text);text-shadow:none}
 [data-theme="light"] .hero-headline{color:var(--text)}
 [data-theme="light"] .hero-subtitle .name-text{color:var(--accent-text)}
-[data-theme="light"] .hero-subtitle .title-text{color:var(--violet)}
 [data-theme="light"] .btn-primary{background:var(--accent-btn-bg);color:var(--accent-btn-text)}
 [data-theme="light"] .btn-primary:hover{background:var(--accent-hover)}
 [data-theme="light"] .stat-number{color:var(--accent-text)}
@@ -498,7 +500,6 @@ section{padding:6rem 2rem}
 [data-theme="light"] .building-strip{background:var(--surface);border-color:var(--border);border-left-color:var(--violet)}
 [data-theme="light"] .building-strip h3{color:var(--text)}
 [data-theme="light"] .building-strip p{color:var(--muted)}
-[data-theme="light"] .building-label{color:var(--violet)}
 [data-theme="light"] .building-domains span{background:var(--bg);color:var(--text);border-color:rgba(109,40,217,.25)}
 [data-theme="light"] .building-note{color:var(--muted)}
 [data-theme="light"] .building-note a{color:var(--accent-text)}
@@ -530,6 +531,78 @@ section{padding:6rem 2rem}
 [data-theme="light"] .wm-x{filter:drop-shadow(0 0 6px rgba(109,40,217,.18))}
 [data-theme="dark"] .wm-x{filter:drop-shadow(0 0 12px rgba(196,255,83,.4)) drop-shadow(0 0 16px rgba(139,92,246,.32))}
 .nav-brand .wm-x{height:.8em;width:.64em}
+
+/* ══ AUDIT FIXES 2026-10 ══ accessibility, contrast, honest pills. Overrides the rules above. */
+:root{--violet-text:#B9A2FF;--error:#FF8A8A;--input-border:#5A5A78}
+@media(prefers-color-scheme:light){:root{--accent-text:#2E5200;--violet-text:#5B21B6;--error:#9B0019;--input-border:#8A8499}}
+[data-theme="light"]{--accent-text:#2E5200;--violet-text:#5B21B6;--error:#9B0019;--input-border:#8A8499}
+[data-theme="dark"]{--accent-text:#C4FF53;--violet-text:#B9A2FF;--error:#FF8A8A;--input-border:#5A5A78}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* the real cursor always shows; the ring is a mouse-only flourish */
+body{cursor:auto}
+.cursor-dot{display:none}
+@media not all and (pointer:fine){.cursor-ring{display:none}}
+/* focus + skip link readable in both themes */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--accent-text);outline-offset:3px}
+.skip-link{background:var(--accent-btn-bg);color:var(--accent-btn-text)}
+/* toggled-dark on a light-mode device: nav + menu back to dark */
+[data-theme="dark"] .nav{background:rgba(8,8,16,.7)}
+[data-theme="dark"] .mobile-nav{background:rgba(8,8,16,.95)}
+/* accent text on surfaces uses the theme-safe token */
+.proof-client-tag,.project-link,.building-note a,.contact-email,.section-label,.hero-kicker,.project-origin{color:var(--accent-text)}
+.contact-email{color:var(--accent-text)!important}
+.service-num,.project-tag,.hero-subtitle .title-text,.building-label,.projects-more a{color:var(--violet-text)}
+.theme-toggle{border-color:var(--accent-text);color:var(--accent-text)}
+.form-status.error{color:var(--error)}
+.form-group input,.form-group select,.form-group textarea{border-color:var(--input-border)}
+/* 12px minimum text */
+.project-card-badge,.project-status,.project-tag,.building-label,.proof-client-tag,.site-card-tag{font-size:.75rem}
+@media(max-width:768px){.hero-kicker{font-size:.75rem;letter-spacing:1.5px}}
+/* status labels are not buttons: square tags, no pulsing */
+.project-card-badge,.project-status{border-radius:4px;animation:none}
+.stack-pill{border-radius:4px;cursor:default}
+.stack-pill:hover{transform:none;box-shadow:none}
+.stack-pill:hover::before{opacity:0}
+/* animations stop after a few cycles (WCAG 2.2.2) */
+.hero-kicker-dot{animation-iteration-count:3}
+.hero-orb--lime,.hero-orb--violet{animation-iteration-count:1,2}
+.stack-pulse{animation-iteration-count:2}
+/* 44px tap targets */
+.project-link,.building-note a,.contact-cal{display:inline-flex;align-items:center;min-height:44px}
+.contact-socials a{width:44px;height:44px}
+.nav-links a,.nav-dropdown-toggle{display:inline-flex;align-items:center;min-height:44px}
+.footer-link{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline}
+/* honeypot + privacy line */
+.hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-privacy{font-size:.8rem;color:var(--muted);margin-top:.75rem;text-align:center}
+.form-privacy a{text-decoration:underline;display:inline-flex;align-items:center;min-height:44px}
+/* second pass (re-measure 2026-10-13) */
+.nav-cta{background:var(--accent-btn-bg);color:var(--accent-btn-text);display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:768px){.nav-cta{display:none}}
+.nav-brand{display:inline-flex;align-items:center;min-height:44px}
+.mobile-nav a{display:inline-flex;align-items:center;min-height:44px}
+.projects-more a{display:inline-block;padding:.7rem 0}
+.contact-email{display:inline-flex;align-items:center;min-height:44px}
+.form-group input,.form-group select{min-height:44px}
+.hero-kicker{font-size:.75rem}
+.project-stack span,.proof-points span,.building-domains span,.building-note{font-size:.75rem}
+.project-spark{color:var(--accent-text)}
+.project-link:hover,.building-note a:hover,.contact-email:hover{color:var(--violet-text)!important}
+.form-group ::placeholder{color:var(--muted);opacity:1}
+:root{--input-border:#666684}
+[data-theme="dark"]{--input-border:#666684}
+@media(prefers-color-scheme:light){:root{--input-border:#8A8499}}
+[data-theme="light"]{--input-border:#8A8499}
+/* without JavaScript: no dead buttons, menu shown inline on phones */
+html:not(.js) .theme-toggle,html:not(.js) .hamburger{display:none}
+@media(max-width:768px){html:not(.js) .mobile-nav{display:flex;position:static;padding:5rem 1rem 1rem;gap:.25rem;background:var(--bg)}}
+/* hero headline is now the h1: same look as the old value line */
+h1.hero-headline{font-size:clamp(1.3rem,3.3vw,2rem);font-weight:500}
+@media(max-width:768px){h1.hero-headline{font-size:clamp(1.15rem,5vw,1.5rem)}}
+/* content stays visible if scripts never run */
+.reveal{opacity:1;transform:none}
+.js .reveal:not(.visible){opacity:0;transform:translateY(30px)}
+@media (prefers-reduced-motion: reduce){.js .reveal:not(.visible){opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -544,7 +617,7 @@ section{padding:6rem 2rem}
 <a href="#main-content" class="skip-link">Skip to content</a>
 
 <!-- THEME TOGGLE -->
-<button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+<button class="theme-toggle" id="themeToggle" aria-label="Dark mode" aria-pressed="false">
   <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
   <svg class="icon-moon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
 </button>
@@ -572,7 +645,7 @@ section{padding:6rem 2rem}
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </div>
-  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a call</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
   <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileNav">
     <span></span><span></span><span></span>
   </button>
@@ -586,7 +659,7 @@ section{padding:6rem 2rem}
   <a href="#pulse">Pulse</a>
   <a href="#about">About</a>
   <a href="#contact">Contact</a>
-  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a call</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
 </div>
 
 <main id="main-content">
@@ -598,21 +671,16 @@ section{padding:6rem 2rem}
   <div class="hero-orb hero-orb--lime"></div>
   <div class="hero-orb hero-orb--violet"></div>
   <div class="hero-content">
-    <p class="hero-kicker reveal"><span class="hero-kicker-dot" aria-hidden="true"></span>Design Technology Studio &middot; Local-First AI</p>
-    <h1 class="hero-wordmark reveal" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</h1>
-    <p class="hero-headline reveal">I listen for friction, then engineer the fix.</p>
+    <p class="hero-kicker reveal"><span class="hero-kicker-dot" aria-hidden="true"></span>Design Technology Studio &middot; Local&#8209;First AI</p>
+    <p class="hero-wordmark reveal" role="img" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</p>
+    <h1 class="hero-headline reveal">Small, private AI tools that clear the busywork for small teams and the trades.</h1>
     <p class="hero-subtitle reveal">
       <span class="name-text">Lukas Green</span><span class="hero-subtitle-sep" aria-hidden="true"> &middot; </span><span class="title-text">Design Technologist</span>
     </p>
-    <p class="hero-tagline reveal">Small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in, and it keeps working.</p>
+    <p class="hero-tagline reveal">I listen for friction, then engineer the fix. Your data stays yours, no lock-in, and it keeps working.</p>
     <div class="hero-ctas reveal">
-      <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a call &rarr;</a>
+      <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
       <a href="/audit" class="btn-secondary">Or take the 3-min Pulse &rarr;</a>
-    </div>
-    <div class="stats-bar reveal">
-      <div class="stat"><div class="stat-number" data-target="6" data-suffix="+">0</div><div class="stat-label">Products Built</div></div>
-      <div class="stat"><div class="stat-number" data-target="3" data-suffix="">0</div><div class="stat-label">Sites Live in Production</div></div>
-      <div class="stat"><div class="stat-number" data-target="16" data-suffix="+ yrs">0</div><div class="stat-label">Design Practice</div></div>
     </div>
   </div>
 </section>
@@ -658,7 +726,7 @@ section{padding:6rem 2rem}
   <div class="container">
     <div class="section-label reveal">Digital Readiness</div>
     <h2 class="section-title reveal">Not sure where AI actually fits? Take the Pulse.</h2>
-    <p class="section-subtitle reveal">A free, 7-question read on your business's digital readiness. Answer in about 3 minutes and get your score, industry benchmarks, and a custom action plan. No signup.</p>
+    <p class="section-subtitle reveal">A free, 7-question read on your business's digital readiness. Answer in about 3 minutes and get a readiness score and a starting plan. No signup.</p>
     <div class="pulse-cta-wrap reveal" style="text-align:left;margin-top:2rem">
       <a href="/audit" class="btn-primary">Start the free assessment &rarr;</a>
       <div class="pulse-note">About 3 minutes &middot; No signup required</div>
@@ -671,29 +739,29 @@ section{padding:6rem 2rem}
   <div class="container">
     <div class="section-label reveal">What I Build</div>
     <h2 class="section-title reveal">Products</h2>
-    <p class="section-subtitle reveal">Software you own, sovereign by default and connected only when your team needs it. One in active build, one live today, more under wraps.</p>
+    <p class="section-subtitle reveal">Software you own, sovereign by default and connected only when your team needs it. One live today, one in build, more under wraps.</p>
     <div class="projects-grid">
 
       <div class="project-card project-card--featured reveal">
         <div class="project-card-badge">Flagship</div>
         <div class="project-tag">Local-First AI Platform</div>
         <h3>LUXIGA OS</h3>
-        <div class="project-origin">"your files and recordings, understood, without the cloud"</div>
-        <p>A local-first intelligence layer for teams whose data can't leave the building. Scan, transcribe, summarize, and route files and voice memos on your own hardware. The engine the LUXIGA vertical tools are built on.</p>
+        <div class="project-origin">Your files and recordings, understood, without the cloud.</div>
+        <p>A local-first intelligence layer for teams whose data can't leave the building. Scan, transcribe, summarize, and route files and voice memos on your own hardware. Built to be the engine for LUXIGA's vertical tools.</p>
         <div class="project-stack">
-          <span>Local LLM</span><span>Whisper</span><span>Private by default</span>
+          <span>Local LLM</span><span>Speech to text</span><span>Private by default</span>
         </div>
-        <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">Book a 30-min walkthrough &rarr;</a>
+        <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
       </div>
 
       <div class="project-card reveal">
         <div class="project-card-badge">Live</div>
         <div class="project-tag">Invoicing / Finance</div>
         <h3>LUXIGA Bill <span class="project-spark" aria-hidden="true">◆</span></h3>
-        <div class="project-origin">"contractor overpaying for 10% of a platform"</div>
-        <p>Send a polished invoice in 90 seconds, straight from Google Sheets. PDF export, client tracking, auto-reminders, payment links. No SaaS subscription, no learning curve, no monthly fee for software you barely use.</p>
+        <div class="project-origin">For the contractor paying for a whole platform to use one corner of it.</div>
+        <p>Send a polished invoice straight from Google Sheets. PDF export, client tracking, and email sending built in. No SaaS subscription, no learning curve, no monthly fee for software you barely use.</p>
         <div class="project-stack">
-          <span>Apps Script</span><span>Docs</span><span>Stripe-ready</span>
+          <span>Apps Script</span><span>Google Sheets</span><span>PDF + email</span>
         </div>
         <a href="case-studies/solobill.html" class="project-link">View Case Study &rarr;</a>
       </div>
@@ -702,18 +770,18 @@ section{padding:6rem 2rem}
         <div class="project-card-badge">In Build</div>
         <div class="project-tag">Guided Setup / Performance Support</div>
         <h3>LUXIGA Runbook <span class="project-spark" aria-hidden="true">&#9670;</span></h3>
-        <div class="project-origin">"instructions written by someone who forgot what it is like not to know"</div>
+        <div class="project-origin">For instructions written by someone who forgot what it is like not to know.</div>
         <p>A step engine for the setups that eat an afternoon and your patience. It reads the official documentation, drafts a verified flow, and serves it at whichever density fits you: Guided, Standard, or Expert. Exact values show at every level, only the hand-holding fades. Works with the connection off, because the worst moment to lose the instructions is halfway through.</p>
         <div class="project-stack">
           <span>Offline reader</span><span>Local LLM author</span><span>Three-tier density</span>
         </div>
-        <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">Ask about early access &rarr;</a>
+        <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">Ask about early access: book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
       </div>
 
     </div>
 
     <div class="projects-more reveal">
-      Also shipped: <a href="case-studies/canvasskit.html">CanvassKit</a>, an outreach CRM in a Google Sheets sidebar, and my studio portfolio at <a href="https://lukasdgreen.com" target="_blank" rel="noopener">lukasdgreen.com</a>. The live client build is <a href="#proof">just below</a>.
+      Also built: <a href="case-studies/canvasskit.html">CanvassKit</a>, an outreach CRM in a Google Sheets sidebar, and my studio portfolio at <a href="https://lukasdgreen.com" target="_blank" rel="noopener">lukasdgreen.com</a>. The live client build is <a href="#proof">just below</a>.
     </div>
 
     <!-- BUILDING IN: platform capability strip -->
@@ -725,9 +793,9 @@ section{padding:6rem 2rem}
         <span>Voice-to-record for the trades</span>
         <span>Privacy-constrained workflows</span>
         <span>Field and back-office ops</span>
-        <span>Local LLM · Whisper · Structured output</span>
+        <span>Local LLM · Speech to text · Structured output</span>
       </div>
-      <div class="building-note"><a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a 30-min build call &rarr;</a></div>
+      <div class="building-note"><a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a></div>
     </div>
 
   </div>
@@ -737,22 +805,16 @@ section{padding:6rem 2rem}
 <section class="proof" id="proof">
   <div class="container">
     <div class="section-label reveal">Proof</div>
-    <h2 class="section-title reveal">It ships. It's live. It works.</h2>
-    <p class="section-subtitle reveal">Not slideware. Real products in production, and a client site doing its job right now.</p>
-    <div class="proof-stats reveal">
-      <div class="proof-stat"><div class="num">6+</div><div class="lbl">products designed, built, and shipped end-to-end</div></div>
-      <div class="proof-stat"><div class="num">90 sec</div><div class="lbl">from a Google Sheet to a client-ready invoice, no SaaS fee</div></div>
-      <div class="proof-stat"><div class="num">100%</div><div class="lbl">local-first where the data has to stay private</div></div>
-    </div>
+    <h2 class="section-title reveal">It ships. It's live.</h2>
+    <p class="section-subtitle reveal">Not slideware. A real client build, live on the web, shown as it is.</p>
     <div class="proof-client reveal">
-      <div class="proof-client-tag">Client Spotlight · Live</div>
+      <div class="proof-client-tag">Client build · Live site</div>
       <h3>Golden Goose Construction &middot; Salem, OR</h3>
-      <p>A roofing and renovation contractor needed leads without paying the CRM tax. I designed, built, and deployed the whole thing: a fast marketing site, affiliate tracking with QR campaigns, an admin panel, and automated lead notifications. When a real prospect was nearly lost to a social-media in-app browser, I shipped a safeguard so it would not happen again. Every change goes live behind passing end-to-end tests.</p>
+      <p>A roofing and renovation contractor needed leads without paying the CRM tax. I designed, built, and deployed the whole thing: a fast marketing site, affiliate tracking with QR campaigns, an admin panel, and automated lead notifications. After a real prospect was lost to a social-media in-app browser, I shipped a safeguard so it would not happen again.</p>
       <div class="proof-points">
-        <span>Live at goldgosling.com</span><span>Affiliate + QR tracking</span><span>Automated lead alerts</span><span>Playwright + CI</span>
+        <span>Live at goldgosling.com</span><span>Affiliate + QR tracking</span><span>Automated lead alerts</span><span>Webview safeguard</span>
       </div>
-      <blockquote class="proof-quote">"Lukas built us a site that brings in real work, not just clicks. He set up automatic lead alerts so nothing slips through, and when one nearly got missed he fixed it fast. He gets what a contractor actually needs."<cite>Justin &middot; Golden Goose Construction, Salem OR</cite></blockquote>
-      <a href="https://goldgosling.com" class="project-link" target="_blank" rel="noopener">Open the live site &rarr;</a>
+      <a href="https://goldgosling.com" class="project-link" target="_blank" rel="noopener">Open the live site &rarr;<span class="sr-only"> (opens in a new tab)</span></a>
     </div>
   </div>
 </section>
@@ -785,13 +847,13 @@ section{padding:6rem 2rem}
     <h2 class="section-title reveal">About</h2>
     <div class="about-grid">
       <div class="about-photo-wrap reveal">
-        <img src="assets/img/cartoon-lukas.jpeg" alt="Lukas Green" class="about-photo">
+        <img src="assets/img/cartoon-lukas.jpeg" alt="Illustrated portrait of Lukas Green" class="about-photo">
         <div class="about-quote">"I listen for what's getting in the way, then I build the fix."</div>
       </div>
       <div class="about-bio reveal">
-        <p>I came up through graphic design, doing in-house print and design work from 2004 onward. Two decades developing an eye for what works across print, digital, and UX. I am finishing my degree at Portland State, where design and systems thinking keep colliding in useful ways.</p>
-        <p>When AI tools arrived and I realized I could build, not just design, everything clicked. I&rsquo;ve since evolved into architecting automation-driven tools, internal platforms, and AI-augmented workflows. Every project starts with a specific friction point.</p>
         <p>LUXIGA is the studio where design intelligence meets smart automation. I partner with mission-driven teams who need both technical fluency and design intelligence, especially where AI can reduce friction and build more accessible systems.</p>
+        <p>I architect automation-driven tools, internal platforms, and AI-augmented workflows. Every project starts with a specific friction point. When AI tools arrived and I realized I could build, not just design, everything clicked.</p>
+        <p>Before that I came up through design, doing in-house print and design work from 2004 onward. Two decades developing an eye for what works across print, digital, and UX. I am finishing my degree at Portland State, where design and systems thinking keep colliding in useful ways.</p>
         <div class="timeline">
           <div class="timeline-item">
             <div class="timeline-year">2004 - 2020</div>
@@ -803,7 +865,7 @@ section{padding:6rem 2rem}
           </div>
           <div class="timeline-item active">
             <div class="timeline-year">2023 - Now</div>
-            <div class="timeline-body"><h4>AI Design Technologist</h4><p>Building where design meets automation</p></div>
+            <div class="timeline-body"><h4>Design Technologist</h4><p>Building where design meets automation</p></div>
           </div>
         </div>
       </div>
@@ -821,7 +883,7 @@ section{padding:6rem 2rem}
         <p>Open to consulting engagements, partnerships, and conversations about AI and systems design.</p>
         <a href="mailto:lukas@luxiga.co" class="contact-email">lukas@luxiga.co</a>
         <br>
-        <a href="https://calendly.com/lukasgreen-ai-design" class="contact-cal" target="_blank" rel="noopener">Not sure if we're a fit? Start with a free 30-min call &rarr;</a>
+        <a href="https://calendly.com/lukasgreen-ai-design" class="contact-cal" target="_blank" rel="noopener">Not sure if we're a fit? Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
         <div class="contact-socials">
           <a href="https://github.com/Lukas-Green" target="_blank" rel="noopener" aria-label="GitHub">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -834,6 +896,7 @@ section{padding:6rem 2rem}
       <form id="contactForm" class="reveal" action="https://formspree.io/f/mkopjjab" method="POST">
         <input type="hidden" name="source" value="luxiga.co / contact form">
         <input type="hidden" name="_subject" value="New lead: luxiga.co contact form">
+        <div class="hp-field" aria-hidden="true"><label for="lx_hp_7f">Skip</label><input type="text" id="lx_hp_7f" name="_gotcha" tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore></div>
         <div class="form-row">
           <div class="form-group">
             <label for="name">Name</label>
@@ -861,7 +924,8 @@ section{padding:6rem 2rem}
           <textarea id="message" name="message" required placeholder="Tell me about the friction..."></textarea>
         </div>
         <button type="submit" class="btn-primary form-submit">Send Message &rarr;</button>
-        <div class="form-status" id="formStatus"></div>
+        <p class="form-privacy">Your message goes only to Lukas. <a href="/privacy.html">Privacy</a></p>
+        <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
       </form>
     </div>
   </div>
@@ -872,7 +936,7 @@ section{padding:6rem 2rem}
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-brand" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</div>
-  <div class="footer-copy">&copy; 2026 LUXIGA LLC. All rights reserved.</div>
+  <div class="footer-copy">&copy; 2026 LUXIGA LLC. All rights reserved. &middot; <a href="/privacy.html" class="footer-link">Privacy</a></div>
 </footer>
 
 <script>
@@ -888,6 +952,7 @@ section{padding:6rem 2rem}
     localStorage.setItem('theme',t);
     iconSun.style.display = t==='dark' ? 'block' : 'none';
     iconMoon.style.display = t==='light' ? 'block' : 'none';
+    toggle.setAttribute('aria-pressed', t==='dark' ? 'true' : 'false');
   }
   const saved = localStorage.getItem('theme');
   if(saved){ setTheme(saved); }
@@ -895,6 +960,7 @@ section{padding:6rem 2rem}
     const prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
     iconSun.style.display = prefersDark ? 'block' : 'none';
     iconMoon.style.display = prefersDark ? 'none' : 'block';
+    toggle.setAttribute('aria-pressed', prefersDark ? 'true' : 'false');
   }
   toggle.addEventListener('click',()=>{
     const current = document.documentElement.getAttribute('data-theme')
@@ -909,6 +975,15 @@ section{padding:6rem 2rem}
     const open = hamburger.classList.toggle('open');
     mobileNav.classList.toggle('open');
     hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { const first = mobileNav.querySelector('a'); if (first) first.focus(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+      hamburger.classList.remove('open');
+      mobileNav.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.focus();
+    }
   });
   mobileNav.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
@@ -1032,7 +1107,7 @@ section{padding:6rem 2rem}
   });
 
   // ── The system: LUXIGA is the hub, its tools are the nodes clustered around it ──
-  const TOOLS = ['FieldKit','LUXIGA OS','LUXIGA Bill','RecallAI','Gradian','Scrivener','Quarry','Pulse','Nightshift','Local Agent','Voice Library'];
+  const TOOLS = ['LUXIGA OS','LUXIGA Bill','Runbook','Pulse'];
   const NODE_COUNT = 24;
   const assembleDoneAt = 60 + (NODE_COUNT - 1) * 40 + 900;
   const isTouch = window.matchMedia('(hover:none)').matches;
@@ -1264,7 +1339,7 @@ section{padding:6rem 2rem}
   pills.forEach((pill, i) => {
     const duration = 2.5 + Math.random() * 1.5;
     const delay = i * 0.2;
-    pill.style.animation = 'pillFloat ' + duration + 's ease-in-out ' + delay + 's infinite';
+    pill.style.animation = 'pillFloat ' + duration + 's ease-in-out ' + delay + 's 3';
   });
 
   /* ── CONTACT FORM ── */
@@ -1272,6 +1347,8 @@ section{padding:6rem 2rem}
   const status = document.getElementById('formStatus');
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
+    const hp = form.querySelector('[name="_gotcha"]');
+    if (hp && hp.value) { form.reset(); status.textContent = 'Sent! I\'ll be in touch.'; status.className = 'form-status success'; return; }
     const btn = form.querySelector('.form-submit');
     btn.disabled = true;
     btn.textContent = 'Sending...';
