@@ -160,7 +160,9 @@ function b64urlDecodeToString(s) {
 }
 
 async function hmac(env, msg) {
-  const secret = env.UNSUB_SECRET || 'lx-dev-unsub-secret-change-me';
+  // Fail closed: a missing secret must never fall back to a value in public code.
+  const secret = env.UNSUB_SECRET;
+  if (!secret) throw new Error('UNSUB_SECRET not configured');
   const key = await crypto.subtle.importKey(
     'raw', new TextEncoder().encode(secret),
     { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']

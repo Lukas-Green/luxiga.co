@@ -232,7 +232,8 @@ async function verifyCfAccessJwt(token, env) {
   if (payload.nbf && payload.nbf > now + 60) return { ok: false, fatal: true, reason: 'not_yet_valid' };
   const expectedIss = `https://${env.CF_ACCESS_TEAM_DOMAIN}`;
   if (payload.iss !== expectedIss) return { ok: false, fatal: true, reason: 'bad_iss' };
-  if (env.CF_ACCESS_AUD) {
+  if (!env.CF_ACCESS_AUD) return { ok: false, fatal: true, reason: 'aud_not_configured' };
+  {
     const audMatch = Array.isArray(payload.aud)
       ? payload.aud.includes(env.CF_ACCESS_AUD)
       : payload.aud === env.CF_ACCESS_AUD;
@@ -349,6 +350,12 @@ export default {
       // Mailchimp webhook: syncs their native unsubscribes back into our
       // Suppression list so both channels honor the same opt-outs.
       if (url.pathname === '/api/mailchimp/webhook') {
+        // Fail closed: the webhook URL must carry the shared key (?k=), set with
+        // `wrangler secret put MAILCHIMP_WEBHOOK_KEY`. Without it, anyone could
+        // add any address to Suppression. No key configured = route does not exist.
+        if (!env.MAILCHIMP_WEBHOOK_KEY || !timingSafeEqual(url.searchParams.get('k') || '', env.MAILCHIMP_WEBHOOK_KEY)) {
+          return new Response('not found', { status: 404 });
+        }
         if (request.method === 'GET') return new Response('ok', { status: 200 });
         if (request.method === 'POST') return await handleMailchimpWebhook(env, request);
       }
@@ -436,7 +443,8 @@ export default {
 
       return json({ error: 'not_found' }, 404);
     } catch (err) {
-      return json({ error: 'server_error', detail: err.message }, 500);
+      console.log('server_error', { detail: String(err && err.message || err) });
+      return json({ error: 'server_error' }, 500);
     }
   },
 
@@ -483,6 +491,9 @@ async function readBody(request) {
 // emails Lukas via workRequestNotifyHtml; (4) auto-replies to the requester via
 // workRequestReceiptHtml. Rate-limited (fetch-level) + honeypot.
 async function handleWorkRequest(env, request, ctx) {
+  // Fail closed until Turnstile is configured: this route reads Airtable and
+  // emails whatever address it is given, so it must not run for scripts.
+  if (!env.TURNSTILE_SECRET) return json({ error: 'not_configured' }, 503);
   const parsed = await readBody(request);
   if (parsed.tooLarge) return json({ error: 'payload_too_large' }, 413);
   if (parsed.invalid) return json({ error: 'invalid_json' }, 400);
@@ -494,6 +505,15 @@ async function handleWorkRequest(env, request, ctx) {
       console.log('honeypot_triggered', { endpoint: 'work-request', field: hp });
       return json({ ok: true, id: 'hp_' + Date.now(), fake: true }, 201);
     }
+  }
+
+  const tsToken = typeof raw.turnstile_token === 'string' ? raw.turnstile_token : '';
+  if (!(await verifyTurnstile(env, tsToken, request.headers.get('CF-Connecting-IP') || ''))) {
+    return json({ error: 'verification_failed' }, 403);
+  }
+  if (!(await underDailyCap(env, 'work-request', 50))) {
+    console.log('work_request_daily_cap_hit');
+    return json({ error: 'try_again_tomorrow' }, 429);
   }
 
   const name = typeof raw.name === 'string' ? raw.name.trim() : '';
@@ -576,6 +596,40 @@ async function handleWorkRequest(env, request, ctx) {
   }
 
   return json({ ok: true, id: contactId, spam: spam || undefined }, 201);
+}
+
+async function verifyTurnstile(env, token, ip) {
+  if (!token) return false;
+  try {
+    const form = new FormData();
+    form.append('secret', env.TURNSTILE_SECRET);
+    form.append('response', token);
+    if (ip) form.append('remoteip', ip);
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form });
+    const out = await res.json();
+    return out && out.success === true;
+  } catch (e) {
+    console.log('turnstile_verify_error', { detail: String(e && e.message || e) });
+    return false;
+  }
+}
+
+// Daily cap kept in KV (binding RATE_KV). In-memory limits reset per isolate,
+// so they cannot cap a distributed script. No KV bound = no cap, logged loudly.
+async function underDailyCap(env, name, max) {
+  if (!env.RATE_KV) { console.log('daily_cap_unbound', { name }); return true; }
+  const key = `cap:${name}:${new Date().toISOString().slice(0, 10)}`;
+  const n = parseInt((await env.RATE_KV.get(key)) || '0', 10);
+  if (n >= max) return false;
+  await env.RATE_KV.put(key, String(n + 1), { expirationTtl: 172800 });
+  return true;
+}
+
+function timingSafeEqual(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
 }
 
 async function handleNotifyTest(env, ctx) {

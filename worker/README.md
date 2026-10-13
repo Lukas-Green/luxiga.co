@@ -187,3 +187,15 @@ curl -sX POST https://luxiga.co/api/admin/notify-test -H "Authorization: Bearer 
   `linkedin`), not a CRM Source option, so work-request maps it to a valid select
   (`Card Scan` by default) and keeps the raw medium as attribution in notes /
   interaction summary.
+
+## Fail-closed secrets (2026-10-13)
+
+These public routes refuse to run until their secret is set:
+
+- `MAILCHIMP_WEBHOOK_KEY`: the Mailchimp webhook URL must end in `?k=<key>`, otherwise 404.
+- `TURNSTILE_SECRET`: `/api/work-request` and `/api/lead` return 503 until set, then need a valid Turnstile token.
+- `UNSUB_SECRET`: unsubscribe links cannot be signed or checked without it.
+- `CF_ACCESS_AUD`: admin routes reject every login until set.
+- Optional KV binding `RATE_KV` caps work requests at 50 a day.
+
+Proof: `node worker/failclosed.test.mjs`.
