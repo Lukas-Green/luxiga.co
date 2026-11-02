@@ -21,7 +21,7 @@ jobs:
   test:
     name: Playwright Tests
     if: github.event_name != 'schedule'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # pinned: Playwright 1.59 cannot install on ubuntu-latest (26.04)
     steps:
       - uses: actions/checkout@v5
 
@@ -52,7 +52,7 @@ jobs:
     name: Lighthouse Audit
     needs: deploy
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # pinned: Playwright 1.59 cannot install on ubuntu-latest (26.04)
     steps:
       - uses: actions/checkout@v5
 
@@ -73,7 +73,7 @@ jobs:
   lighthouse-scheduled:
     name: Lighthouse Audit (Scheduled)
     if: github.event_name == 'schedule'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # pinned: Playwright 1.59 cannot install on ubuntu-latest (26.04)
     steps:
       - uses: actions/checkout@v5
 
@@ -90,7 +90,7 @@ jobs:
 
   links:
     name: Link Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # pinned: Playwright 1.59 cannot install on ubuntu-latest (26.04)
     steps:
       - uses: actions/checkout@v5
 
@@ -114,7 +114,7 @@ jobs:
     name: Deploy to Pages
     needs: [test, links]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # pinned: Playwright 1.59 cannot install on ubuntu-latest (26.04)
     permissions:
       contents: read
       pages: write
