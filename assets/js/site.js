@@ -102,7 +102,7 @@
   });
 
   /* ── CONTACT FORM ──
-     form-guard: exempt same Formspree contact form already live on luxiga.co, moved out of inline script unchanged; listed as a known gap in business/standards/FORM-SPAM-GUARD.md ("luxiga.co contact and Pulse capture", no backend of ours). Honeypot stays. Turnstile needs a Worker, tracked there. */
+     form-guard: exempt Formspree-hosted contact form, no backend of ours to run a bot check, honeypot in place */
   var form = document.getElementById('contactForm');
   var status = document.getElementById('formStatus');
   var SENT = 'Sent! I\'ll be in touch.';
