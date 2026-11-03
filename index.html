@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- CSP: every script is an external file, so there are no inline-script hashes to keep in sync. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://formspree.io; form-action https://formspree.io; frame-src 'self'; object-src 'none'; base-uri 'self'">
+<!-- CSP: script hashes must be regenerated after ANY edit to an inline script (tests/csp.spec.js fails if stale). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Du+OJKJSbdUgz5nrHeWWINvez6XKDDU/tyj/5c2uvwo=' 'sha256-OyzdfCirH8txlCBzyw/Q0oJYcXEYzLhRJFosnd1tePA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://formspree.io; form-action https://formspree.io; frame-src 'self'; object-src 'none'; base-uri 'self'">
 <title>LUXIGA · AI Design Technology Studio</title>
 <meta name="description" content="LUXIGA builds small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in, built to keep working after launch.">
 <meta name="author" content="Lukas Green">
@@ -20,25 +20,590 @@
 <meta name="twitter:title" content="LUXIGA · AI Design Technology Studio">
 <meta name="twitter:description" content="Small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in.">
 <meta name="twitter:image" content="https://luxiga.co/assets/img/og-preview.png">
-<meta name="theme-color" content="#0B0B0F" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#F3F1EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#080810" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
 <link rel="canonical" href="https://luxiga.co/">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org", "@type": "ProfessionalService", "name": "LUXIGA", "legalName": "LUXIGA LLC", "url": "https://luxiga.co", "logo": "https://luxiga.co/favicon.svg", "image": "https://luxiga.co/assets/img/og-preview.png", "description": "LUXIGA builds small, private AI tools that clear the busywork for small teams and the trades. Your data stays yours, no lock-in, built to keep working after launch.", "founder": {
     "@type": "Person", "name": "Lukas Green", "sameAs": "https://www.linkedin.com/in/lukas-green-designer/"
-  }, "areaServed": "US", "knowsAbout": ["AI Consulting", "Systems Automation", "UX Design", "Quality Engineering", "Digital Readiness Audit", "Guided Process Design", "Instructional Design", "Plain Language", "Cognitive Accessibility"], "sameAs": ["https://www.linkedin.com/in/lukas-green-designer/"]
+  }, "areaServed": "US", "knowsAbout": ["AI Consulting", "Systems Automation", "UX Design", "Digital Readiness Audit", "Guided Process Design", "Instructional Design", "Plain Language", "Cognitive Accessibility"], "sameAs": ["https://www.linkedin.com/in/lukas-green-designer/"]
 }
 </script>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/svg+xml" sizes="32x32" href="/favicon-32.svg">
 <link rel="icon" type="image/svg+xml" sizes="16x16" href="/favicon-16.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.svg">
-<script src="assets/js/boot.js"></script>
+<script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/site.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* ── KEYBOARD FOCUS ── visible ring for keyboard users (body hides the mouse cursor) */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+/* ── SKIP LINK ── first tab stop, jumps past the nav */
+.skip-link{position:fixed;top:-100px;left:1rem;z-index:10001;padding:.7rem 1.2rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.85rem;border-radius:var(--radius-btn);transition:top .2s}
+.skip-link:focus{top:1rem}
+:root{
+  --bg:#080810;--surface:#0D0D1A;--accent:#C4FF53;--accent-hover:#d4ff73;
+  --violet:#8B5CF6;--violet-hover:#a78bfa;--text:#E8E8F0;--muted:#DAD6EA;
+  --border:#1a1a2e;--radius-btn:6px;--radius-card:12px;
+  --sans:'Space Grotesk',system-ui,sans-serif;--mono:'Space Mono',monospace;
+  --accent-text:var(--accent);--accent-btn-bg:var(--accent);--accent-btn-text:var(--bg);
+  color-scheme:dark light;
+}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+ul{list-style:none}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* ── CUSTOM CURSOR ── */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:10000;border-radius:50%;transform:translate(-50%,-50%)}
+.cursor-dot{width:6px;height:6px;background:var(--accent)}
+.cursor-ring{width:36px;height:36px;border:1.5px solid var(--accent);opacity:.4;transition:width .2s,height .2s,opacity .2s}
+.cursor-ring.hover{width:56px;height:56px;opacity:.6}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,16,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-brand{font-family:var(--mono);font-size:1.25rem;font-weight:700;letter-spacing:2px;color:var(--text)}
+.nav-brand .ux{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:.875rem;color:var(--muted);transition:color .2s;font-weight:500;letter-spacing:.5px}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-cta{padding:.5rem 1.25rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.8rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s}
+.nav-cta:hover{background:var(--accent-hover)}
+/* ── NAV DROPDOWN ── */
+.nav-dropdown{position:relative}
+.nav-dropdown-toggle{display:inline-flex;align-items:center;gap:.35rem;font-size:.875rem;color:var(--muted);font-weight:500;letter-spacing:.5px;font-family:var(--sans);background:none;border:none;padding:0;cursor:pointer;transition:color .2s}
+.nav-dropdown-toggle:hover,.nav-dropdown:hover .nav-dropdown-toggle,.nav-dropdown-toggle.active{color:var(--text)}
+.nav-dropdown-toggle svg{width:11px;height:11px;transition:transform .25s}
+.nav-dropdown:hover .nav-dropdown-toggle svg,.nav-dropdown:focus-within .nav-dropdown-toggle svg,.nav-dropdown-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}
+.nav-dropdown-menu{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%) translateY(6px);min-width:170px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.4rem;display:flex;flex-direction:column;gap:.1rem;opacity:0;visibility:hidden;transition:opacity .2s,transform .2s;box-shadow:0 14px 44px rgba(0,0,0,.4);z-index:1001}
+.nav-dropdown-menu::before{content:'';position:absolute;top:-14px;left:0;right:0;height:14px}
+.nav-dropdown:hover .nav-dropdown-menu,.nav-dropdown:focus-within .nav-dropdown-menu,.nav-dropdown-menu.open{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.nav-dropdown-menu a{padding:.55rem .8rem;border-radius:8px;font-size:.85rem;color:var(--muted);white-space:nowrap;transition:background .15s,color .15s}
+.nav-dropdown-menu a:hover,.nav-dropdown-menu a.active{background:var(--bg);color:var(--text)}
+section[id]{scroll-margin-top:64px}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-width:44px;min-height:44px;align-items:center;justify-content:center}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .3s,opacity .3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-nav{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(8,8,16,.95);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:999}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-size:1.25rem;color:var(--muted);transition:color .2s}
+.mobile-nav a:hover{color:var(--text)}
+
+/* ── SECTIONS ── */
+section{padding:6rem 2rem}
+.container{max-width:1100px;margin:0 auto}
+.section-label{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:.75rem}
+.section-title{font-size:2.5rem;font-weight:700;line-height:1.15;margin-bottom:1rem;text-wrap:balance}
+.section-subtitle{color:var(--muted);font-size:1.05rem;max-width:560px;line-height:1.7;text-wrap:pretty}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding-top:64px}
+.hero-canvas{position:absolute;inset:0;z-index:0}
+.hero-canvas canvas{width:100%;height:100%}
+/* Spotlight glow: manufactures the focal point behind the wordmark, where the constellation clusters */
+.hero-glow{position:absolute;top:44%;left:50%;width:min(820px,92vw);height:min(820px,92vw);transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(196,255,83,.11) 0%,rgba(139,92,246,.07) 40%,transparent 68%);pointer-events:none;z-index:1;opacity:0;animation:orbFadeIn 1.8s .2s forwards}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:1;opacity:0;animation:orbFadeIn 1.5s 1.5s forwards}
+.hero-orb--lime{width:340px;height:340px;background:rgba(196,255,83,.12);top:20%;left:15%;animation:orbFadeIn 1.5s 1.5s forwards,orbFloat 8s 3s ease-in-out infinite}
+.hero-orb--violet{width:280px;height:280px;background:rgba(139,92,246,.1);bottom:15%;right:10%;animation:orbFadeIn 1.5s 1.8s forwards,orbFloat 10s 3.3s ease-in-out infinite reverse}
+@keyframes orbFadeIn{to{opacity:1}}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:840px;padding:2rem}
+/* Kicker: Space Mono system-label with a live status dot */
+.hero-kicker{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:1.75rem;display:inline-flex;align-items:center;gap:.6rem;justify-content:center}
+.hero-kicker-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:kickerPulse 2.4s ease-in-out infinite}
+@keyframes kickerPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+/* The wordmark IS the hero object: bold, solid, the hub of the system. UX stays highlighted. */
+.hero-wordmark{font-family:var(--sans);font-weight:700;font-size:clamp(4rem,15vw,11rem);line-height:.9;letter-spacing:-.045em;color:var(--text);margin:0 0 1.4rem;position:relative;text-shadow:0 0 70px rgba(196,255,83,.14)}
+.hero-wordmark .ux{color:var(--accent);text-shadow:0 0 36px rgba(196,255,83,.5),0 0 12px rgba(196,255,83,.35)}
+/* Value line (the former h1): supports the wordmark, does not compete with it */
+.hero-headline{font-size:clamp(1.3rem,3.3vw,2rem);font-weight:500;line-height:1.2;letter-spacing:-.01em;color:var(--text);max-width:24ch;margin:0 auto 1.4rem;text-wrap:balance}
+.hero-subtitle{font-family:var(--mono);margin-bottom:1.5rem;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.hero-subtitle .name-text{color:var(--accent);font-size:1.15rem;font-weight:700;letter-spacing:2px}
+.hero-subtitle .title-text{color:var(--violet);font-family:var(--sans);font-size:.9rem;font-weight:300;letter-spacing:.3px;text-transform:none}
+.hero-subtitle-sep{display:none}
+.hero-tagline{color:var(--muted);font-size:1rem;line-height:1.7;max-width:500px;margin:0 auto 2.25rem;text-wrap:balance}
+.hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;background:var(--accent);color:var(--bg);font-weight:600;font-size:.9rem;border-radius:var(--radius-btn);letter-spacing:.5px;transition:background .2s,transform .1s;border:none;cursor:pointer;font-family:var(--sans)}
+.btn-primary:hover{background:var(--accent-hover);transform:translateY(-1px)}
+.btn-secondary{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;background:transparent;color:var(--text);font-weight:600;font-size:.9rem;border-radius:var(--radius-btn);border:1px solid var(--border);letter-spacing:.5px;transition:border-color .2s,transform .1s;cursor:pointer;font-family:var(--sans)}
+.btn-secondary:hover{border-color:var(--accent);transform:translateY(-1px)}
+.stats-bar{display:flex;gap:3rem;justify-content:center;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-number{font-size:2rem;font-weight:700;color:var(--accent);font-family:var(--mono)}
+.stat-label{font-size:.8rem;color:var(--muted);margin-top:.25rem}
+
+/* ── SERVICES ── */
+.services{background:var(--bg)}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3rem}
+.service-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:2.25rem 2rem;transition:border-color .3s,transform .3s}
+.service-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.service-num{font-family:var(--mono);font-size:.8rem;color:var(--violet);margin-bottom:1rem;letter-spacing:1px}
+.service-card h3{font-size:1.25rem;font-weight:600;margin-bottom:.75rem}
+.service-card p{color:var(--muted);font-size:.92rem;line-height:1.7}
+
+/* ── PULSE ── */
+.pulse{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.pulse-features{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2.5rem 0}
+.pulse-feature{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-card);padding:2rem 1.75rem;transition:border-color .3s}
+.pulse-feature:hover{border-color:var(--violet)}
+.pulse-icon{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin-bottom:1rem;color:var(--accent)}
+.pulse-icon svg{width:100%;height:100%}
+.pulse-feature h4{font-size:1.05rem;font-weight:600;margin-bottom:.5rem}
+.pulse-feature p{color:var(--muted);font-size:.875rem;line-height:1.65}
+.pulse-cta-wrap{text-align:center;margin-top:2.5rem}
+.pulse-note{font-size:.8rem;color:var(--muted);margin-top:.75rem}
+
+/* ── LIVE SITES ── */
+.live-sites{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.live-sites-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.site-card{position:relative;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.75rem 1.5rem;transition:border-color .3s,transform .3s,box-shadow .3s;text-decoration:none;color:inherit}
+.site-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 0 24px rgba(196,255,83,.08)}
+.site-card--self{background:linear-gradient(135deg,var(--bg) 0%,rgba(139,92,246,.06) 100%);border-color:rgba(139,92,246,.3)}
+.site-card--self:hover{border-color:var(--violet);box-shadow:0 0 28px rgba(139,92,246,.12)}
+.site-card-domain{font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--accent);letter-spacing:.5px;margin-bottom:.5rem;word-break:break-all}
+.site-card--self .site-card-domain{color:var(--violet)}
+.site-card-tag{font-family:var(--mono);font-size:.65rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.75rem}
+.site-card-origin{font-style:italic;color:var(--text);font-size:.85rem;line-height:1.55;margin-bottom:1rem;flex:1}
+.site-card-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.site-card-stack span{font-family:var(--mono);font-size:.65rem;padding:.22rem .55rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--muted)}
+.site-card-cta{font-family:var(--mono);font-size:.75rem;color:var(--accent);letter-spacing:1px}
+.site-card--self .site-card-cta{color:var(--violet)}
+.site-card:hover .site-card-cta{color:var(--accent-hover)}
+
+/* ── PROJECTS / SHIPPED TOOLS ── */
+.projects{background:var(--bg)}
+.projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3rem}
+.project-card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:2.25rem 2rem;transition:border-color .3s,transform .3s,box-shadow .3s}
+.project-card:hover{border-color:var(--violet);transform:translateY(-4px)}
+.project-card--featured{background:linear-gradient(135deg,var(--surface) 0%,rgba(196,255,83,.05) 100%);border-color:rgba(196,255,83,.3);box-shadow:0 0 28px rgba(196,255,83,.06)}
+.project-card--featured:hover{border-color:var(--accent);box-shadow:0 0 36px rgba(196,255,83,.12);transform:translateY(-4px)}
+.project-card-badge{position:absolute;top:1.25rem;right:1.25rem;font-family:var(--mono);font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;background:var(--accent);color:#0a0a0a;padding:.25rem .55rem;border-radius:999px;font-weight:700;animation:badgePulse 3s ease-in-out infinite}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(196,255,83,.5)}50%{box-shadow:0 0 0 6px rgba(196,255,83,0)}}
+.project-spark{display:inline-block;font-size:.7rem;color:var(--accent);vertical-align:middle;margin-left:.18em}
+@keyframes sparkSpin{0%,90%,100%{transform:rotate(0deg)}45%{transform:rotate(15deg)}55%{transform:rotate(-15deg)}}
+.project-status{display:inline-block;margin-top:.6rem;font-family:var(--mono);font-size:.65rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:.18rem .5rem;border:1px solid var(--border);border-radius:999px}
+.project-tag{font-family:var(--mono);font-size:.7rem;color:var(--violet);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.75rem}
+.project-card h3{font-size:1.2rem;font-weight:600;margin-bottom:.35rem}
+.project-origin{font-style:italic;color:var(--accent);font-size:.85rem;margin-bottom:.75rem}
+.project-card p{color:var(--muted);font-size:.9rem;line-height:1.65;margin-bottom:1rem}
+.project-stack{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.project-stack span{font-family:var(--mono);font-size:.7rem;padding:.3rem .65rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--muted)}
+.project-link{font-family:var(--mono);font-size:.8rem;color:var(--accent);transition:color .2s}
+.project-link:hover{color:var(--accent-hover)}
+.projects-more{margin-top:1.75rem;text-align:center;color:var(--muted);font-size:.9rem}
+.projects-more a{color:var(--violet);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+.projects-more a:hover{border-bottom-color:var(--violet)}
+
+/* ── PROOF ── */
+.proof-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2.5rem}
+.proof-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:1.85rem 1.5rem;text-align:center}
+.proof-stat .num{font-family:var(--mono);font-size:2.5rem;font-weight:700;color:var(--accent);line-height:1}
+.proof-stat .lbl{color:var(--muted);font-size:.85rem;margin-top:.6rem;line-height:1.45}
+.proof-client{background:linear-gradient(135deg,var(--surface) 0%,rgba(139,92,246,.05) 100%);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius-card);padding:2.25rem 2rem}
+.proof-client-tag{font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem}
+.proof-client h3{font-size:1.3rem;font-weight:600;margin-bottom:.75rem}
+.proof-client p{color:var(--muted);font-size:.92rem;line-height:1.7;margin-bottom:1.25rem;max-width:720px}
+.proof-points{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem}
+.proof-points span{font-family:var(--mono);font-size:.72rem;padding:.32rem .7rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--text);letter-spacing:.5px}
+.proof-quote{border-left:2px solid var(--accent);padding-left:1.25rem;margin:1.5rem 0;font-size:1.05rem;line-height:1.6;color:var(--text);font-style:italic}
+.proof-quote cite{display:block;margin-top:.6rem;font-style:normal;font-size:.85rem;color:var(--muted);font-family:var(--mono)}
+@media(max-width:680px){.proof-stats{grid-template-columns:1fr}}
+
+/* ── BUILDING IN (protected SaaS strip) ── */
+.building-strip{margin-top:3rem;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:var(--radius-card);padding:2.25rem 2rem;position:relative;overflow:hidden}
+.building-strip::before{content:'';position:absolute;top:0;right:0;width:160px;height:160px;background:radial-gradient(circle at center,rgba(139,92,246,.08),transparent 70%);pointer-events:none}
+.building-label{font-family:var(--mono);font-size:.7rem;color:var(--violet);letter-spacing:2px;text-transform:uppercase;margin-bottom:.75rem}
+.building-strip h3{font-size:1.25rem;font-weight:600;margin-bottom:.75rem;color:var(--text)}
+.building-strip p{color:var(--muted);font-size:.92rem;line-height:1.7;margin-bottom:1.25rem;max-width:680px}
+.building-domains{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem}
+.building-domains span{font-family:var(--mono);font-size:.72rem;padding:.32rem .7rem;background:var(--bg);border:1px solid rgba(139,92,246,.25);border-radius:var(--radius-btn);color:var(--text);letter-spacing:.5px}
+.building-note{font-family:var(--mono);font-size:.72rem;color:var(--muted);letter-spacing:.5px}
+.building-note a{color:var(--accent);transition:color .2s}
+.building-note a:hover{color:var(--accent-hover)}
+
+/* ── STACK ── */
+.stack{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.5rem 2rem;overflow:hidden}
+.stack .container{max-width:700px;text-align:center}
+.stack .section-label,.stack .section-title{text-align:center}
+.stack-orbit{position:relative;margin:2rem auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem}
+.stack-pill{font-family:var(--mono);font-size:.78rem;padding:.5rem 1.1rem;background:var(--bg);border:1px solid var(--border);border-radius:20px;color:var(--text);transition:border-color .3s,transform .3s,box-shadow .3s;cursor:default;position:relative;overflow:hidden}
+.stack-pill::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(196,255,83,.08),rgba(139,92,246,.08));opacity:0;transition:opacity .3s}
+.stack-pill:hover{border-color:var(--accent);transform:translateY(-2px) scale(1.05);box-shadow:0 4px 20px rgba(196,255,83,.12)}
+.stack-pill:hover::before{opacity:1}
+.stack-pill[data-cat="ai"]{border-color:rgba(139,92,246,.3)}
+.stack-pill[data-cat="ai"]:hover{border-color:var(--violet);box-shadow:0 4px 20px rgba(139,92,246,.15)}
+.stack-divider{display:flex;align-items:center;justify-content:center;gap:8px;margin:1.25rem 0 .5rem;color:var(--muted);font-family:var(--mono);font-size:.65rem;letter-spacing:2px;text-transform:uppercase}
+.stack-divider::before,.stack-divider::after{content:'';height:1px;width:40px;background:var(--border)}
+.stack-pulse{position:absolute;width:100%;height:2px;bottom:0;left:-100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:stackPulse 4s ease-in-out infinite}
+@keyframes stackPulse{0%{left:-100%}50%{left:100%}100%{left:100%}}
+@keyframes pillFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+/* ── ABOUT ── */
+.about{background:var(--bg)}
+.about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:4rem;align-items:start;margin-top:3rem}
+.about-photo-wrap{position:relative}
+.about-photo{width:100%;max-width:320px;border-radius:var(--radius-card);border:1px solid var(--border)}
+.about-quote{font-family:var(--mono);font-size:.9rem;color:var(--accent);margin-top:1.25rem;padding-left:1rem;border-left:2px solid var(--accent);max-width:320px}
+.about-bio p{color:var(--muted);font-size:.95rem;line-height:1.75;margin-bottom:1.25rem}
+.timeline{margin-top:2.5rem;display:flex;flex-direction:column;gap:1rem}
+.timeline-item{display:flex;gap:1.25rem;align-items:flex-start}
+.timeline-year{font-family:var(--mono);font-size:.75rem;color:var(--muted);min-width:100px;padding-top:2px}
+.timeline-item.active .timeline-year{color:var(--accent)}
+.timeline-body h4{font-size:.95rem;font-weight:600;margin-bottom:.15rem}
+.timeline-body p{font-size:.85rem;color:var(--muted)}
+.timeline-item.active .timeline-body h4{color:var(--accent)}
+
+/* ── CONTACT ── */
+.contact{background:var(--surface);border-top:1px solid var(--border)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;margin-top:3rem}
+.contact-info p{color:var(--muted);font-size:.95rem;line-height:1.7;margin-bottom:1.5rem}
+.contact-email{color:var(--accent)!important;font-family:var(--mono);font-size:.95rem;transition:color .2s}
+.contact-email:hover{color:var(--accent-hover)!important}
+.contact-cal{display:inline-block;margin-top:1rem;font-size:.875rem;color:var(--muted);transition:color .2s}
+.contact-cal:hover{color:var(--accent)}
+.contact-socials{display:flex;gap:1rem;margin-top:2rem}
+.contact-socials a{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--muted);transition:border-color .2s,color .2s}
+.contact-socials a:hover{border-color:var(--accent);color:var(--accent)}
+.contact-socials svg{width:18px;height:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:.4rem;font-weight:500}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:.7rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-btn);color:var(--text);font-family:var(--sans);font-size:.9rem;transition:border-color .2s;outline:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
+.form-group textarea{resize:vertical;min-height:120px}
+.form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888899' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.form-submit{width:100%}
+.form-status{font-family:var(--mono);font-size:.85rem;margin-top:.75rem;text-align:center}
+.form-status.success{color:var(--accent)}
+.form-status.error{color:#ff5555}
+
+/* ── FOOTER ── */
+.footer{padding:2.5rem 2rem 6rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.footer-brand{font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:2px}
+.footer-brand .ux{color:var(--accent)}
+.footer-copy{font-size:.8rem;color:var(--muted)}
+
+/* ── UTILITIES ── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+/* ── REDUCED MOTION ── respect the OS setting; content stays fully visible */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  html{scroll-behavior:auto}
+  .hero-orb{animation:none;opacity:.4}
+  .reveal{opacity:1;transform:none}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  body{cursor:auto}
+  .cursor-dot,.cursor-ring{display:none}
+  .nav{padding:0 1.25rem}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  section{padding:4rem 1.25rem}
+  .hero{padding-top:64px;min-height:auto;padding-bottom:3rem}
+  .hero-wordmark{font-size:clamp(3.2rem,20vw,5.5rem);letter-spacing:-.03em;margin-bottom:1.1rem}
+  .hero-headline{font-size:clamp(1.15rem,5vw,1.5rem);max-width:24ch}
+  .hero-tagline{font-size:.95rem;max-width:32ch}
+  .hero-subtitle{display:flex;flex-direction:column;gap:.4rem;font-size:.8rem}
+  .hero-subtitle-sep{display:none}
+  .stats-bar{gap:2rem}
+  .stat-number{font-size:1.5rem}
+  .services-grid{grid-template-columns:1fr}
+  .pulse-features{grid-template-columns:1fr}
+  .live-sites-grid{grid-template-columns:1fr}
+  .projects-grid{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr;gap:2.5rem}
+  .contact-grid{grid-template-columns:1fr;gap:2.5rem}
+  .form-row{grid-template-columns:1fr}
+  .section-title{font-size:2rem}
+  .footer{flex-direction:column;gap:.75rem;text-align:center}
+  .hero-kicker{font-size:.62rem;letter-spacing:2px}
+}
+
+/* ── LIGHT MODE ── */
+@media(prefers-color-scheme:light){
+  :root{
+    --bg:#FAFAF8;--surface:#F0EFF4;--accent:#C4FF53;--accent-hover:#b8f245;
+    --accent-text:#3D6B00;--accent-btn-bg:#C4FF53;--accent-btn-text:#1a1a2e;
+    --violet:#6D28D9;--violet-hover:#5B21B6;--text:#1A1A2E;--muted:#443E55;
+    --border:#D8D4E2;
+  }
+  body{background:var(--bg);color:var(--text)}
+  ::selection{background:var(--accent);color:var(--text)}
+  .nav{background:rgba(250,250,248,.85);border-bottom-color:var(--border)}
+  .nav-brand{color:var(--text)}
+  .nav-links a{color:var(--muted)}
+  .nav-links a:hover,.nav-links a.active{color:var(--text)}
+  .nav-cta{background:var(--accent-btn-bg);color:var(--accent-btn-text)}
+  .nav-cta:hover{background:var(--accent-hover)}
+  .mobile-nav{background:rgba(250,250,248,.97)}
+  .hero-orb--lime{background:rgba(196,255,83,.15)}
+  .hero-orb--violet{background:rgba(109,40,217,.08)}
+  .hero-kicker{color:var(--accent-text)}
+  .hero-kicker-dot{background:var(--accent-text);box-shadow:0 0 8px rgba(61,107,0,.45)}
+  .hero-wordmark{color:var(--text);text-shadow:0 0 60px rgba(196,255,83,.28)}
+  .hero-wordmark .ux{color:var(--accent-text);text-shadow:none}
+  .hero-headline{color:var(--text)}
+  .hero-subtitle .name-text{color:var(--accent-text)}
+  .hero-subtitle .title-text{color:var(--violet)}
+  .hero-tagline{color:var(--muted)}
+  .btn-primary{background:var(--accent-btn-bg);color:var(--accent-btn-text)}
+  .btn-primary:hover{background:var(--accent-hover)}
+  .btn-secondary{color:var(--text);border-color:var(--border)}
+  .btn-secondary:hover{border-color:var(--accent-text)}
+  .stat-number{color:var(--accent-text)}
+  .section-label{color:var(--accent-text)}
+  .service-card{background:var(--surface);border-color:var(--border)}
+  .service-card:hover{border-color:var(--accent-text)}
+  .service-num{color:var(--violet)}
+  .service-card p{color:var(--muted)}
+  .pulse{background:var(--surface);border-color:var(--border)}
+  .pulse-feature{background:var(--bg);border-color:var(--border)}
+  .pulse-feature:hover{border-color:var(--violet)}
+  .pulse-icon{color:var(--accent-text)}
+  .pulse-feature p{color:var(--muted)}
+  .pulse-note{color:var(--muted)}
+  .project-card{background:var(--surface);border-color:var(--border)}
+  .project-card:hover{border-color:var(--violet)}
+  .project-tag{color:var(--violet)}
+  .project-origin{color:var(--accent-text)}
+  .project-card p{color:var(--muted)}
+  .project-stack span{background:var(--bg);border-color:var(--border);color:var(--muted)}
+  .project-link{color:var(--accent-text)}
+  .project-link:hover{color:var(--violet)}
+  .stack{background:var(--surface);border-color:var(--border)}
+  .stack-pill{background:var(--bg);border-color:var(--border);color:var(--text)}
+  .stack-pill:hover{border-color:var(--accent-text);box-shadow:0 4px 20px rgba(61,107,0,.1)}
+  .stack-pill[data-cat="ai"]{border-color:rgba(109,40,217,.3)}
+  .stack-pill[data-cat="ai"]:hover{border-color:var(--violet);box-shadow:0 4px 20px rgba(109,40,217,.1)}
+  .stack-divider{color:var(--muted)}
+  .stack-divider::before,.stack-divider::after{background:var(--border)}
+  .stack-pulse{background:linear-gradient(90deg,transparent,var(--accent-text),transparent)}
+  .about-bio p{color:var(--muted)}
+  .about-quote{color:var(--accent-text);border-left-color:var(--accent-text)}
+  .about-photo{border-color:var(--border)}
+  .timeline-year{color:var(--muted)}
+  .timeline-item.active .timeline-year{color:var(--accent-text)}
+  .timeline-item.active .timeline-body h4{color:var(--accent-text)}
+  .timeline-body p{color:var(--muted)}
+  .contact{background:var(--surface);border-color:var(--border)}
+  .contact-info p{color:var(--muted)}
+  .contact-email{color:var(--accent-text)!important}
+  .contact-email:hover{color:var(--violet)!important}
+  .contact-cal{color:var(--muted)}
+  .contact-cal:hover{color:var(--accent-text)}
+  .contact-socials a{border-color:var(--border);color:var(--muted)}
+  .contact-socials a:hover{border-color:var(--accent-text);color:var(--accent-text)}
+  .form-group label{color:var(--muted)}
+  .form-group input,.form-group select,.form-group textarea{background:var(--bg);border-color:var(--border);color:var(--text)}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent-text)}
+  .form-status.success{color:var(--accent-text)}
+  .footer{border-color:var(--border)}
+  .footer-brand{color:var(--text)}
+  .footer-copy{color:var(--muted)}
+  .cursor-dot{background:var(--accent-text)}
+  .cursor-ring{border-color:var(--accent-text)}
+  .nav-brand .ux{color:var(--accent-text)}
+  .footer-brand .ux{color:var(--accent-text)}
+  .live-sites{background:var(--surface);border-color:var(--border)}
+  .site-card{background:var(--bg);border-color:var(--border)}
+  .site-card:hover{border-color:var(--accent-text);box-shadow:0 0 24px rgba(61,107,0,.08)}
+  .site-card--self{background:linear-gradient(135deg,var(--bg) 0%,rgba(109,40,217,.05) 100%);border-color:rgba(109,40,217,.3)}
+  .site-card--self:hover{border-color:var(--violet);box-shadow:0 0 28px rgba(109,40,217,.1)}
+  .site-card-domain{color:var(--accent-text)}
+  .site-card--self .site-card-domain{color:var(--violet)}
+  .site-card-tag{color:var(--muted)}
+  .site-card-origin{color:var(--text)}
+  .site-card-stack span{background:var(--surface);border-color:var(--border);color:var(--muted)}
+  .site-card-cta{color:var(--accent-text)}
+  .site-card--self .site-card-cta{color:var(--violet)}
+  .site-card:hover .site-card-cta{color:var(--accent-text)}
+  .building-strip{background:var(--surface);border-color:var(--border);border-left-color:var(--violet)}
+  .building-strip h3{color:var(--text)}
+  .building-strip p{color:var(--muted)}
+  .building-label{color:var(--violet)}
+  .building-domains span{background:var(--bg);color:var(--text);border-color:rgba(109,40,217,.25)}
+  .building-note{color:var(--muted)}
+  .building-note a{color:var(--accent-text)}
+  .building-note a:hover{color:var(--violet)}
+  .hero-subtitle-sep{color:var(--muted)}
+  .hero h1 .h1-soft{color:var(--muted)}
+}
+/* ── MANUAL THEME OVERRIDE ── */
+[data-theme="light"]{
+  --bg:#FAFAF8;--surface:#F0EFF4;--accent:#C4FF53;--accent-hover:#b8f245;
+  --accent-text:#3D6B00;--accent-btn-bg:#C4FF53;--accent-btn-text:#1a1a2e;
+  --violet:#6D28D9;--violet-hover:#5B21B6;--text:#1A1A2E;--muted:#443E55;
+  --border:#D8D4E2;
+}
+[data-theme="light"] body{background:var(--bg);color:var(--text)}
+[data-theme="light"] ::selection{background:var(--accent);color:var(--text)}
+[data-theme="light"] .nav{background:rgba(250,250,248,.85);border-bottom-color:var(--border)}
+[data-theme="light"] .nav-brand{color:var(--text)}
+[data-theme="light"] .mobile-nav{background:rgba(250,250,248,.97)}
+[data-theme="light"] .hero-orb--lime{background:rgba(196,255,83,.15)}
+[data-theme="light"] .hero-orb--violet{background:rgba(109,40,217,.08)}
+[data-theme="light"] .hero-kicker{color:var(--accent-text)}
+[data-theme="light"] .hero-kicker-dot{background:var(--accent-text);box-shadow:0 0 8px rgba(61,107,0,.45)}
+[data-theme="light"] .hero-wordmark{color:var(--text);text-shadow:0 0 60px rgba(196,255,83,.28)}
+[data-theme="light"] .hero-wordmark .ux{color:var(--accent-text);text-shadow:none}
+[data-theme="light"] .hero-headline{color:var(--text)}
+[data-theme="light"] .hero-subtitle .name-text{color:var(--accent-text)}
+[data-theme="light"] .btn-primary{background:var(--accent-btn-bg);color:var(--accent-btn-text)}
+[data-theme="light"] .btn-primary:hover{background:var(--accent-hover)}
+[data-theme="light"] .stat-number{color:var(--accent-text)}
+[data-theme="light"] .section-label{color:var(--accent-text)}
+[data-theme="light"] .service-card:hover{border-color:var(--accent-text)}
+[data-theme="light"] .pulse-icon{color:var(--accent-text)}
+[data-theme="light"] .project-origin{color:var(--accent-text)}
+[data-theme="light"] .project-link{color:var(--accent-text)}
+[data-theme="light"] .project-link:hover{color:var(--violet)}
+[data-theme="light"] .stack-pill:hover{border-color:var(--accent-text);box-shadow:0 4px 20px rgba(61,107,0,.1)}
+[data-theme="light"] .stack-pill[data-cat="ai"]:hover{border-color:var(--violet);box-shadow:0 4px 20px rgba(109,40,217,.1)}
+[data-theme="light"] .stack-pulse{background:linear-gradient(90deg,transparent,var(--accent-text),transparent)}
+[data-theme="light"] .about-quote{color:var(--accent-text);border-left-color:var(--accent-text)}
+[data-theme="light"] .timeline-item.active .timeline-year{color:var(--accent-text)}
+[data-theme="light"] .timeline-item.active .timeline-body h4{color:var(--accent-text)}
+[data-theme="light"] .contact-email{color:var(--accent-text)!important}
+[data-theme="light"] .contact-email:hover{color:var(--violet)!important}
+[data-theme="light"] .contact-socials a:hover{border-color:var(--accent-text);color:var(--accent-text)}
+[data-theme="light"] .form-group input:focus,[data-theme="light"] .form-group select:focus,[data-theme="light"] .form-group textarea:focus{border-color:var(--accent-text)}
+[data-theme="light"] .form-status.success{color:var(--accent-text)}
+[data-theme="light"] .cursor-dot{background:var(--accent-text)}
+[data-theme="light"] .cursor-ring{border-color:var(--accent-text)}
+[data-theme="light"] .nav-brand .ux{color:var(--accent-text)}
+[data-theme="light"] .footer-brand .ux{color:var(--accent-text)}
+[data-theme="light"] .live-sites{background:var(--surface);border-color:var(--border)}
+[data-theme="light"] .site-card{background:var(--bg);border-color:var(--border)}
+[data-theme="light"] .site-card:hover{border-color:var(--accent-text);box-shadow:0 0 24px rgba(61,107,0,.08)}
+[data-theme="light"] .site-card--self{background:linear-gradient(135deg,var(--bg) 0%,rgba(109,40,217,.05) 100%);border-color:rgba(109,40,217,.3)}
+[data-theme="light"] .site-card--self:hover{border-color:var(--violet);box-shadow:0 0 28px rgba(109,40,217,.1)}
+[data-theme="light"] .site-card-domain{color:var(--accent-text)}
+[data-theme="light"] .site-card--self .site-card-domain{color:var(--violet)}
+[data-theme="light"] .site-card-tag{color:var(--muted)}
+[data-theme="light"] .site-card-origin{color:var(--text)}
+[data-theme="light"] .site-card-stack span{background:var(--surface);border-color:var(--border);color:var(--muted)}
+[data-theme="light"] .site-card-cta{color:var(--accent-text)}
+[data-theme="light"] .site-card--self .site-card-cta{color:var(--violet)}
+[data-theme="light"] .site-card:hover .site-card-cta{color:var(--accent-text)}
+[data-theme="light"] .building-strip{background:var(--surface);border-color:var(--border);border-left-color:var(--violet)}
+[data-theme="light"] .building-strip h3{color:var(--text)}
+[data-theme="light"] .building-strip p{color:var(--muted)}
+[data-theme="light"] .building-domains span{background:var(--bg);color:var(--text);border-color:rgba(109,40,217,.25)}
+[data-theme="light"] .building-note{color:var(--muted)}
+[data-theme="light"] .building-note a{color:var(--accent-text)}
+[data-theme="light"] .building-note a:hover{color:var(--violet)}
+[data-theme="light"] .hero-subtitle-sep{color:var(--muted)}
+[data-theme="light"] .hero h1 .h1-soft{color:var(--muted)}
+[data-theme="light"] .contact-cal:hover{color:var(--accent-text)}
+[data-theme="dark"]{
+  --bg:#080810;--surface:#0D0D1A;--accent:#C4FF53;--accent-hover:#d4ff73;
+  --accent-text:#C4FF53;--accent-btn-bg:#C4FF53;--accent-btn-text:#080810;
+  --violet:#8B5CF6;--violet-hover:#a78bfa;--text:#E8E8F0;--muted:#DAD6EA;
+  --border:#1a1a2e;
+}
+/* theme toggle button */
+.theme-toggle{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;width:48px;height:48px;border-radius:50%;border:2px solid var(--accent);background:var(--surface);color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,background .2s,transform .2s;box-shadow:0 4px 20px rgba(196,255,83,.2)}
+.theme-toggle:active{transform:scale(.9)}
+.theme-toggle:hover{border-color:var(--accent-text)}
+.theme-toggle svg{width:20px;height:20px}
+
+/* WORDMARK X: the two-blade mark set as a glyph (design lime x technology violet) */
+:root{--x-lime:#C4FF53;--x-violet:#8B5CF6}
+@media(prefers-color-scheme:light){:root{--x-lime:#3D6B00;--x-violet:#6D28D9}}
+[data-theme="light"]{--x-lime:#3D6B00;--x-violet:#6D28D9}
+[data-theme="dark"]{--x-lime:#C4FF53;--x-violet:#8B5CF6}
+.wm-x{height:.74em;width:.66em;display:inline-block;vertical-align:baseline;margin:0 -.008em;
+  filter:drop-shadow(0 0 12px rgba(196,255,83,.4)) drop-shadow(0 0 16px rgba(139,92,246,.32))}
+.wm-x use{pointer-events:none}
+@media(prefers-color-scheme:light){.wm-x{filter:drop-shadow(0 0 6px rgba(109,40,217,.18))}}
+[data-theme="light"] .wm-x{filter:drop-shadow(0 0 6px rgba(109,40,217,.18))}
+[data-theme="dark"] .wm-x{filter:drop-shadow(0 0 12px rgba(196,255,83,.4)) drop-shadow(0 0 16px rgba(139,92,246,.32))}
+.nav-brand .wm-x{height:.8em;width:.64em}
+
+/* ══ AUDIT FIXES 2026-10 ══ accessibility, contrast, honest pills. Overrides the rules above. */
+:root{--violet-text:#B9A2FF;--error:#FF8A8A;--input-border:#5A5A78}
+@media(prefers-color-scheme:light){:root{--accent-text:#2E5200;--violet-text:#5B21B6;--error:#9B0019;--input-border:#8A8499}}
+[data-theme="light"]{--accent-text:#2E5200;--violet-text:#5B21B6;--error:#9B0019;--input-border:#8A8499}
+[data-theme="dark"]{--accent-text:#C4FF53;--violet-text:#B9A2FF;--error:#FF8A8A;--input-border:#5A5A78}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* the real cursor always shows; the ring is a mouse-only flourish */
+body{cursor:auto}
+.cursor-dot{display:none}
+@media not all and (pointer:fine){.cursor-ring{display:none}}
+/* focus + skip link readable in both themes */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--accent-text);outline-offset:3px}
+.skip-link{background:var(--accent-btn-bg);color:var(--accent-btn-text)}
+/* toggled-dark on a light-mode device: nav + menu back to dark */
+[data-theme="dark"] .nav{background:rgba(8,8,16,.7)}
+[data-theme="dark"] .mobile-nav{background:rgba(8,8,16,.95)}
+/* accent text on surfaces uses the theme-safe token */
+.proof-client-tag,.project-link,.building-note a,.contact-email,.section-label,.hero-kicker,.project-origin{color:var(--accent-text)}
+.contact-email{color:var(--accent-text)!important}
+.service-num,.project-tag,.hero-subtitle .title-text,.building-label,.projects-more a{color:var(--violet-text)}
+.theme-toggle{border-color:var(--accent-text);color:var(--accent-text)}
+.form-status.error{color:var(--error)}
+.form-group input,.form-group select,.form-group textarea{border-color:var(--input-border)}
+/* 12px minimum text */
+.project-card-badge,.project-status,.project-tag,.building-label,.proof-client-tag,.site-card-tag{font-size:.75rem}
+@media(max-width:768px){.hero-kicker{font-size:.75rem;letter-spacing:1.5px}}
+/* status labels are not buttons: square tags, no pulsing */
+.project-card-badge,.project-status{border-radius:4px;animation:none}
+.stack-pill{border-radius:4px;cursor:default}
+.stack-pill:hover{transform:none;box-shadow:none}
+.stack-pill:hover::before{opacity:0}
+/* animations stop after a few cycles (WCAG 2.2.2) */
+.hero-kicker-dot{animation-iteration-count:3}
+.hero-orb--lime,.hero-orb--violet{animation-iteration-count:1,2}
+.stack-pulse{animation-iteration-count:2}
+/* 44px tap targets */
+.project-link,.building-note a,.contact-cal{display:inline-flex;align-items:center;min-height:44px}
+.contact-socials a{width:44px;height:44px}
+.nav-links a,.nav-dropdown-toggle{display:inline-flex;align-items:center;min-height:44px}
+.footer-link{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline}
+/* honeypot + privacy line */
+.hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-privacy{font-size:.8rem;color:var(--muted);margin-top:.75rem;text-align:center}
+.form-privacy a{text-decoration:underline;display:inline-flex;align-items:center;min-height:44px}
+/* second pass (re-measure 2026-10-13) */
+.nav-cta{background:var(--accent-btn-bg);color:var(--accent-btn-text);display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:768px){.nav-cta{display:none}}
+.nav-brand{display:inline-flex;align-items:center;min-height:44px}
+.mobile-nav a{display:inline-flex;align-items:center;min-height:44px}
+.projects-more a{display:inline-block;padding:.7rem 0}
+.contact-email{display:inline-flex;align-items:center;min-height:44px}
+.form-group input,.form-group select{min-height:44px}
+.hero-kicker{font-size:.75rem}
+.project-stack span,.proof-points span,.building-domains span,.building-note{font-size:.75rem}
+.project-spark{color:var(--accent-text)}
+.project-link:hover,.building-note a:hover,.contact-email:hover{color:var(--violet-text)!important}
+.form-group ::placeholder{color:var(--muted);opacity:1}
+:root{--input-border:#666684}
+[data-theme="dark"]{--input-border:#666684}
+@media(prefers-color-scheme:light){:root{--input-border:#8A8499}}
+[data-theme="light"]{--input-border:#8A8499}
+/* without JavaScript: no dead buttons, menu shown inline on phones */
+html:not(.js) .theme-toggle,html:not(.js) .hamburger{display:none}
+@media(max-width:768px){html:not(.js) .mobile-nav{display:flex;position:static;padding:5rem 1rem 1rem;gap:.25rem;background:var(--bg)}}
+/* hero headline is now the h1: same look as the old value line */
+h1.hero-headline{font-size:clamp(1.3rem,3.3vw,2rem);font-weight:500}
+@media(max-width:768px){h1.hero-headline{font-size:clamp(1.15rem,5vw,1.5rem)}}
+/* content stays visible if scripts never run */
+.reveal{opacity:1;transform:none}
+.js .reveal:not(.visible){opacity:0;transform:translateY(30px)}
+@media (prefers-reduced-motion: reduce){.js .reveal:not(.visible){opacity:1;transform:none}}
+</style>
 </head>
 <body>
 <!-- LUXIGA blade X: one mark, reused in every wordmark. Colors are theme-aware via CSS vars. -->
@@ -51,35 +616,39 @@
 
 <a href="#main-content" class="skip-link">Skip to content</a>
 
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" id="themeToggle" aria-label="Dark mode" aria-pressed="false">
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <svg class="icon-moon" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
 <!-- NAV -->
-<nav class="nav" aria-label="Main">
-  <div class="wrap">
-    <a href="#home" class="nav-brand" aria-label="LUXIGA, back to top">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</a>
-    <div class="nav-links">
-      <a href="#services">Services</a>
-      <div class="nav-dropdown">
-        <button class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
-          Work
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
-        </button>
-        <div class="nav-dropdown-menu">
-          <a href="#projects">Products</a>
-          <a href="#proof">Proof</a>
-        </div>
+<nav class="nav">
+  <a href="#home" class="nav-brand" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</a>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <div class="nav-dropdown">
+      <button class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+        Work
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
+      </button>
+      <div class="nav-dropdown-menu">
+        <a href="#projects">Products</a>
+        <a href="#proof">Proof</a>
       </div>
-      <a href="#pulse">Pulse</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
     </div>
-    <button class="theme-toggle" id="themeToggle" aria-label="Dark mode" aria-pressed="false">
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
-    <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
-    <button class="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
-      <span></span><span></span><span></span>
-    </button>
+    <a href="#pulse">Pulse</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
   </div>
+  <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
+  <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileNav">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- MOBILE NAV -->
@@ -90,173 +659,215 @@
   <a href="#pulse">Pulse</a>
   <a href="#about">About</a>
   <a href="#contact">Contact</a>
-  <a href="https://calendly.com/lukasgreen-ai-design" class="mobile-cta" target="_blank" rel="noopener">Book a free 30-min call <span aria-hidden="true">&rarr;</span><span class="sr-only"> (opens Calendly in a new tab)</span></a>
+  <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
 </div>
 
 <main id="main-content">
 
 <!-- HERO -->
 <section class="hero" id="home">
-  <div class="hero-canvas" aria-hidden="true"><canvas id="heroCanvas"></canvas></div>
-  <div class="hero-inner wrap">
-    <p class="hero-meta"><span class="live">Taking new projects</span><span>Design technology studio</span><span>Local-first AI</span></p>
-    <h1 class="hero-title">Small, private AI tools that <mark>clear the busywork</mark> <span class="soft">for small teams and the trades.</span></h1>
-    <div class="hero-row">
-      <p class="hero-lede">I listen for friction, then engineer the fix. Your data stays yours, no lock-in, and it keeps working.</p>
-      <p class="hero-byline"><strong>Lukas Green</strong>Design Technologist, founder</p>
-    </div>
-    <div class="hero-ctas">
-      <a href="https://calendly.com/lukasgreen-ai-design" class="btn btn-primary" target="_blank" rel="noopener">Book a free 30-min call <span class="arr" aria-hidden="true">&rarr;</span><span class="sr-only"> (opens Calendly in a new tab)</span></a>
-      <a href="/audit" class="btn btn-ghost">Or take the 3-min Pulse <span class="arr" aria-hidden="true">&rarr;</span></a>
+  <div class="hero-canvas"><canvas id="heroCanvas"></canvas></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb--lime"></div>
+  <div class="hero-orb hero-orb--violet"></div>
+  <div class="hero-content">
+    <p class="hero-kicker reveal"><span class="hero-kicker-dot" aria-hidden="true"></span>Design Technology Studio &middot; Local&#8209;First AI</p>
+    <p class="hero-wordmark reveal" role="img" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</p>
+    <h1 class="hero-headline reveal">Small, private AI tools that clear the busywork for small teams and the trades.</h1>
+    <p class="hero-subtitle reveal">
+      <span class="name-text">Lukas Green</span><span class="hero-subtitle-sep" aria-hidden="true"> &middot; </span><span class="title-text">Design Technologist</span>
+    </p>
+    <p class="hero-tagline reveal">I listen for friction, then engineer the fix. Your data stays yours, no lock-in, and it keeps working.</p>
+    <div class="hero-ctas reveal">
+      <a href="https://calendly.com/lukasgreen-ai-design" class="btn-primary" target="_blank" rel="noopener">Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
+      <a href="/audit" class="btn-secondary">Or take the 3-min Pulse &rarr;</a>
     </div>
   </div>
-  <p class="hero-wordmark" role="img" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</p>
 </section>
 
 <!-- SERVICES -->
 <section class="services" id="services">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-index"><b>01</b>Services</p>
-      <h2 class="sec-title">Five ways in. <span class="soft">Each one starts with listening.</span></h2>
-      <p class="sec-lede">I listen for where the work actually hurts, scope the smallest tool that fixes it, and build it local-first so it gets adopted and stays adopted.</p>
-    </header>
-    <div class="svc-list reveal">
-      <details class="svc">
-        <summary><span class="svc-num">01</span><span class="svc-name">AI Consulting</span><span class="svc-hook">Find the one place AI pays for itself, and hear plainly where it does not.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>I look for the one place in your operation where AI actually earns its keep, and I tell you honestly about the places it would not. You leave with a tool that still works six months after it ships, not a demo that gets abandoned.</p></div>
-      </details>
-      <details class="svc">
-        <summary><span class="svc-num">02</span><span class="svc-name">Systems Automation</span><span class="svc-hook">Map the repeat work, then build it out of your week.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>If your team does the same manual steps every week, I map exactly where the repetition is and build a lightweight tool that takes it over. It should be easy to maintain and easy to forget about. Your team just notices the day getting shorter.</p></div>
-      </details>
-      <details class="svc">
-        <summary><span class="svc-num">03</span><span class="svc-name">Design for Adoption</span><span class="svc-hook">Tools shaped around how your people already work.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>A tool nobody uses gives nothing back. Two decades of design go into every build, so the interface fits how people actually work. If someone needs a walkthrough to use it, it is not done yet.</p></div>
-      </details>
-      <details class="svc">
-        <summary><span class="svc-num">04</span><span class="svc-name">Quality Engineering</span><span class="svc-hook">Test coverage and release gates your team will actually follow.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>I talk with your team to find where quality slips through, then build the safety net: real test coverage, release gates, and a process people follow. I can set QA up from scratch, fix a pipeline that fights you, or train your team so the quality outlasts me.</p></div>
-      </details>
-      <details class="svc">
-        <summary><span class="svc-num">05</span><span class="svc-name">Guided Process Design</span><span class="svc-hook">Turn a confusing process into one clear next step at a time.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>Financial aid, licensing, onboarding, a degree audit, a vendor setup that assumes you already know the answer. I read the whole thing against the rules that actually govern it, then rebuild it as a path with one clear next step. It is written at three levels of detail, so a nervous first-timer and someone who has done it twice can work from the same document.<span class="fine" style="display:block">Independent work, not affiliated with or endorsed by any school, agency or lender.</span></p></div>
-      </details>
-    </div>
-  </div>
-</section>
-
-<!-- PULSE -->
-<section class="pulse" id="pulse">
-  <div class="wrap pulse-grid">
-    <header class="sec-head">
-      <p class="sec-index"><b>02</b>Digital readiness</p>
-      <h2 class="sec-title">Not sure where AI fits? <span class="soft">Take the Pulse.</span></h2>
-      <p class="sec-lede">A free, 7-question read on your business's digital readiness. You get a readiness score and a starting plan.</p>
-    </header>
-    <div class="pulse-card reveal">
-      <div class="pulse-steps" aria-hidden="true"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span><span></span><span></span></div>
-      <p class="pulse-facts"><span>7 questions</span><span>About 3 minutes</span><span>No signup</span></p>
-      <a href="/audit" class="btn btn-primary">Start the free assessment <span class="arr" aria-hidden="true">&rarr;</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- PRODUCTS -->
-<section class="projects" id="projects">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-index"><b>03</b>Products</p>
-      <h2 class="sec-title">Software that stays yours. <span class="soft">One live, one in build, more under wraps.</span></h2>
-      <p class="sec-lede">Sovereign by default, and connected only when your team needs it.</p>
-    </header>
-    <div class="spec-grid">
-      <article class="spec reveal">
-        <div class="spec-top"><span class="spec-kind">Local-first platform</span><span class="tag">Flagship</span></div>
-        <h3>LUXIGA OS</h3>
-        <p class="spec-for">Your files and recordings, understood, without the cloud.</p>
-        <dl>
-          <div><dt>For</dt><dd>Teams whose data can't leave the building</dd></div>
-          <div><dt>Does</dt><dd>Scans, transcribes, summarizes and routes files and voice memos</dd></div>
-          <div><dt>Runs</dt><dd>On your own hardware</dd></div>
-        </dl>
-        <a href="#contact" class="link">Ask about LUXIGA OS &rarr;</a>
-      </article>
-      <article class="spec reveal">
-        <div class="spec-top"><span class="spec-kind">Invoicing</span><span class="tag live">Live</span></div>
-        <h3>LUXIGA Bill</h3>
-        <p class="spec-for">For the contractor paying for a whole platform to use one corner of it.</p>
-        <dl>
-          <div><dt>For</dt><dd>Contractors who just need to send an invoice</dd></div>
-          <div><dt>Does</dt><dd>Polished invoices with PDF export, client tracking and email sending</dd></div>
-          <div><dt>Runs</dt><dd>Inside Google Sheets, no monthly fee</dd></div>
-        </dl>
-        <a href="case-studies/solobill.html" class="link">Read the case study &rarr;</a>
-      </article>
-      <article class="spec reveal">
-        <div class="spec-top"><span class="spec-kind">Guided setup</span><span class="tag">In build</span></div>
-        <h3>LUXIGA Runbook</h3>
-        <p class="spec-for">For instructions written by someone who forgot what it is like not to know.</p>
-        <dl>
-          <div><dt>For</dt><dd>Setups that eat an afternoon and your patience</dd></div>
-          <div><dt>Does</dt><dd>Reads the official docs, drafts a verified flow, serves it as Guided, Standard or Expert</dd></div>
-          <div><dt>Runs</dt><dd>With the connection off</dd></div>
-        </dl>
-        <a href="#contact" class="link">Ask about early access &rarr;</a>
-      </article>
-    </div>
-    <p class="also reveal">Also built: <a href="case-studies/canvasskit.html">CanvassKit</a>, an outreach CRM in a Google Sheets sidebar, and my studio portfolio at <a href="https://lukasdgreen.com" target="_blank" rel="noopener">lukasdgreen.com<span class="sr-only"> (opens in a new tab)</span></a>.</p>
-    <div class="engine reveal">
-      <p class="engine-label">One engine, many trades</p>
-      <div>
-        <h3>The same local-first engine, pointed at the next trade.</h3>
-        <p>Voice and files in, structured records out, on your own hardware. It fits any field where the work is spoken rather than typed and the data has to stay in the building: the trades, field services, and regulated back-office work.</p>
+  <div class="container">
+    <div class="section-label reveal">How I Work</div>
+    <h2 class="section-title reveal">Services</h2>
+    <p class="section-subtitle reveal">I listen for where the work actually hurts, scope the smallest tool that fixes it, and build it local-first so it gets adopted and stays adopted.</p>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <h3>AI Consulting</h3>
+        <p>Most AI advice is noise. I find the one place in your operation where it actually pays for itself, and I am honest about the ten places it does not. You leave with a tool that still works six months after it ships, not the demo that wowed the room and got abandoned.</p>
       </div>
-      <a href="https://calendly.com/lukasgreen-ai-design" class="btn btn-ghost" target="_blank" rel="noopener">Talk it through <span class="arr" aria-hidden="true">&rarr;</span><span class="sr-only"> (opens Calendly in a new tab)</span></a>
+      <div class="service-card reveal">
+        <div class="service-num">02</div>
+        <h3>Systems Automation</h3>
+        <p>Recurring manual work is a design failure, not a fact of life. I map the exact repetition and engineer it away. What I build is lightweight, maintainable, and invisible by design. Your team should forget it is there and just feel the day get shorter.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <h3>Design for Adoption</h3>
+        <p>Capability means nothing if no one uses it. Two decades of design thinking go into every build, so the interface matches how people actually work, not how an engineer wishes they would. If someone needs a walkthrough to use it, it&rsquo;s not done yet.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">04</div>
+        <h3>Quality Engineering</h3>
+        <p>Shipping fast counts for nothing if it breaks in front of your customer. I interview your team to find exactly where quality slips through, then build the safety net: real test coverage, release gates, and a process people actually follow. I can stand QA up from scratch, fix a pipeline that fights you, or onboard your team so the quality outlasts me.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">05</div>
+        <h3>Guided Process Design</h3>
+        <p>Some processes are only hard because nobody ever wrote them down properly. Financial aid, licensing, onboarding, a degree audit, a vendor setup that assumes you already know the answer. I read the whole sprawling mess against the rules that actually govern it, then rebuild it as a path with one clear next step. Written at three levels of detail, so a nervous first-timer and someone who has done it twice can work from the same document. Nobody should need a second job to finish a form. Independent work, not affiliated with or endorsed by any school, agency or lender.</p>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- PULSE (slim strip) -->
+<section class="pulse" id="pulse">
+  <div class="container">
+    <div class="section-label reveal">Digital Readiness</div>
+    <h2 class="section-title reveal">Not sure where AI actually fits? Take the Pulse.</h2>
+    <p class="section-subtitle reveal">A free, 7-question read on your business's digital readiness. Answer in about 3 minutes and get a readiness score and a starting plan. No signup.</p>
+    <div class="pulse-cta-wrap reveal" style="text-align:left;margin-top:2rem">
+      <a href="/audit" class="btn-primary">Start the free assessment &rarr;</a>
+      <div class="pulse-note">About 3 minutes &middot; No signup required</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="container">
+    <div class="section-label reveal">What I Build</div>
+    <h2 class="section-title reveal">Products</h2>
+    <p class="section-subtitle reveal">Software you own, sovereign by default and connected only when your team needs it. One live today, one in build, more under wraps.</p>
+    <div class="projects-grid">
+
+      <div class="project-card project-card--featured reveal">
+        <div class="project-card-badge">Flagship</div>
+        <div class="project-tag">Local-First AI Platform</div>
+        <h3>LUXIGA OS</h3>
+        <div class="project-origin">Your files and recordings, understood, without the cloud.</div>
+        <p>A local-first intelligence layer for teams whose data can't leave the building. Scan, transcribe, summarize, and route files and voice memos on your own hardware. Built to be the engine for LUXIGA's vertical tools.</p>
+        <div class="project-stack">
+          <span>Local LLM</span><span>Speech to text</span><span>Private by default</span>
+        </div>
+        <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-card-badge">Live</div>
+        <div class="project-tag">Invoicing / Finance</div>
+        <h3>LUXIGA Bill <span class="project-spark" aria-hidden="true">◆</span></h3>
+        <div class="project-origin">For the contractor paying for a whole platform to use one corner of it.</div>
+        <p>Send a polished invoice straight from Google Sheets. PDF export, client tracking, and email sending built in. No SaaS subscription, no learning curve, no monthly fee for software you barely use.</p>
+        <div class="project-stack">
+          <span>Apps Script</span><span>Google Sheets</span><span>PDF + email</span>
+        </div>
+        <a href="case-studies/solobill.html" class="project-link">View Case Study &rarr;</a>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-card-badge">In Build</div>
+        <div class="project-tag">Guided Setup / Performance Support</div>
+        <h3>LUXIGA Runbook <span class="project-spark" aria-hidden="true">&#9670;</span></h3>
+        <div class="project-origin">For instructions written by someone who forgot what it is like not to know.</div>
+        <p>A step engine for the setups that eat an afternoon and your patience. It reads the official documentation, drafts a verified flow, and serves it at whichever density fits you: Guided, Standard, or Expert. Exact values show at every level, only the hand-holding fades. Works with the connection off, because the worst moment to lose the instructions is halfway through.</p>
+        <div class="project-stack">
+          <span>Offline reader</span><span>Local LLM author</span><span>Three-tier density</span>
+        </div>
+        <a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener" class="project-link">Ask about early access: book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
+      </div>
+
+    </div>
+
+    <div class="projects-more reveal">
+      Also built: <a href="case-studies/canvasskit.html">CanvassKit</a>, an outreach CRM in a Google Sheets sidebar, and my studio portfolio at <a href="https://lukasdgreen.com" target="_blank" rel="noopener">lukasdgreen.com</a>. The live client build is <a href="#proof">just below</a>.
+    </div>
+
+    <!-- BUILDING IN: platform capability strip -->
+    <div class="building-strip reveal">
+      <div class="building-label">One Engine · Many Verticals</div>
+      <h3>The same local-first engine, pointed at the next trade</h3>
+      <p>LUXIGA OS is the engine, and each vertical is the same pattern pointed at a different trade. Voice and files in, structured records out, on your own hardware. It fits any field where the work is spoken rather than typed and the data has to stay in the building: the trades, field services, and regulated back-office work. If that sounds like your operation, the fastest path is a quick call.</p>
+      <div class="building-domains">
+        <span>Voice-to-record for the trades</span>
+        <span>Privacy-constrained workflows</span>
+        <span>Field and back-office ops</span>
+        <span>Local LLM · Speech to text · Structured output</span>
+      </div>
+      <div class="building-note"><a href="https://calendly.com/lukasgreen-ai-design" target="_blank" rel="noopener">Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a></div>
+    </div>
+
   </div>
 </section>
 
 <!-- PROOF -->
 <section class="proof" id="proof">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-index"><b>04</b>Proof</p>
-      <h2 class="sec-title">It ships, and it's live. <span class="soft">A real client build, shown as it is.</span></h2>
-    </header>
-    <div class="proof-panel reveal">
-      <p class="proof-tag">Client build<br>Salem, OR</p>
-      <div>
-        <a href="https://goldgosling.com" class="proof-domain" target="_blank" rel="noopener">goldgosling.com <span class="arr" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a>
-        <p class="proof-who">Golden Goose Construction, roofing and renovation</p>
-        <p class="proof-body">A contractor needed leads without paying the CRM tax. I designed, built and deployed the whole thing: a fast marketing site, affiliate tracking with QR campaigns, an admin panel, and automated lead notifications. After a real prospect was lost to a social-media in-app browser, I shipped a safeguard so it would not happen again.</p>
-        <ul class="proof-facts">
-          <li>Live site</li><li>Affiliate and QR tracking</li><li>Automated lead alerts</li><li>In-app browser safeguard</li>
-        </ul>
+  <div class="container">
+    <div class="section-label reveal">Proof</div>
+    <h2 class="section-title reveal">It ships. It's live.</h2>
+    <p class="section-subtitle reveal">Not slideware. A real client build, live on the web, shown as it is.</p>
+    <div class="proof-client reveal">
+      <div class="proof-client-tag">Client build · Live site</div>
+      <h3>Golden Goose Construction &middot; Salem, OR</h3>
+      <p>A roofing and renovation contractor needed leads without paying the CRM tax. I designed, built, and deployed the whole thing: a fast marketing site, affiliate tracking with QR campaigns, an admin panel, and automated lead notifications. After a real prospect was lost to a social-media in-app browser, I shipped a safeguard so it would not happen again.</p>
+      <div class="proof-points">
+        <span>Live at goldgosling.com</span><span>Affiliate + QR tracking</span><span>Automated lead alerts</span><span>Webview safeguard</span>
       </div>
+      <a href="https://goldgosling.com" class="project-link" target="_blank" rel="noopener">Open the live site &rarr;<span class="sr-only"> (opens in a new tab)</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section class="stack" id="stack">
+  <div class="container">
+    <div class="section-label reveal">Tools</div>
+    <h2 class="section-title reveal">Built With</h2>
+    <div class="stack-orbit reveal" id="stackOrbit">
+      <span class="stack-pill" data-cat="backend">Python</span>
+      <span class="stack-pill" data-cat="backend">FastAPI</span>
+      <span class="stack-pill" data-cat="backend">SQLite</span>
+      <span class="stack-pill" data-cat="ai">Ollama</span>
+      <span class="stack-pill" data-cat="ai">Claude API</span>
+      <span class="stack-pill" data-cat="frontend">HTML / CSS</span>
+      <span class="stack-pill" data-cat="frontend">Vanilla JS</span>
+      <span class="stack-pill" data-cat="frontend">Google Apps Script</span>
+      <span class="stack-pill" data-cat="ops">Figma</span>
+      <span class="stack-pill" data-cat="ops">GitHub</span>
+      <div class="stack-pulse"></div>
     </div>
   </div>
 </section>
 
 <!-- ABOUT -->
 <section class="about" id="about">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-index"><b>05</b>About</p>
-      <h2 class="sec-title">A designer who learned to build. <span class="soft">Then everything clicked.</span></h2>
-    </header>
+  <div class="container">
+    <div class="section-label reveal">Background</div>
+    <h2 class="section-title reveal">About</h2>
     <div class="about-grid">
-      <img src="assets/img/cartoon-lukas.jpeg" alt="Illustrated portrait of Lukas Green" class="about-photo reveal" width="746" height="883" loading="lazy">
-      <p class="about-cap">Lukas Green, founder</p>
+      <div class="about-photo-wrap reveal">
+        <img src="assets/img/cartoon-lukas.jpeg" alt="Illustrated portrait of Lukas Green" class="about-photo">
+        <div class="about-quote">"I listen for what's getting in the way, then I build the fix."</div>
+      </div>
       <div class="about-bio reveal">
-        <p>LUXIGA is my studio. I work with small teams and mission-driven organizations on the places where AI can take friction out of the work and make systems easier to use.</p>
-        <p>I build automation tools, internal platforms and AI-assisted workflows, and every project starts from one specific problem someone is tired of. When AI tools arrived and I realized I could build what I designed, not just design it, everything clicked.</p>
-        <p>Before that I came up through design, doing in-house print and design work from 2004 onward. Two decades of developing an eye for what works across print, digital and UX. I am finishing my degree at Portland State.</p>
-        <ol class="timeline">
-          <li><span class="yr">2004 to 2020</span><div><h4>Graphic Design</h4><p>In-house print and design</p></div></li>
-          <li><span class="yr">2020 to 2023</span><div><h4>The Pivot</h4><p>Portland State, design meets systems thinking</p></div></li>
-          <li class="now"><span class="yr">2023 to now</span><div><h4>Design Technologist</h4><p>Building where design meets automation</p></div></li>
-        </ol>
+        <p>LUXIGA is the studio where design intelligence meets smart automation. I partner with mission-driven teams who need both technical fluency and design intelligence, especially where AI can reduce friction and build more accessible systems.</p>
+        <p>I architect automation-driven tools, internal platforms, and AI-augmented workflows. Every project starts with a specific friction point. When AI tools arrived and I realized I could build, not just design, everything clicked.</p>
+        <p>Before that I came up through design, doing in-house print and design work from 2004 onward. Two decades developing an eye for what works across print, digital, and UX. I am finishing my degree at Portland State, where design and systems thinking keep colliding in useful ways.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-year">2004 - 2020</div>
+            <div class="timeline-body"><h4>Graphic Design</h4><p>In-house print and design</p></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-year">2020 - 2023</div>
+            <div class="timeline-body"><h4>The Pivot</h4><p>Portland State, design meets systems thinking</p></div>
+          </div>
+          <div class="timeline-item active">
+            <div class="timeline-year">2023 - Now</div>
+            <div class="timeline-body"><h4>Design Technologist</h4><p>Building where design meets automation</p></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -264,26 +875,24 @@
 
 <!-- CONTACT -->
 <section class="contact" id="contact">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-index"><b>06</b>Contact</p>
-      <h2 class="sec-title">Tell me what's getting in the way. <span class="soft">I'll tell you if I can help.</span></h2>
-    </header>
+  <div class="container">
+    <div class="section-label reveal">Let's Talk</div>
+    <h2 class="section-title reveal">Got a project?</h2>
     <div class="contact-grid">
       <div class="contact-info reveal">
         <p>Open to consulting engagements, partnerships, and conversations about AI and systems design.</p>
         <a href="mailto:lukas@luxiga.co" class="contact-email">lukas@luxiga.co</a>
-        <p style="margin-top:1rem">Rather talk? <a href="https://calendly.com/lukasgreen-ai-design" class="link" target="_blank" rel="noopener">Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a></p>
+        <br>
+        <a href="https://calendly.com/lukasgreen-ai-design" class="contact-cal" target="_blank" rel="noopener">Not sure if we're a fit? Book a free 30-min call &rarr;<span class="sr-only"> (opens Calendly in a new tab)</span></a>
         <div class="contact-socials">
-          <a href="https://github.com/Lukas-Green" target="_blank" rel="noopener" aria-label="GitHub (opens in a new tab)">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.410-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <a href="https://github.com/Lukas-Green" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           </a>
-          <a href="https://www.linkedin.com/in/lukas-green-designer/" target="_blank" rel="noopener" aria-label="LinkedIn (opens in a new tab)">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.850 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <a href="https://www.linkedin.com/in/lukas-green-designer/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           </a>
         </div>
       </div>
-      <!-- form-guard: exempt Formspree-hosted contact form, no backend of ours to run a bot check, honeypot in place -->
       <form id="contactForm" class="reveal" action="https://formspree.io/f/mkopjjab" method="POST">
         <input type="hidden" name="source" value="luxiga.co / contact form">
         <input type="hidden" name="_subject" value="New lead: luxiga.co contact form">
@@ -291,31 +900,30 @@
         <div class="form-row">
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" id="name" name="name" required autocomplete="name" placeholder="Your name">
+            <input type="text" id="name" name="name" required placeholder="Your name">
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@company.com">
+            <input type="email" id="email" name="email" required placeholder="you@company.com">
           </div>
         </div>
         <div class="form-group">
-          <label for="scope">What do you need?</label>
+          <label for="scope">Scope</label>
           <select id="scope" name="scope" required>
-            <option value="" disabled selected>Pick the closest one</option>
+            <option value="" disabled selected>Select a scope</option>
             <option value="AI Consulting">AI Consulting</option>
             <option value="Systems Automation">Systems Automation</option>
-            <option value="UX/Design">Design for Adoption (UX)</option>
-            <option value="Quality Engineering">Quality Engineering</option>
-            <option value="Guided Process Design">Guided Process Design</option>
+            <option value="UX/Design">UX/Design</option>
             <option value="Digital Readiness Audit">Digital Readiness Audit</option>
+            <option value="Guided Process Design">Guided Process Design</option>
             <option value="Something else">Something else</option>
           </select>
         </div>
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea id="message" name="message" required placeholder="What's slowing your team down?"></textarea>
+          <textarea id="message" name="message" required placeholder="Tell me about the friction..."></textarea>
         </div>
-        <button type="submit" class="btn btn-primary form-submit">Send message <span class="arr" aria-hidden="true">&rarr;</span></button>
+        <button type="submit" class="btn-primary form-submit">Send Message &rarr;</button>
         <p class="form-privacy">Your message goes only to Lukas. <a href="/privacy.html">Privacy</a></p>
         <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
       </form>
@@ -325,13 +933,448 @@
 
 </main>
 
+<!-- FOOTER -->
 <footer class="footer">
-  <div class="wrap">
-    <div class="footer-brand" role="img" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</div>
-    <div class="footer-copy">&copy; 2026 LUXIGA LLC &middot; <a href="/privacy.html" class="footer-link">Privacy</a></div>
-  </div>
+  <div class="footer-brand" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</div>
+  <div class="footer-copy">&copy; 2026 LUXIGA LLC. All rights reserved. &middot; <a href="/privacy.html" class="footer-link">Privacy</a></div>
 </footer>
 
-<script src="assets/js/site.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* ── THEME TOGGLE ── */
+  const toggle = document.getElementById('themeToggle');
+  const iconSun = toggle.querySelector('.icon-sun');
+  const iconMoon = toggle.querySelector('.icon-moon');
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme',t);
+    localStorage.setItem('theme',t);
+    iconSun.style.display = t==='dark' ? 'block' : 'none';
+    iconMoon.style.display = t==='light' ? 'block' : 'none';
+    toggle.setAttribute('aria-pressed', t==='dark' ? 'true' : 'false');
+  }
+  const saved = localStorage.getItem('theme');
+  if(saved){ setTheme(saved); }
+  else {
+    const prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+    iconSun.style.display = prefersDark ? 'block' : 'none';
+    iconMoon.style.display = prefersDark ? 'none' : 'block';
+    toggle.setAttribute('aria-pressed', prefersDark ? 'true' : 'false');
+  }
+  toggle.addEventListener('click',()=>{
+    const current = document.documentElement.getAttribute('data-theme')
+      || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+    setTheme(current==='dark'?'light':'dark');
+  });
+
+  /* ── MOBILE NAV ── */
+  const hamburger = document.querySelector('.hamburger');
+  const mobileNav = document.querySelector('.mobile-nav');
+  hamburger.addEventListener('click', () => {
+    const open = hamburger.classList.toggle('open');
+    mobileNav.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) { const first = mobileNav.querySelector('a'); if (first) first.focus(); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+      hamburger.classList.remove('open');
+      mobileNav.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.focus();
+    }
+  });
+  mobileNav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileNav.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ── HOME SCROLL (force re-scroll even if hash is already #home) ── */
+  document.querySelectorAll('a[href="#home"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      hamburger.classList.remove('open');
+      mobileNav.classList.remove('open');
+      history.replaceState(null, '', '#home');
+    });
+  });
+
+  /* ── ACTIVE NAV ON SCROLL ── */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const dropToggle = document.querySelector('.nav-dropdown-toggle');
+  function updateActiveNav() {
+    const scrollY = window.scrollY + 120;
+    sections.forEach(sec => {
+      const top = sec.offsetTop;
+      const h = sec.offsetHeight;
+      const id = sec.getAttribute('id');
+      if (scrollY >= top && scrollY < top + h) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector('.nav-links a[href="#' + id + '"]');
+        if (link) link.classList.add('active');
+        // Highlight the "Work" parent when its section is active
+        if (dropToggle) dropToggle.classList.toggle('active', !!link && link.closest('.nav-dropdown-menu') !== null);
+      }
+    });
+  }
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+
+  /* ── NAV DROPDOWN (touch + keyboard) ── */
+  const dropdown = document.querySelector('.nav-dropdown');
+  if (dropdown && dropToggle) {
+    const dropMenu = dropdown.querySelector('.nav-dropdown-menu');
+    dropToggle.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = dropMenu.classList.toggle('open');
+      dropToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    dropMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      dropMenu.classList.remove('open');
+      dropToggle.setAttribute('aria-expanded', 'false');
+    }));
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target)) {
+        dropMenu.classList.remove('open');
+        dropToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  if (window.matchMedia('(pointer:fine)').matches) {
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    (function moveCursor() {
+      rx += (mx - rx) * 0.30;
+      ry += (my - ry) * 0.30;
+      dot.style.left = mx + 'px';
+      dot.style.top = my + 'px';
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(moveCursor);
+    })();
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+  }
+
+  /* ── HERO CANVAS ANIMATION ── */
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, mouseX = 0, mouseY = 0, startTime = 0, nodes = [], animFrame;
+  let cx, cy, ringInner, ringOuter, lite = false, frozen = false, pulses = [], nextPulseAt = 2400;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let heroInView = true;
+
+  function resize() {
+    const hero = canvas.parentElement.parentElement;
+    W = canvas.width = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+    const base = Math.min(W, H);
+    ringInner = base * 0.17;
+    ringOuter = base * 0.44;
+    lite = reduceMotion || W < 760;
+    // Anchor the hub to the wordmark's real position so the constellation reads as its system
+    const cr = canvas.getBoundingClientRect();
+    const wm = document.querySelector('.hero-wordmark');
+    if (wm) { const wr = wm.getBoundingClientRect(); cx = wr.left + wr.width / 2 - cr.left; cy = wr.top + wr.height / 2 - cr.top; }
+    else { cx = W / 2; cy = H * 0.44; }
+    // Keep the spotlight glow centered on the wordmark hub
+    const glow = document.querySelector('.hero-glow');
+    if (glow) { glow.style.top = cy + 'px'; glow.style.left = cx + 'px'; }
+    // Assigning canvas.width above clears the bitmap. When we are not looping
+    // (reduced-motion, or a frozen mobile frame), schedule one repaint.
+    if ((reduceMotion || frozen) && !animFrame) animFrame = requestAnimationFrame(animate);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  // Re-measure once the display font swaps in (wordmark height changes)
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(resize);
+
+  document.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+  });
+
+  // ── The system: LUXIGA is the hub, its tools are the nodes clustered around it ──
+  const TOOLS = ['LUXIGA OS','LUXIGA Bill','Runbook','Pulse'];
+  const NODE_COUNT = 24;
+  const assembleDoneAt = 60 + (NODE_COUNT - 1) * 40 + 900;
+  const isTouch = window.matchMedia('(hover:none)').matches;
+  // Theme-aware node/edge colour. Dark: lime + violet on near-black. Light: deep green + deep
+  // violet so the constellation reads on a near-white field instead of washing out.
+  let curLight = false;
+  const isLight = () => { const th = document.documentElement.getAttribute('data-theme'); return th ? th === 'light' : window.matchMedia('(prefers-color-scheme: light)').matches; };
+  const rgbaOf = (hex, a) => {
+    const violet = hex === '#8B5CF6';
+    const c = violet ? (curLight ? '109,40,217' : '139,92,246') : (curLight ? '61,107,0' : '196,255,83');
+    return 'rgba(' + c + ',' + a + ')';
+  };
+
+  // First TOOLS.length nodes are named products; the rest are smaller connective nodes
+  for (let i = 0; i < NODE_COUNT; i++) {
+    const labeled = i < TOOLS.length;
+    nodes.push({
+      label: labeled ? TOOLS[i] : null, angle: Math.random() * Math.PI * 2, ringT: labeled ? 0.18 + Math.random() * 0.62 : 0.4 + Math.random() * 0.58, angleSpeed: (Math.random() * 0.0006 + 0.0004) * (Math.random() < 0.5 ? -1 : 1), wobblePhase: Math.random() * Math.PI * 2, wobbleAmp: Math.random() * 0.045 + 0.02, r: labeled ? Math.random() * 1.4 + 2.6 : Math.random() * 1.1 + 1.3, color: (labeled ? i % 2 === 0 : i % 3 === 0) ? '#8B5CF6' : '#C4FF53', born: 60 + i * 40, dx: 0, dy: 0, x: 0, y: 0, alpha: 0, flash: -9999
+    });
+  }
+
+  // Mesh gradient blobs
+  const blobs = [
+    { x: 0.25, y: 0.35, r: 0.25, color: '196,255,83', speed: 0.0003, phase: 0 }, { x: 0.7, y: 0.6, r: 0.22, color: '196,255,83', speed: 0.0004, phase: 2 }, { x: 0.5, y: 0.45, r: 0.2, color: '139,92,246', speed: 0.00035, phase: 4 }
+  ];
+
+  function drawMeshGradient(t) {
+    blobs.forEach(b => {
+      const bx = (b.x + Math.sin(t * b.speed + b.phase) * 0.08) * W;
+      const by = (b.y + Math.cos(t * b.speed * 0.7 + b.phase) * 0.06) * H;
+      const br = b.r * Math.min(W, H);
+      const grad = ctx.createRadialGradient(bx, by, 0, bx, by, br);
+      grad.addColorStop(0, 'rgba(' + b.color + ',0.07)');
+      grad.addColorStop(1, 'rgba(' + b.color + ',0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
+    });
+  }
+
+  // ── The constellation: nodes orbit the LUXIGA hub; spokes run inward; pulses show it's live ──
+  function drawConstellation(elapsed, t) {
+    const settled = reduceMotion; // render fully-formed and motionless
+    curLight = isLight(); // resolve theme once per frame so node/edge colours follow light/dark
+
+    // Focus = nearest labeled node to the cursor (using last frame's positions, within a generous
+    // read radius). The focused node stops fleeing and magnetically eases toward the cursor so its
+    // label parks under it and stays readable, while every other node keeps repelling.
+    let hover = null;
+    if (!lite && !isTouch) {
+      let best = 96 * 96;
+      nodes.forEach(n => {
+        if (!n.label || n.alpha < 0.6) return;
+        const d = (n.x - mouseX) ** 2 + (n.y - mouseY) ** 2;
+        if (d < best) { best = d; hover = n; }
+      });
+    }
+
+    // Pass 1: position every node in polar space around the hub, so it clusters IN, never flees to the edges
+    nodes.forEach(n => {
+      let prog;
+      if (settled) { prog = 1; }
+      else {
+        const age = elapsed - n.born;
+        if (age <= 0) { n.alpha = 0; n.x = cx; n.y = cy; return; }
+        const p = Math.min(age / 750, 1);
+        prog = 1 - Math.pow(1 - p, 3); // ease-out: nodes emanate from the hub
+      }
+      n.alpha = prog;
+      const focused = n === hover;
+      if (!lite && !focused) n.angle += n.angleSpeed; // the focused node holds its angle (stops drifting)
+      const wob = (lite || focused) ? 0 : Math.sin(t * 0.0004 + n.wobblePhase) * n.wobbleAmp;
+      const radius = (ringInner + (ringOuter - ringInner) * n.ringT) * (1 + wob) * (0.42 + 0.58 * prog);
+      const bx = cx + Math.cos(n.angle) * radius;
+      const by = cy + Math.sin(n.angle) * radius * 0.72; // elliptical: wider than tall, fits widescreen
+      if (focused) { // magnetic: ease toward the cursor and hold, so the label is easy to read
+        n.dx += ((mouseX - bx) * 0.5 - n.dx) * 0.2;
+        n.dy += ((mouseY - by) * 0.5 - n.dy) * 0.2;
+      } else {
+        if (!lite && !isTouch) { // cursor pushes the other nodes; they spring back
+          const mdx = bx - mouseX, mdy = by - mouseY, md = Math.hypot(mdx, mdy);
+          if (md < 150 && md > 0) { const f = (150 - md) / 150 * 6; n.dx += (mdx / md) * f; n.dy += (mdy / md) * f; }
+        }
+        n.dx *= 0.86; n.dy *= 0.86;
+      }
+      n.x = bx + n.dx; n.y = by + n.dy;
+    });
+
+    // Spokes: every tool connects back into the hub
+    nodes.forEach(n => {
+      if (n.alpha <= 0.02) return;
+      const bright = n === hover ? 0.5 : 0.06;
+      const g = ctx.createLinearGradient(cx, cy, n.x, n.y);
+      g.addColorStop(0, rgbaOf(n.color, 0));
+      g.addColorStop(1, rgbaOf(n.color, bright * n.alpha));
+      ctx.strokeStyle = g; ctx.lineWidth = n === hover ? 1.2 : 0.7;
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(n.x, n.y); ctx.stroke();
+    });
+
+    // Short edges between neighbours (organic mesh)
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        if (a.alpha < 0.2 || b.alpha < 0.2) continue;
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < 150) {
+          ctx.strokeStyle = rgbaOf('#C4FF53', (1 - d / 150) * 0.09 * Math.min(a.alpha, b.alpha));
+          ctx.lineWidth = 0.5;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+    }
+
+    // Signal pulses travelling hub -> node (the system is doing something)
+    if (!lite && !settled) {
+      if (elapsed > nextPulseAt) {
+        const cand = nodes.filter(n => n.label && n.alpha > 0.9);
+        if (cand.length) pulses.push({ node: cand[Math.floor(Math.random() * cand.length)], start: elapsed });
+        nextPulseAt = elapsed + 1400 + Math.random() * 1400;
+      }
+      pulses = pulses.filter(p => {
+        const pr = (elapsed - p.start) / 900;
+        if (pr >= 1) { p.node.flash = elapsed; return false; }
+        const px = cx + (p.node.x - cx) * pr, py = cy + (p.node.y - cy) * pr;
+        ctx.beginPath(); ctx.arc(px, py, 2.4, 0, Math.PI * 2);
+        ctx.fillStyle = rgbaOf(p.node.color, 0.9 * (1 - pr * 0.3)); ctx.fill();
+        return true;
+      });
+    }
+
+    // Nodes (labeled ones get a soft halo; freshly-pulsed ones flash)
+    nodes.forEach(n => {
+      if (n.alpha <= 0.02) return;
+      const flash = Math.max(0, 1 - (elapsed - n.flash) / 600);
+      const hovered = n === hover;
+      if (n.label) {
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 4 + flash * 3, 0, Math.PI * 2);
+        ctx.fillStyle = rgbaOf(n.color, (0.1 + flash * 0.25) * n.alpha); ctx.fill();
+      }
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r + (hovered ? 1.5 : 0), 0, Math.PI * 2);
+      ctx.fillStyle = rgbaOf(n.color, Math.min(1, (0.75 + flash * 0.25) * n.alpha)); ctx.fill();
+    });
+
+    // Hover label chip
+    if (hover) {
+      ctx.font = '700 12px "Space Mono", monospace';
+      const label = hover.label.toUpperCase();
+      const tw = ctx.measureText(label).width;
+      const lx = hover.x, ly = hover.y - hover.r - 12;
+      ctx.fillStyle = curLight ? 'rgba(255,255,255,0.92)' : 'rgba(8,8,16,0.85)';
+      ctx.fillRect(lx - tw / 2 - 8, ly - 13, tw + 16, 20);
+      ctx.strokeStyle = rgbaOf(hover.color, 0.5); ctx.lineWidth = 1;
+      ctx.strokeRect(lx - tw / 2 - 8, ly - 13, tw + 16, 20);
+      ctx.fillStyle = rgbaOf(hover.color, 1); ctx.textAlign = 'center';
+      ctx.fillText(label, lx, ly + 1);
+      ctx.textAlign = 'left';
+    }
+  }
+
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+
+    ctx.clearRect(0, 0, W, H);
+    drawMeshGradient(timestamp);
+    drawConstellation(elapsed, timestamp);
+
+    // Reduced-motion: render one settled frame, don't loop.
+    if (reduceMotion) { animFrame = null; return; }
+    // Lite (small screens): play the assemble once, then hold static (no continuous physics on phones).
+    if (lite && elapsed > assembleDoneAt) { frozen = true; animFrame = null; return; }
+    // Off-screen: pause the loop to save CPU; the hero observer restarts it.
+    if (heroInView) animFrame = requestAnimationFrame(animate);
+    else animFrame = null;
+  }
+  requestAnimationFrame(animate);
+
+  // Pause the canvas animation when the hero scrolls out of view
+  const heroSection = document.getElementById('home');
+  if (heroSection) {
+    new IntersectionObserver(entries => {
+      heroInView = entries[0].isIntersecting;
+      if (heroInView && !reduceMotion && !frozen && !animFrame) animFrame = requestAnimationFrame(animate);
+    }, { threshold: 0 }).observe(heroSection);
+  }
+
+  // Repaint once on theme change when the loop is idle (reduced-motion / frozen mobile)
+  const onThemeChange = () => { if ((reduceMotion || frozen) && !animFrame) animFrame = requestAnimationFrame(animate); };
+  new MutationObserver(onThemeChange).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', onThemeChange);
+
+  /* ── COUNTER ANIMATION ── */
+  const counters = document.querySelectorAll('.stat-number');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
+        if (reduceMotion) { el.textContent = target + suffix; counterObserver.unobserve(el); return; }
+        const duration = 1500;
+        const start = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => counterObserver.observe(c));
+
+  /* ── SCROLL REVEAL ── */
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(r => revealObserver.observe(r));
+
+  /* ── STACK PILL FLOAT ── */
+  const pills = document.querySelectorAll('.stack-pill');
+  pills.forEach((pill, i) => {
+    const duration = 2.5 + Math.random() * 1.5;
+    const delay = i * 0.2;
+    pill.style.animation = 'pillFloat ' + duration + 's ease-in-out ' + delay + 's 3';
+  });
+
+  /* ── CONTACT FORM ── */
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const hp = form.querySelector('[name="_gotcha"]');
+    if (hp && hp.value) { form.reset(); status.textContent = 'Sent! I\'ll be in touch.'; status.className = 'form-status success'; return; }
+    const btn = form.querySelector('.form-submit');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    status.textContent = '';
+    status.className = 'form-status';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        status.textContent = 'Sent! I\'ll be in touch.';
+        status.classList.add('success');
+        form.reset();
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) {
+      status.textContent = 'Error sending message. Try emailing directly.';
+      status.classList.add('error');
+    }
+    btn.disabled = false;
+    btn.textContent = 'Send Message \u2192';
+  });
+
+})();
+</script>
+
 </body>
 </html>
