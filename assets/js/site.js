@@ -139,13 +139,26 @@
   var hero = document.getElementById('home');
   var isTouch = window.matchMedia('(hover: none)').matches;
   var GRID = 32;
+  // Every named terminal is a real, public piece of work. Hover shows what it is, click opens it.
+  // Blurbs reuse the wording already on this page, so the hover makes no new claims.
   var TOOLS = [
-    { label: 'LUXIGA OS', fx: 0.66, fy: 0.20 },
-    { label: 'LUXIGA Bill', fx: 0.88, fy: 0.32 },
-    { label: 'Runbook', fx: 0.74, fy: 0.50 },
-    { label: 'Pulse', fx: 0.92, fy: 0.60 },
-    { fx: 0.80, fy: 0.14 }, { fx: 0.96, fy: 0.44 }, { fx: 0.68, fy: 0.66 }, { fx: 0.84, fy: 0.72 }
+    { label: 'LUXIGA OS', kind: 'Flagship', fx: 0.64, fy: 0.08, href: '#projects',
+      blurb: 'Your files and recordings, understood, without the cloud. Runs on your own hardware.' },
+    { label: 'LUXIGA Bill', kind: 'Live', fx: 0.86, fy: 0.18, href: 'case-studies/solobill.html',
+      blurb: 'Polished invoices with PDF export, client tracking and email sending, inside Google Sheets.' },
+    { label: 'Runbook', kind: 'In build', fx: 0.70, fy: 0.30, href: '#projects',
+      blurb: 'Reads the official docs, drafts a verified flow, serves it as Guided, Standard or Expert.' },
+    { label: 'Pulse', kind: 'Free assessment', fx: 0.90, fy: 0.40, href: '/audit',
+      blurb: 'A 7-question read on your digital readiness. About 3 minutes, no signup.' },
+    { label: 'CanvassKit', kind: 'Case study', fx: 0.64, fy: 0.52, href: 'case-studies/canvasskit.html',
+      blurb: 'A field contact tracker for a nonprofit outreach team, inside Google Workspace.' },
+    { label: 'goldgosling.com', kind: 'Client build', fx: 0.82, fy: 0.62, href: 'https://goldgosling.com', ext: true,
+      blurb: 'Marketing site, affiliate and QR tracking, an admin panel and automated lead alerts.' },
+    { label: 'lukasdgreen.com', kind: 'Portfolio', fx: 0.66, fy: 0.74, href: 'https://lukasdgreen.com', ext: true,
+      blurb: 'My studio portfolio.' },
+    { fx: 0.78, fy: 0.04 }, { fx: 0.97, fy: 0.30 }, { fx: 0.96, fy: 0.56 }, { fx: 0.94, fy: 0.72 }
   ];
+  var pinned = null, hot = null;
   var W, H, dpr, hub, busY, spineX, nodes = [], showNodes = false, lite = false;
   var lamp = { x: 0, y: 0, tx: 0, ty: 0 }, mouse = null, colors = {};
   var t0 = 0, raf = null, inView = true, pulses = [], nextPulse = 1600;
@@ -189,7 +202,8 @@
       var nx = spineX + 48 + (W - spineX - 150) * ((t.fx - 0.6) / 0.38);
       var ny = 80 + (busY - 140) * (t.fy / 0.75);
       return {
-        label: t.label || null, x: Math.round(nx / GRID) * GRID, y: Math.round(ny / GRID) * GRID,
+        label: t.label || null, kind: t.kind, blurb: t.blurb, href: t.href, ext: t.ext,
+        x: Math.round(nx / GRID) * GRID, y: Math.round(ny / GRID) * GRID,
         ox: 0, oy: 0, born: 200 + i * 110, flash: -1e9, color: i % 2 ? 'violet' : 'lime'
       };
     }).filter(function (n) { return n.y < busY - GRID && n.x < W - 40; });
@@ -249,8 +263,8 @@
     if (!showNodes) return;
     var settled = reduceMotion;
     // Magnetic focus: the nearest named terminal leans toward the cursor and its label lights up.
-    var focus = null;
-    if (mouse && !isTouch && !settled) {
+    var focus = pinned;
+    if (mouse && !isTouch) {
       var best = 90 * 90;
       nodes.forEach(function (n) {
         if (!n.label) return;
@@ -259,8 +273,9 @@
       });
     }
     nodes.forEach(function (n) {
-      var tx = n === focus ? Math.max(-24, Math.min(24, (mouse.x - n.x) * 0.4)) : 0;
-      var ty = n === focus ? Math.max(-24, Math.min(24, (mouse.y - n.y) * 0.4)) : 0;
+      var lean = n === focus && mouse && !settled;
+      var tx = lean ? Math.max(-24, Math.min(24, (mouse.x - n.x) * 0.4)) : 0;
+      var ty = lean ? Math.max(-24, Math.min(24, (mouse.y - n.y) * 0.4)) : 0;
       n.ox += (tx - n.ox) * 0.18; n.oy += (ty - n.oy) * 0.18;
     });
 
@@ -269,7 +284,8 @@
       var frac = settled ? 1 : Math.max(0, Math.min(1, (elapsed - n.born) / 900));
       if (frac <= 0) return;
       frac = 1 - Math.pow(1 - frac, 3);
-      ctx.strokeStyle = rgba(colors[n.color], n === focus ? 0.75 : (n.label ? 0.28 : 0.14));
+      var dim = focus && n !== focus ? 0.5 : 1;
+      ctx.strokeStyle = rgba(colors[n.color], n === focus ? 0.75 : (n.label ? 0.28 : 0.14) * dim);
       strokePartial(pathOf(n), frac);
       n.ready = frac >= 1;
     });
@@ -279,6 +295,10 @@
         var c = nodes.filter(function (n) { return n.label && n.ready; });
         if (c.length) pulses.push({ n: c[Math.floor(Math.random() * c.length)], s: elapsed });
         nextPulse = elapsed + 1100 + Math.random() * 1300;
+      }
+      // While a terminal is in focus, keep a signal running out to it.
+      if (focus && focus.ready && !pulses.some(function (p) { return p.n === focus && elapsed - p.s < 700; })) {
+        pulses.push({ n: focus, s: elapsed });
       }
       pulses = pulses.filter(function (p) {
         var path = pathOf(p.n), pr = (elapsed - p.s) / 1300;
@@ -312,9 +332,65 @@
         ctx.fillText(n.label.toUpperCase(), x + 14, y + 0.5);
       }
     });
+    if (focus && (focus.ready || settled)) drawCard(focus);
     // Hub socket on the X.
     ctx.fillStyle = rgba(colors.lime, 0.9);
     ctx.fillRect(hub.x - 3, hub.y - 3, 6, 6);
+  }
+
+  function wrapText(text, maxW) {
+    var words = text.split(' '), lines = [], line = '';
+    words.forEach(function (w) {
+      var t = line ? line + ' ' + w : w;
+      if (ctx.measureText(t).width > maxW && line) { lines.push(line); line = w; } else line = t;
+    });
+    if (line) lines.push(line);
+    return lines;
+  }
+  // The hover card: what the terminal is, and where clicking it goes. Kept right of the spine
+  // so it never sits under the hero copy.
+  function drawCard(n) {
+    var x = n.x + n.ox, y = n.y + n.oy, pad = 14;
+    var cw = Math.min(260, W - spineX - 24);
+    ctx.font = '400 13px "Space Grotesk", sans-serif';
+    var lines = wrapText(n.blurb, cw - pad * 2);
+    var ch = pad + 14 + 8 + lines.length * 18 + 10 + 14 + pad;
+    var cx = Math.max(spineX + 12, Math.min(W - cw - 12, x - 20));
+    var cy = y + 22;
+    if (cy + ch > busY - 8) cy = y - 22 - ch;
+    ctx.fillStyle = rgba(colors.bg, 0.94);
+    ctx.fillRect(cx, cy, cw, ch);
+    ctx.strokeStyle = rgba(colors[n.color], 0.8);
+    ctx.lineWidth = 1;
+    ctx.strokeRect(cx + 0.5, cy + 0.5, cw - 1, ch - 1);
+    ctx.fillStyle = rgba(colors[n.color], 1);
+    ctx.fillRect(cx, cy, 3, ch);
+    ctx.textBaseline = 'top';
+    ctx.font = '700 10px "Space Mono", monospace';
+    ctx.fillStyle = rgba(colors.ink, 0.7);
+    ctx.fillText(n.kind.toUpperCase(), cx + pad, cy + pad);
+    ctx.font = '400 13px "Space Grotesk", sans-serif';
+    ctx.fillStyle = rgba(colors.ink, 1);
+    lines.forEach(function (l, i) { ctx.fillText(l, cx + pad, cy + pad + 22 + i * 18); });
+    ctx.font = '700 10px "Space Mono", monospace';
+    ctx.fillStyle = rgba(colors.ink, 0.85);
+    var cue = isTouch ? (pinned === n ? 'TAP AGAIN TO OPEN' : 'TAP TO OPEN') : 'CLICK TO OPEN';
+    ctx.fillText(cue + (n.ext ? ' ↗' : ' →'), cx + pad, cy + ch - pad - 12);
+    ctx.textBaseline = 'middle';
+  }
+
+  function hitNode(px, py) {
+    var hit = null, best = 26 * 26;
+    nodes.forEach(function (n) {
+      if (!n.label || !n.ready) return;
+      var d = Math.pow(n.x + n.ox - px, 2) + Math.pow(n.y + n.oy - py, 2);
+      if (d < best) { best = d; hit = n; }
+    });
+    return hit;
+  }
+  function openNode(n) {
+    if (n.ext) window.open(n.href, '_blank', 'noopener');
+    else window.location.href = n.href;
   }
 
   function frame(ts) {
@@ -338,8 +414,21 @@
     var r = hero.getBoundingClientRect();
     mouse = { x: e.clientX - r.left, y: e.clientY - r.top };
     lamp.tx = mouse.x; lamp.ty = mouse.y;
+    var onCopy = e.target.closest && e.target.closest('a, button, h1, p');
+    hot = showNodes && !onCopy ? hitNode(mouse.x, mouse.y) : null;
+    hero.style.cursor = hot ? 'pointer' : '';
+    kick();
   });
-  hero.addEventListener('pointerleave', function () { mouse = null; lamp.tx = hub.x; lamp.ty = hub.y - 40; });
+  hero.addEventListener('pointerleave', function () { mouse = null; hot = null; hero.style.cursor = ''; lamp.tx = hub.x; lamp.ty = hub.y - 40; kick(); });
+  hero.addEventListener('click', function (e) {
+    if (!showNodes || (e.target.closest && e.target.closest('a, button'))) return;
+    var r = hero.getBoundingClientRect();
+    var n = hitNode(e.clientX - r.left, e.clientY - r.top);
+    if (!n) { if (pinned) { pinned = null; kick(); } return; }
+    // Touch has no hover: the first tap shows the card, the second opens it.
+    if (isTouch && pinned !== n) { pinned = n; kick(); return; }
+    openNode(n);
+  });
   new IntersectionObserver(function (en) { inView = en[0].isIntersecting; if (inView) kick(); }).observe(hero);
   var onTheme = function () { readColors(); kick(); };
   new MutationObserver(onTheme).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
