@@ -13,7 +13,8 @@ test.describe('Book a Call CTAs', () => {
     await page.goto('/');
     const links = page.locator(`a[href="${CALENDLY}"]`);
     const count = await links.count();
-    expect(count).toBeGreaterThanOrEqual(5);
+    // Nav, mobile nav, hero and contact. The 2026-11 redesign cut the repeats on purpose.
+    expect(count).toBeGreaterThanOrEqual(4);
     for (let i = 0; i < count; i++) {
       await expect(links.nth(i)).toHaveAttribute('target', '_blank');
       await expect(links.nth(i)).toHaveAttribute('rel', 'noopener');

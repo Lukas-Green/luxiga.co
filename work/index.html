@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- CSP: every script is an external file, so there are no inline-script hashes to keep in sync. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://formspree.io; form-action https://formspree.io; frame-src 'self'; object-src 'none'; base-uri 'self'">
+<title>Work · LUXIGA</title>
+<meta name="description" content="LUXIGA products and client work: LUXIGA OS, LUXIGA Bill, LUXIGA Runbook, CanvassKit and the live goldgosling.com build.">
+<meta name="author" content="Lukas Green">
+<meta property="og:title" content="Work · LUXIGA">
+<meta property="og:description" content="LUXIGA products and client work: LUXIGA OS, LUXIGA Bill, LUXIGA Runbook, CanvassKit and the live goldgosling.com build.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://luxiga.co/assets/img/og-preview.png">
+<meta property="og:url" content="https://luxiga.co/work">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LUXIGA, AI Design Technology Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Work · LUXIGA">
+<meta name="twitter:description" content="LUXIGA products and client work: LUXIGA OS, LUXIGA Bill, LUXIGA Runbook, CanvassKit and the live goldgosling.com build.">
+<meta name="twitter:image" content="https://luxiga.co/assets/img/og-preview.png">
+<meta name="theme-color" content="#0B0B0F" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F1EA" media="(prefers-color-scheme: light)">
+<link rel="canonical" href="https://luxiga.co/work">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/svg+xml" sizes="32x32" href="/favicon-32.svg">
+<link rel="icon" type="image/svg+xml" sizes="16x16" href="/favicon-16.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.svg">
+<script src="../assets/js/boot.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body data-page="work">
+<!-- LUXIGA blade X: one mark, reused in every wordmark. Colors are theme-aware via CSS vars. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="lx-x" viewBox="12 12 40 40">
+    <path d="M37,12 L52,12 L27,52 L12,52 Z" fill="var(--x-violet,#8B5CF6)"/>
+    <path d="M12,12 L27,12 L52,52 L37,52 Z" fill="var(--x-lime,#C4FF53)"/>
+  </symbol>
+</svg>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<!-- NAV -->
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a href="../" class="nav-brand" aria-label="LUXIGA, home">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</a>
+    <div class="nav-links">
+      <a href="../services/">Services</a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-toggle active" aria-current="page" aria-haspopup="true" aria-expanded="false">
+          Work
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
+        </button>
+        <div class="nav-dropdown-menu">
+          <a href="../work/#projects">Products</a>
+          <a href="../work/#proof">Proof</a>
+        </div>
+      </div>
+      <a href="../audit/">Pulse</a>
+      <a href="../about/">About</a>
+      <a href="../#contact">Contact</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Dark mode" aria-pressed="false">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a href="https://calendly.com/lukasgreen-ai-design" class="nav-cta" target="_blank" rel="noopener">Book a free 30-min call<span class="sr-only"> (opens Calendly in a new tab)</span></a>
+    <button class="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="../services/">Services</a>
+  <a href="../work/#projects">Products</a>
+  <a href="../work/#proof">Proof</a>
+  <a href="../audit/">Pulse</a>
+  <a href="../about/">About</a>
+  <a href="../#contact">Contact</a>
+  <a href="https://calendly.com/lukasgreen-ai-design" class="mobile-cta" target="_blank" rel="noopener">Book a free 30-min call <span aria-hidden="true">&rarr;</span><span class="sr-only"> (opens Calendly in a new tab)</span></a>
+</div>
+
+<main id="main-content">
+
+<section class="page projects" id="projects">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-index"><b>01</b>Products</p>
+      <h1 class="sec-title">Software that stays yours. <span class="soft">One live, one in build, more under wraps.</span></h1>
+      <p class="sec-lede">Sovereign by default, and connected only when your team needs it.</p>
+    </header>
+    <div class="spec-grid">
+      <article class="spec reveal">
+        <div class="spec-top"><span class="spec-kind">Local-first platform</span><span class="tag">Flagship</span></div>
+        <h2>LUXIGA OS</h2>
+        <p class="spec-for">Your files and recordings, understood, without the cloud.</p>
+        <dl>
+          <div><dt>For</dt><dd>Teams whose data can't leave the building</dd></div>
+          <div><dt>Does</dt><dd>Scans, transcribes, summarizes and routes files and voice memos</dd></div>
+          <div><dt>Runs</dt><dd>On your own hardware</dd></div>
+        </dl>
+        <a href="../#contact" class="link">Ask about LUXIGA OS &rarr;</a>
+      </article>
+      <article class="spec reveal">
+        <div class="spec-top"><span class="spec-kind">Invoicing</span><span class="tag live">Live</span></div>
+        <h2>LUXIGA Bill</h2>
+        <p class="spec-for">For the contractor paying for a whole platform to use one corner of it.</p>
+        <dl>
+          <div><dt>For</dt><dd>Contractors who just need to send an invoice</dd></div>
+          <div><dt>Does</dt><dd>Polished invoices with PDF export, client tracking and email sending</dd></div>
+          <div><dt>Runs</dt><dd>Inside Google Sheets, no monthly fee</dd></div>
+        </dl>
+        <a href="../case-studies/solobill.html" class="link">Read the case study &rarr;</a>
+      </article>
+      <article class="spec reveal">
+        <div class="spec-top"><span class="spec-kind">Guided setup</span><span class="tag">In build</span></div>
+        <h2>LUXIGA Runbook</h2>
+        <p class="spec-for">For instructions written by someone who forgot what it is like not to know.</p>
+        <dl>
+          <div><dt>For</dt><dd>Setups that eat an afternoon and your patience</dd></div>
+          <div><dt>Does</dt><dd>Reads the official docs, drafts a verified flow, serves it as Guided, Standard or Expert</dd></div>
+          <div><dt>Runs</dt><dd>With the connection off</dd></div>
+        </dl>
+        <a href="../#contact" class="link">Ask about early access &rarr;</a>
+      </article>
+    </div>
+    <p class="also reveal">Also built: <a href="../case-studies/canvasskit.html">CanvassKit</a>, an outreach CRM in a Google Sheets sidebar, and my studio portfolio at <a href="https://lukasdgreen.com" target="_blank" rel="noopener">lukasdgreen.com<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+    <div class="engine reveal">
+      <p class="engine-label">One engine, many trades</p>
+      <div>
+        <h2>The same local-first engine, pointed at the next trade.</h2>
+        <p>Voice and files in, structured records out, on your own hardware. It fits any field where the work is spoken rather than typed and the data has to stay in the building: the trades, field services, and regulated back-office work.</p>
+      </div>
+      <a href="https://calendly.com/lukasgreen-ai-design" class="btn btn-ghost" target="_blank" rel="noopener">Talk it through <span class="arr" aria-hidden="true">&rarr;</span><span class="sr-only"> (opens Calendly in a new tab)</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="proof" id="proof">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-index"><b>02</b>Proof</p>
+      <h2 class="sec-title">It ships, and it's live. <span class="soft">A real client build, shown as it is.</span></h2>
+    </header>
+    <div class="proof-panel reveal">
+      <p class="proof-tag">Client build<br>Salem, OR</p>
+      <div>
+        <a href="https://goldgosling.com" class="proof-domain" target="_blank" rel="noopener">goldgosling.com <span class="arr" aria-hidden="true">&#8599;</span><span class="sr-only"> (opens in a new tab)</span></a>
+        <p class="proof-who">Golden Goose Construction, roofing and renovation</p>
+        <p class="proof-body">A contractor needed leads without paying the CRM tax. I designed, built and deployed the whole thing: a fast marketing site, affiliate tracking with QR campaigns, an admin panel, and automated lead notifications. After a real prospect was lost to a social-media in-app browser, I shipped a safeguard so it would not happen again.</p>
+        <ul class="proof-facts">
+          <li>Live site</li><li>Affiliate and QR tracking</li><li>Automated lead alerts</li><li>In-app browser safeguard</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT STEP -->
+<section class="contact cta-band">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="sec-index"><b>&rarr;</b>Next step</p>
+      <h2 class="sec-title">Tell me what's getting in the way. <span class="soft">I'll tell you if I can help.</span></h2>
+      <div class="cta-row">
+        <a href="https://calendly.com/lukasgreen-ai-design" class="btn btn-primary" target="_blank" rel="noopener">Book a free 30-min call <span class="arr" aria-hidden="true">&rarr;</span><span class="sr-only"> (opens Calendly in a new tab)</span></a>
+        <a href="../#contact" class="btn btn-ghost">Send a message <span class="arr" aria-hidden="true">&rarr;</span></a>
+      </div>
+    </header>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-brand" role="img" aria-label="LUXIGA">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</div>
+    <div class="footer-copy">&copy; 2026 LUXIGA LLC &middot; <a href="../privacy.html" class="footer-link">Privacy</a></div>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+</body>
+</html>

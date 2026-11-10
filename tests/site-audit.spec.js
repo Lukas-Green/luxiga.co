@@ -49,7 +49,7 @@ test.describe('Desktop Navigation', () => {
     await expect(menu).toHaveCSS('visibility', 'hidden');
     await page.locator('.nav-dropdown-toggle').hover();
     await expect(menu).toHaveCSS('visibility', 'visible');
-    await expect(menu.locator('a[href="#projects"]')).toBeVisible();
+    await expect(menu.locator('a[href="work/#projects"]')).toBeVisible();
   });
 
   test('Nav brand links to home', async ({ page }) => {
@@ -207,11 +207,37 @@ test.describe('Subpage mobile nav', () => {
 // ── Sections ──
 
 test.describe('Sections', () => {
-  test('All main sections exist', async ({ page }) => {
+  test('Homepage keeps the essentials', async ({ page }) => {
     await page.goto('/');
-    const sectionIds = ['home', 'services', 'pulse', 'projects', 'about', 'contact'];
+    const sectionIds = ['home', 'services', 'pulse', 'work', 'contact'];
     for (const id of sectionIds) {
       await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
+  });
+
+  // The long scroll was split 2026-11-10: detail lives on its own page.
+  const INNER = [
+    { path: '/services/', ids: ['services', 'ai-consulting', 'guided-process-design'] },
+    { path: '/work/', ids: ['projects', 'proof'] },
+    { path: '/about/', ids: ['about'] },
+  ];
+  for (const { path, ids } of INNER) {
+    test(`${path} has its sections, marks itself in the nav, and wires the page JS`, async ({ page }) => {
+      const errors = [];
+      page.on('pageerror', e => errors.push(e.message));
+      await page.goto(path);
+      for (const id of ids) await expect(page.locator(`#${id}`)).toHaveCount(1);
+      await expect(page.locator('html')).toHaveClass(/(^|\s)js(\s|$)/);
+      await expect(page.locator('.mobile-nav a')).toHaveCount(7);
+      expect(errors, errors.join('\n')).toEqual([]);
+    });
+  }
+
+  test('a homepage service row opens that service on the services page', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('.svc-index a[href="services/#quality-engineering"]').click();
+    await expect(page).toHaveURL(/\/services\/#quality-engineering$/);
+    await expect(page.locator('#quality-engineering')).toHaveAttribute('open', '');
+    await expect(page.locator('#ai-consulting')).not.toHaveAttribute('open', '');
   });
 });

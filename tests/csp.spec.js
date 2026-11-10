@@ -1,9 +1,9 @@
 const { test, expect } = require('@playwright/test');
 
-// index.html has a meta CSP that pins the two inline scripts by sha256. Any edit
-// to either script makes the hash stale and the browser silently refuses to run
-// it: the page still renders, but the nav, form and theme toggle are dead. This
-// spec is the tripwire for that.
+// index.html has a meta CSP with script-src 'self': only the external files in
+// assets/js/ may run. If someone adds an inline script, the browser silently
+// refuses it: the page still renders, but the nav, form and theme toggle are dead.
+// This spec is the tripwire for that.
 
 const CSP_PATTERN = /Content Security Policy|Content-Security-Policy|Refused to/i;
 
@@ -20,10 +20,10 @@ test.describe('Homepage CSP', () => {
     await page.goto('/');
     await page.waitForLoadState('load');
 
-    // Script 1 (head): adds class js to <html>.
+    // boot.js (head): adds class js to <html>.
     await expect(page.locator('html')).toHaveClass(/(^|\s)js(\s|$)/);
 
-    // Script 2 (body): wires the hamburger.
+    // site.js (body): wires the hamburger.
     const mobileNav = page.locator('.mobile-nav');
     await expect(mobileNav).not.toBeVisible();
     await page.locator('.hamburger').click();
