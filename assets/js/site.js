@@ -69,7 +69,8 @@
 
   /* ── ACTIVE NAV ON SCROLL ── */
   var navLinks = document.querySelectorAll('.nav-links a');
-  if ('IntersectionObserver' in window) {
+  // Inner pages mark their own link with aria-current, so only the homepage tracks scroll.
+  if ('IntersectionObserver' in window && document.body.getAttribute('data-page') === 'home') {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (!en.isIntersecting) return;
@@ -100,13 +101,20 @@
       if (d.open) svcs.forEach(function (o) { if (o !== d) o.open = false; });
     });
   });
+  // Arriving from a homepage row (services/#ai-consulting): open that row.
+  function openFromHash() {
+    var t = location.hash && document.getElementById(location.hash.slice(1));
+    if (t && t.classList.contains('svc')) t.open = true;
+  }
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
 
   /* ── CONTACT FORM ──
      form-guard: exempt Formspree-hosted contact form, no backend of ours to run a bot check, honeypot in place */
   var form = document.getElementById('contactForm');
   var status = document.getElementById('formStatus');
   var SENT = 'Sent! I\'ll be in touch.';
-  form.addEventListener('submit', async function (e) {
+  if (form) form.addEventListener('submit', async function (e) {
     e.preventDefault();
     var hp = form.querySelector('[name="_gotcha"]');
     if (hp && hp.value) { form.reset(); status.textContent = SENT; status.className = 'form-status success'; return; }
@@ -142,11 +150,11 @@
   // Every named terminal is a real, public piece of work. Hover shows what it is, click opens it.
   // Blurbs reuse the wording already on this page, so the hover makes no new claims.
   var TOOLS = [
-    { label: 'LUXIGA OS', kind: 'Flagship', fx: 0.64, fy: 0.08, href: '#projects',
+    { label: 'LUXIGA OS', kind: 'Flagship', fx: 0.64, fy: 0.08, href: 'work/#projects',
       blurb: 'Your files and recordings, understood, without the cloud. Runs on your own hardware.' },
     { label: 'LUXIGA Bill', kind: 'Live', fx: 0.86, fy: 0.18, href: 'case-studies/solobill.html',
       blurb: 'Polished invoices with PDF export, client tracking and email sending, inside Google Sheets.' },
-    { label: 'Runbook', kind: 'In build', fx: 0.70, fy: 0.30, href: '#projects',
+    { label: 'Runbook', kind: 'In build', fx: 0.70, fy: 0.30, href: 'work/#projects',
       blurb: 'Reads the official docs, drafts a verified flow, serves it as Guided, Standard or Expert.' },
     { label: 'Pulse', kind: 'Free assessment', fx: 0.90, fy: 0.40, href: '/audit',
       blurb: 'A 7-question read on your digital readiness. About 3 minutes, no signup.' },

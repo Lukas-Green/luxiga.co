@@ -40,7 +40,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body>
+<body data-page="home">
 <!-- LUXIGA blade X: one mark, reused in every wordmark. Colors are theme-aware via CSS vars. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="lx-x" viewBox="12 12 40 40">
@@ -54,21 +54,21 @@
 <!-- NAV -->
 <nav class="nav" aria-label="Main">
   <div class="wrap">
-    <a href="#home" class="nav-brand" aria-label="LUXIGA, back to top">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</a>
+    <a href="#home" class="nav-brand" aria-label="LUXIGA, home">L<span class="ux">U<svg class="wm-x" aria-hidden="true"><use href="#lx-x"/></svg></span>IGA</a>
     <div class="nav-links">
-      <a href="#services">Services</a>
+      <a href="services/">Services</a>
       <div class="nav-dropdown">
         <button class="nav-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
           Work
           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
         </button>
         <div class="nav-dropdown-menu">
-          <a href="#projects">Products</a>
-          <a href="#proof">Proof</a>
+          <a href="work/#projects">Products</a>
+          <a href="work/#proof">Proof</a>
         </div>
       </div>
-      <a href="#pulse">Pulse</a>
-      <a href="#about">About</a>
+      <a href="audit/">Pulse</a>
+      <a href="about/">About</a>
       <a href="#contact">Contact</a>
     </div>
     <button class="theme-toggle" id="themeToggle" aria-label="Dark mode" aria-pressed="false">
@@ -84,11 +84,11 @@
 
 <!-- MOBILE NAV -->
 <div class="mobile-nav" id="mobileNav">
-  <a href="#services">Services</a>
-  <a href="#projects">Products</a>
-  <a href="#proof">Proof</a>
-  <a href="#pulse">Pulse</a>
-  <a href="#about">About</a>
+  <a href="services/">Services</a>
+  <a href="work/#projects">Products</a>
+  <a href="work/#proof">Proof</a>
+  <a href="audit/">Pulse</a>
+  <a href="about/">About</a>
   <a href="#contact">Contact</a>
   <a href="https://calendly.com/lukasgreen-ai-design" class="mobile-cta" target="_blank" rel="noopener">Book a free 30-min call <span aria-hidden="true">&rarr;</span><span class="sr-only"> (opens Calendly in a new tab)</span></a>
 </div>
@@ -121,28 +121,14 @@
       <h2 class="sec-title">Five ways in. <span class="soft">Each one starts with listening.</span></h2>
       <p class="sec-lede">I listen for where the work actually hurts, scope the smallest tool that fixes it, and build it local-first so it gets adopted and stays adopted.</p>
     </header>
-    <div class="svc-list reveal">
-      <details class="svc">
-        <summary><span class="svc-num">01</span><span class="svc-name">AI Consulting</span><span class="svc-hook">Find the one place AI pays for itself, and hear plainly where it does not.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>I look for the one place in your operation where AI actually earns its keep, and I tell you honestly about the places it would not. You leave with a tool that still works six months after it ships, not a demo that gets abandoned.</p></div>
-      </details>
-      <details class="svc">
-        <summary><span class="svc-num">02</span><span class="svc-name">Systems Automation</span><span class="svc-hook">Map the repeat work, then build it out of your week.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>If your team does the same manual steps every week, I map exactly where the repetition is and build a lightweight tool that takes it over. It should be easy to maintain and easy to forget about. Your team just notices the day getting shorter.</p></div>
-      </details>
-      <details class="svc">
-        <summary><span class="svc-num">03</span><span class="svc-name">Design for Adoption</span><span class="svc-hook">Tools shaped around how your people already work.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>A tool nobody uses gives nothing back. Two decades of design go into every build, so the interface fits how people actually work. If someone needs a walkthrough to use it, it is not done yet.</p></div>
-      </details>
-      <details class="svc">
-        <summary><span class="svc-num">04</span><span class="svc-name">Quality Engineering</span><span class="svc-hook">Test coverage and release gates your team will actually follow.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>I talk with your team to find where quality slips through, then build the safety net: real test coverage, release gates, and a process people follow. I can set QA up from scratch, fix a pipeline that fights you, or train your team so the quality outlasts me.</p></div>
-      </details>
-      <details class="svc">
-        <summary><span class="svc-num">05</span><span class="svc-name">Guided Process Design</span><span class="svc-hook">Turn a confusing process into one clear next step at a time.</span><span class="svc-plus" aria-hidden="true"></span></summary>
-        <div class="svc-body"><p>Financial aid, licensing, onboarding, a degree audit, a vendor setup that assumes you already know the answer. I read the whole thing against the rules that actually govern it, then rebuild it as a path with one clear next step. It is written at three levels of detail, so a nervous first-timer and someone who has done it twice can work from the same document.<span class="fine" style="display:block">Independent work, not affiliated with or endorsed by any school, agency or lender.</span></p></div>
-      </details>
-    </div>
+    <ol class="svc-index reveal">
+      <li><a href="services/#ai-consulting"><span class="svc-num">01</span><span class="svc-name">AI Consulting</span><span class="svc-hook">Find the one place AI pays for itself, and hear plainly where it does not.</span><span class="svc-go" aria-hidden="true">&rarr;</span></a></li>
+      <li><a href="services/#systems-automation"><span class="svc-num">02</span><span class="svc-name">Systems Automation</span><span class="svc-hook">Map the repeat work, then build it out of your week.</span><span class="svc-go" aria-hidden="true">&rarr;</span></a></li>
+      <li><a href="services/#design-for-adoption"><span class="svc-num">03</span><span class="svc-name">Design for Adoption</span><span class="svc-hook">Tools shaped around how your people already work.</span><span class="svc-go" aria-hidden="true">&rarr;</span></a></li>
+      <li><a href="services/#quality-engineering"><span class="svc-num">04</span><span class="svc-name">Quality Engineering</span><span class="svc-hook">Test coverage and release gates your team will actually follow.</span><span class="svc-go" aria-hidden="true">&rarr;</span></a></li>
+      <li><a href="services/#guided-process-design"><span class="svc-num">05</span><span class="svc-name">Guided Process Design</span><span class="svc-hook">Turn a confusing process into one clear next step at a time.</span><span class="svc-go" aria-hidden="true">&rarr;</span></a></li>
+    </ol>
+    <p class="more-row"><a href="services/" class="btn btn-ghost">Every service in detail <span class="arr" aria-hidden="true">&rarr;</span></a></p>
   </div>
 </section>
 
@@ -162,66 +148,11 @@
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<section class="projects" id="projects">
+<!-- WORK -->
+<section class="proof" id="work">
   <div class="wrap">
     <header class="sec-head">
-      <p class="sec-index"><b>03</b>Products</p>
-      <h2 class="sec-title">Software that stays yours. <span class="soft">One live, one in build, more under wraps.</span></h2>
-      <p class="sec-lede">Sovereign by default, and connected only when your team needs it.</p>
-    </header>
-    <div class="spec-grid">
-      <article class="spec reveal">
-        <div class="spec-top"><span class="spec-kind">Local-first platform</span><span class="tag">Flagship</span></div>
-        <h3>LUXIGA OS</h3>
-        <p class="spec-for">Your files and recordings, understood, without the cloud.</p>
-        <dl>
-          <div><dt>For</dt><dd>Teams whose data can't leave the building</dd></div>
-          <div><dt>Does</dt><dd>Scans, transcribes, summarizes and routes files and voice memos</dd></div>
-          <div><dt>Runs</dt><dd>On your own hardware</dd></div>
-        </dl>
-        <a href="#contact" class="link">Ask about LUXIGA OS &rarr;</a>
-      </article>
-      <article class="spec reveal">
-        <div class="spec-top"><span class="spec-kind">Invoicing</span><span class="tag live">Live</span></div>
-        <h3>LUXIGA Bill</h3>
-        <p class="spec-for">For the contractor paying for a whole platform to use one corner of it.</p>
-        <dl>
-          <div><dt>For</dt><dd>Contractors who just need to send an invoice</dd></div>
-          <div><dt>Does</dt><dd>Polished invoices with PDF export, client tracking and email sending</dd></div>
-          <div><dt>Runs</dt><dd>Inside Google Sheets, no monthly fee</dd></div>
-        </dl>
-        <a href="case-studies/solobill.html" class="link">Read the case study &rarr;</a>
-      </article>
-      <article class="spec reveal">
-        <div class="spec-top"><span class="spec-kind">Guided setup</span><span class="tag">In build</span></div>
-        <h3>LUXIGA Runbook</h3>
-        <p class="spec-for">For instructions written by someone who forgot what it is like not to know.</p>
-        <dl>
-          <div><dt>For</dt><dd>Setups that eat an afternoon and your patience</dd></div>
-          <div><dt>Does</dt><dd>Reads the official docs, drafts a verified flow, serves it as Guided, Standard or Expert</dd></div>
-          <div><dt>Runs</dt><dd>With the connection off</dd></div>
-        </dl>
-        <a href="#contact" class="link">Ask about early access &rarr;</a>
-      </article>
-    </div>
-    <p class="also reveal">Also built: <a href="case-studies/canvasskit.html">CanvassKit</a>, an outreach CRM in a Google Sheets sidebar, and my studio portfolio at <a href="https://lukasdgreen.com" target="_blank" rel="noopener">lukasdgreen.com<span class="sr-only"> (opens in a new tab)</span></a>.</p>
-    <div class="engine reveal">
-      <p class="engine-label">One engine, many trades</p>
-      <div>
-        <h3>The same local-first engine, pointed at the next trade.</h3>
-        <p>Voice and files in, structured records out, on your own hardware. It fits any field where the work is spoken rather than typed and the data has to stay in the building: the trades, field services, and regulated back-office work.</p>
-      </div>
-      <a href="https://calendly.com/lukasgreen-ai-design" class="btn btn-ghost" target="_blank" rel="noopener">Talk it through <span class="arr" aria-hidden="true">&rarr;</span><span class="sr-only"> (opens Calendly in a new tab)</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- PROOF -->
-<section class="proof" id="proof">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-index"><b>04</b>Proof</p>
+      <p class="sec-index"><b>03</b>Work</p>
       <h2 class="sec-title">It ships, and it's live. <span class="soft">A real client build, shown as it is.</span></h2>
     </header>
     <div class="proof-panel reveal">
@@ -235,30 +166,7 @@
         </ul>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section class="about" id="about">
-  <div class="wrap">
-    <header class="sec-head">
-      <p class="sec-index"><b>05</b>About</p>
-      <h2 class="sec-title">A designer who learned to build. <span class="soft">Then everything clicked.</span></h2>
-    </header>
-    <div class="about-grid">
-      <img src="assets/img/cartoon-lukas.jpeg" alt="Illustrated portrait of Lukas Green" class="about-photo reveal" width="746" height="883" loading="lazy">
-      <p class="about-cap">Lukas Green, founder</p>
-      <div class="about-bio reveal">
-        <p>LUXIGA is my studio. I work with small teams and mission-driven organizations on the places where AI can take friction out of the work and make systems easier to use.</p>
-        <p>I build automation tools, internal platforms and AI-assisted workflows, and every project starts from one specific problem someone is tired of. When AI tools arrived and I realized I could build what I designed, not just design it, everything clicked.</p>
-        <p>Before that I came up through design, doing in-house print and design work from 2004 onward. Two decades of developing an eye for what works across print, digital and UX. I am finishing my degree at Portland State.</p>
-        <ol class="timeline">
-          <li><span class="yr">2004 to 2020</span><div><h4>Graphic Design</h4><p>In-house print and design</p></div></li>
-          <li><span class="yr">2020 to 2023</span><div><h4>The Pivot</h4><p>Portland State, design meets systems thinking</p></div></li>
-          <li class="now"><span class="yr">2023 to now</span><div><h4>Design Technologist</h4><p>Building where design meets automation</p></div></li>
-        </ol>
-      </div>
-    </div>
+    <p class="more-row"><a href="work/" class="btn btn-ghost">See the products and more work <span class="arr" aria-hidden="true">&rarr;</span></a></p>
   </div>
 </section>
 
@@ -266,7 +174,7 @@
 <section class="contact" id="contact">
   <div class="wrap">
     <header class="sec-head">
-      <p class="sec-index"><b>06</b>Contact</p>
+      <p class="sec-index"><b>04</b>Contact</p>
       <h2 class="sec-title">Tell me what's getting in the way. <span class="soft">I'll tell you if I can help.</span></h2>
     </header>
     <div class="contact-grid">
