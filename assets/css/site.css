@@ -178,7 +178,7 @@ section{padding:clamp(4.5rem,10vw,8rem) 0;position:relative}
 .spec-kind{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--violet-text)}
 .tag{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .5rem;border:1px solid var(--line-strong);color:var(--ink);white-space:nowrap}
 .tag.live{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
-.spec h3{font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:500;letter-spacing:-.035em;line-height:1.05;margin-bottom:.75rem}
+.spec h3,.spec h2{font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:500;letter-spacing:-.035em;line-height:1.05;margin-bottom:.75rem}
 .spec-for{font-size:1rem;color:var(--muted);line-height:1.5;margin-bottom:1.5rem;min-height:3em}
 .spec dl{border-top:1px solid var(--line);margin-bottom:1.25rem;flex:1}
 .spec dl div{display:grid;grid-template-columns:5.5rem minmax(0,1fr);gap:.75rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
@@ -188,7 +188,7 @@ section{padding:clamp(4.5rem,10vw,8rem) 0;position:relative}
 .also a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:.6rem 0}
 .engine{margin-top:3rem;display:grid;grid-template-columns:12rem minmax(0,1fr) auto;gap:1rem 2rem;align-items:start;padding:2rem 0 0;border-top:1px dashed var(--line-strong)}
 .engine-label{font-family:var(--mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--violet-text);padding-top:.35rem}
-.engine h3{font-size:1.4rem;font-weight:500;letter-spacing:-.02em;margin-bottom:.5rem}
+.engine h3,.engine h2{font-size:1.4rem;font-weight:500;letter-spacing:-.02em;margin-bottom:.5rem}
 .engine p{color:var(--muted);max-width:44rem}
 
 /* ── PROOF ── */
@@ -215,9 +215,9 @@ section{padding:clamp(4.5rem,10vw,8rem) 0;position:relative}
 .timeline{margin-top:2rem;border-top:1px solid var(--line)}
 .timeline li{display:grid;grid-template-columns:8rem minmax(0,1fr);gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--line)}
 .timeline .yr{font-family:var(--mono);font-size:.8rem;color:var(--muted);padding-top:.15rem}
-.timeline h4{font-size:1rem;font-weight:600}
+.timeline h4,.timeline h2{font-size:1rem;font-weight:600}
 .timeline p{font-size:.9rem;color:var(--muted)}
-.timeline .now .yr,.timeline .now h4{color:var(--accent-text)}
+.timeline .now .yr,.timeline .now h4,.timeline .now h2{color:var(--accent-text)}
 
 /* ── CONTACT ── */
 .contact{background:var(--surface);border-top:1px solid var(--line)}

@@ -65,6 +65,7 @@
     dropMenu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { setDrop(false); }); });
     document.addEventListener('click', function (e) { if (!dropdown.contains(e.target)) setDrop(false); });
     dropdown.addEventListener('keydown', function (e) { if (e.key === 'Escape') { setDrop(false); dropToggle.focus(); } });
+    dropdown.addEventListener('focusout', function (e) { if (!dropdown.contains(e.relatedTarget)) setDrop(false); });
   }
 
   /* ── ACTIVE NAV ON SCROLL ── */
