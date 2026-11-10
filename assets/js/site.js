@@ -167,7 +167,7 @@
     { fx: 0.78, fy: 0.04 }, { fx: 0.97, fy: 0.30 }, { fx: 0.96, fy: 0.56 }, { fx: 0.94, fy: 0.72 }
   ];
   var pinned = null, hot = null;
-  var W, H, dpr, hub, busY, spineX, nodes = [], showNodes = false, lite = false;
+  var W, H, dpr, hub, busY, floorY, spineX, nodes = [], showNodes = false, lite = false;
   var lamp = { x: 0, y: 0, tx: 0, ty: 0 }, mouse = null, colors = {};
   var t0 = 0, raf = null, inView = true, pulses = [], nextPulse = 1600;
 
@@ -194,30 +194,31 @@
     lite = W < 769;
     var x = hero.querySelector('.hero-wordmark .wm-x');
     var wm = hero.querySelector('.hero-wordmark');
-    if (x) { var xr = x.getBoundingClientRect(); hub = { x: xr.left + xr.width / 2 - r.left, y: xr.top - r.top }; }
+    if (x) { var xr = x.getBoundingClientRect(); hub = { x: xr.left + xr.width / 2 - r.left, y: xr.bottom - r.top }; }
     else hub = { x: W * 0.4, y: H * 0.8 };
-    var wmTop = wm ? wm.getBoundingClientRect().top - r.top : H * 0.8;
-    // Run the bus through the middle of the gap between the buttons and the wordmark, so it never touches either.
-    var ctas = hero.querySelector('.hero-ctas');
-    var ctaBottom = ctas ? ctas.getBoundingClientRect().bottom - r.top : wmTop - 56;
-    busY = Math.round((ctaBottom + wmTop) / 2) + 0.5;
-    // Keep the circuit to the right of the copy so it never runs under the text.
+    var wmr = wm ? wm.getBoundingClientRect() : null;
+    var wmTop = wmr ? wmr.top - r.top : H * 0.8;
+    // The terminals sit above the wordmark; the bus runs underneath it, out of the bottom of the X.
+    floorY = Math.round((wmTop - 28) / GRID) * GRID;
+    busY = Math.round(hub.y + Math.min(28, (H - hub.y) / 2)) + 0.5;
+    // Keep the circuit to the right of the copy and the wordmark so it never runs under the text.
     var textRight = 0;
     // Measure the visible pieces, not their full-width containers.
-    hero.querySelectorAll('.hero-title, .hero-lede, .hero-ctas .btn, .hero-meta span').forEach(function (el) {
+    hero.querySelectorAll('.hero-title, .hero-lede, .hero-byline, .hero-ctas .btn, .hero-meta span').forEach(function (el) {
       var b = el.getBoundingClientRect(); textRight = Math.max(textRight, b.right - r.left);
     });
+    if (wm) { var rg = document.createRange(); rg.selectNodeContents(wm); textRight = Math.max(textRight, rg.getBoundingClientRect().right - r.left); }
     spineX = Math.round((Math.max(W * 0.6, textRight + 56)) / GRID) * GRID;
     showNodes = !lite && (W - spineX) > 260;
     nodes = TOOLS.map(function (t, i) {
       var nx = spineX + 48 + (W - spineX - 150) * ((t.fx - 0.6) / 0.38);
-      var ny = 80 + (busY - 140) * (t.fy / 0.75);
+      var ny = 80 + (floorY - 140) * (t.fy / 0.75);
       return {
         label: t.label || null, kind: t.kind, blurb: t.blurb, href: t.href, ext: t.ext,
         x: Math.round(nx / GRID) * GRID, y: Math.round(ny / GRID) * GRID,
         ox: 0, oy: 0, born: 200 + i * 110, flash: -1e9, color: i % 2 ? 'violet' : 'lime'
       };
-    }).filter(function (n) { return n.y < busY - GRID && n.x < W - 40; });
+    }).filter(function (n) { return n.y < floorY - GRID && n.x < W - 40; });
     if (!mouse) { lamp.x = lamp.tx = hub.x; lamp.y = lamp.ty = hub.y - 40; }
   }
 
@@ -368,7 +369,7 @@
     var ch = pad + 14 + 8 + lines.length * 18 + 10 + 14 + pad;
     var cx = Math.max(spineX + 12, Math.min(W - cw - 12, x - 20));
     var cy = y + 22;
-    if (cy + ch > busY - 8) cy = y - 22 - ch;
+    if (cy + ch > floorY) cy = y - 22 - ch;
     ctx.fillStyle = rgba(colors.bg, 0.94);
     ctx.fillRect(cx, cy, cw, ch);
     ctx.strokeStyle = rgba(colors[n.color], 0.8);
