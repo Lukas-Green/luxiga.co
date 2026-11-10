@@ -197,11 +197,14 @@
     if (x) { var xr = x.getBoundingClientRect(); hub = { x: xr.left + xr.width / 2 - r.left, y: xr.top - r.top }; }
     else hub = { x: W * 0.4, y: H * 0.8 };
     var wmTop = wm ? wm.getBoundingClientRect().top - r.top : H * 0.8;
-    busY = Math.round((wmTop - 28) / GRID) * GRID;
+    // Run the bus through the middle of the gap between the buttons and the wordmark, so it never touches either.
+    var ctas = hero.querySelector('.hero-ctas');
+    var ctaBottom = ctas ? ctas.getBoundingClientRect().bottom - r.top : wmTop - 56;
+    busY = Math.round((ctaBottom + wmTop) / 2) + 0.5;
     // Keep the circuit to the right of the copy so it never runs under the text.
     var textRight = 0;
     // Measure the visible pieces, not their full-width containers.
-    hero.querySelectorAll('.hero-title, .hero-lede, .hero-byline, .hero-ctas .btn, .hero-meta span').forEach(function (el) {
+    hero.querySelectorAll('.hero-title, .hero-lede, .hero-ctas .btn, .hero-meta span').forEach(function (el) {
       var b = el.getBoundingClientRect(); textRight = Math.max(textRight, b.right - r.left);
     });
     spineX = Math.round((Math.max(W * 0.6, textRight + 56)) / GRID) * GRID;

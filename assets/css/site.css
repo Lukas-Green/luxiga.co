@@ -112,6 +112,7 @@ mark{background:none;color:var(--accent-text);text-decoration:underline;text-dec
 .hero-ctas{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.75rem}
 .hero-wordmark{position:relative;z-index:1;font-weight:700;font-size:clamp(4.5rem,min(19vw,26vh),19rem);line-height:.74;letter-spacing:-.06em;white-space:nowrap;width:100%;max-width:var(--max);margin:0 auto -.03em;padding:0 var(--gutter);text-indent:-.06em;color:var(--ink);user-select:none}
 .hero-wordmark .ux{color:var(--accent-text)}
+.hero-sign{position:relative;z-index:1;width:100%;display:flex;padding-top:1.25rem;padding-bottom:clamp(1.25rem,3.5vh,2.25rem)}
 
 /* ── SECTION HEAD: the new titling. Index in the margin, a sentence as the title, second clause softened. ── */
 section{padding:clamp(4.5rem,10vw,8rem) 0;position:relative}
