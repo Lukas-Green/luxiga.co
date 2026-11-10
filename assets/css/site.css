@@ -110,7 +110,7 @@ mark{background:none;color:var(--accent-text);text-decoration:underline;text-dec
 .hero-byline{font-family:var(--mono);font-size:.8rem;line-height:1.6;color:var(--muted);border-left:2px solid var(--accent);padding-left:.9rem}
 .hero-byline strong{display:block;color:var(--ink);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .hero-ctas{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.75rem}
-.hero-wordmark{position:relative;z-index:1;font-weight:700;font-size:clamp(4.5rem,min(19vw,26vh),19rem);line-height:.74;letter-spacing:-.06em;white-space:nowrap;width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--gutter) clamp(2rem,5vh,3.5rem);text-indent:-.06em;color:var(--ink);user-select:none}
+.hero-wordmark{position:relative;z-index:1;font-weight:700;font-size:clamp(4.5rem,min(19vw,22vh),19rem);line-height:.74;letter-spacing:-.06em;white-space:nowrap;width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--gutter) 26px;text-indent:-.06em;color:var(--ink);user-select:none}
 .hero-wordmark .ux{color:var(--accent-text)}
 
 /* ── SECTION HEAD: the new titling. Index in the margin, a sentence as the title, second clause softened. ── */

@@ -200,7 +200,7 @@
     var wmTop = wmr ? wmr.top - r.top : H * 0.8;
     // The terminals sit above the wordmark; the bus runs underneath it, out of the bottom of the X.
     floorY = Math.round((wmTop - 28) / GRID) * GRID;
-    busY = Math.round(hub.y + Math.min(28, (H - hub.y) / 2)) + 0.5;
+    busY = Math.round(hub.y + Math.min(14, (H - hub.y) / 2)) + 0.5;
     // Keep the circuit to the right of the copy and the wordmark so it never runs under the text.
     var textRight = 0;
     // Measure the visible pieces, not their full-width containers.
